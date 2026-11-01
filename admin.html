@@ -1,178 +1,196 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administration | PrixFaso</title>
+  <meta name="theme-color" content="#123d2b">
+  <meta name="description" content="Espace d'administration AFRIKORA : suivi des visites et des profils enregistrés.">
+  <title>Administration | AFRIKORA</title>
   <style>
+    :root {
+      color-scheme: light;
+      --green: #123d2b;
+      --green-light: #0f766e;
+      --ink: #17212b;
+      --muted: #64748b;
+      --surface: #ffffff;
+      --page: #f1f5f9;
+      --border: #dbe3ea;
+      --danger: #b42318;
+      --shadow: 0 8px 24px rgba(15, 23, 42, .07);
+    }
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      color: #17212b;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page);
+      color: var(--ink);
     }
-
     header {
-      background: #123d2b;
-      color: white;
-      padding: 22px 16px;
+      background: var(--green);
+      color: #fff;
+      padding: 24px 18px;
     }
-
-    header h1 { margin-top: 0; }
-
-    main {
-      max-width: 900px;
-      margin: 24px auto;
-      padding: 0 16px;
+    .header-inner, main {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
     }
-
+    header h1 { margin: 0 0 7px; font-size: clamp(24px, 5vw, 32px); }
+    header p { margin: 0; color: #d9eee3; }
+    main { padding: 26px 0 42px; }
     .panel {
-      background: white;
-      padding: 20px;
+      background: var(--surface);
+      padding: 22px;
       margin-bottom: 18px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px #0001;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
     }
-
+    h2 { margin: 0 0 12px; font-size: 20px; }
+    p { line-height: 1.5; }
+    .intro { color: var(--muted); margin-top: 0; }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+    }
+    input {
+      display: block;
+      width: 100%;
+      padding: 13px 14px;
+      margin-top: 7px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 16px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input:focus {
+      outline: 3px solid rgba(15, 118, 110, .16);
+      border-color: var(--green-light);
+    }
+    button, .link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 12px 16px;
+      margin: 16px 8px 0 0;
+      border: 0;
+      border-radius: 9px;
+      background: var(--green-light);
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .65; cursor: wait; }
+    .secondary { background: #475569; }
+    #message {
+      color: var(--muted);
+      overflow-wrap: anywhere;
+      margin: 10px 0 16px;
+    }
+    #message.error { color: var(--danger); }
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 14px;
     }
-
+    .stat-card {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfdff;
+    }
+    .stat-label { color: var(--muted); font-size: 14px; }
     .number {
+      margin-top: 9px;
+      color: var(--green-light);
       font-size: 32px;
-      font-weight: bold;
-      color: #0f766e;
-      margin-top: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
     }
-
-    label {
-      display: block;
-      margin-top: 14px;
-      font-weight: bold;
+    footer {
+      padding: 0 16px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
     }
-
-    input {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button, .link {
-      display: inline-block;
-      padding: 12px 16px;
-      margin: 12px 6px 0 0;
-      border: 0;
-      border-radius: 8px;
-      background: #0f766e;
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .secondary { background: #475569; }
-
-    #message {
-      color: #475569;
-      overflow-wrap: anywhere;
-    }
-
     [hidden] { display: none !important; }
+    @media (max-width: 480px) {
+      .panel { padding: 18px; }
+      button, .link { width: 100%; margin-right: 0; }
+    }
   </style>
 </head>
-
 <body>
   <header>
-    <h1>PrixFaso — Administration</h1>
-    <p>Statistiques du site</p>
+    <div class="header-inner">
+      <h1>AFRIKORA — Administration</h1>
+      <p>Gestion et statistiques de la plateforme</p>
+    </div>
   </header>
 
   <main>
     <section class="panel" id="connexion">
       <h2>Connexion administrateur</h2>
-      <p>Connecte-toi avec ton compte administrateur Supabase.</p>
-
+      <p class="intro">Connecte-toi avec le compte administrateur autorisé.</p>
       <form id="loginForm">
         <label for="email">Adresse e-mail</label>
-        <input
-          id="email"
-          type="email"
-          autocomplete="username"
-          required
-        >
-
+        <input id="email" type="email" autocomplete="username" required>
         <label for="password">Mot de passe</label>
-        <input
-          id="password"
-          type="password"
-          autocomplete="current-password"
-          required
-        >
-
-        <button type="submit">Se connecter</button>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button id="loginButton" type="submit">Se connecter</button>
       </form>
+      <p id="loginMessage" role="status" aria-live="polite"></p>
     </section>
 
     <section class="panel" id="dashboard" hidden>
-      <h2>Activité de PrixFaso</h2>
-      <p id="message" role="status">Chargement des statistiques...</p>
-
+      <h2>Activité d’AFRIKORA</h2>
+      <p id="message" role="status" aria-live="polite">Chargement des statistiques...</p>
       <div class="stats">
-        <div class="panel">
-          <div>Total des visites</div>
+        <div class="stat-card">
+          <div class="stat-label">Total des visites</div>
           <div class="number" id="visites">—</div>
         </div>
-
-        <div class="panel">
-          <div>Visiteurs distincts</div>
+        <div class="stat-card">
+          <div class="stat-label">Visiteurs distincts</div>
           <div class="number" id="distincts">—</div>
         </div>
-
-        <div class="panel">
-          <div>Profils enregistrés</div>
+        <div class="stat-card">
+          <div class="stat-label">Profils enregistrés</div>
           <div class="number" id="profils">—</div>
         </div>
       </div>
-
-      <button id="refresh">Actualiser</button>
-      <button id="logout" class="secondary">Déconnexion</button>
+      <button id="refresh" type="button">Actualiser les statistiques</button>
+      <button id="logout" class="secondary" type="button">Déconnexion</button>
     </section>
 
     <section class="panel">
-      <h2>Gestion de PrixFaso</h2>
-      <a class="link" href="https://prixfaso.vercel.app">
-        Ouvrir le site PrixFaso
+      <h2>Accès rapides</h2>
+      <p class="intro">Ouvre la plateforme ou ton espace de gestion de données.</p>
+      <a class="link" href="https://afrikora.vercel.app" target="_blank" rel="noopener noreferrer">
+        Ouvrir le site AFRIKORA
       </a>
-      <a class="link secondary" href="https://supabase.com/dashboard">
+      <a class="link secondary" href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer">
         Ouvrir Supabase
       </a>
     </section>
   </main>
 
+  <footer>AFRIKORA · Espace d’administration</footer>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL =
-      "https://jovyqqqfcgluoclqrwvq.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_JHNtV5gYT00RrBj0jpfNAA_q9z4S2LM";
-
+    // Configuration Supabase conservée depuis le fichier admin d'origine.
+    const SUPABASE_URL = "https://jovyqqqfcgluoclqrwvq.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_JHNtV5gYT00RrBj0jpfNAA_q9z4S2LM";
     const ADMIN_EMAIL = "zoureassane.96@gmail.com";
 
-    const db = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const el = id => document.getElementById(id);
 
     function afficherConnecte(connecte) {
@@ -180,68 +198,72 @@
       el("dashboard").hidden = !connecte;
     }
 
-    function message(texte) {
-      el("message").textContent = texte;
+    function message(texte, erreur = false) {
+      const zone = el("message");
+      zone.textContent = texte;
+      zone.classList.toggle("error", erreur);
+    }
+
+    function messageConnexion(texte) {
+      el("loginMessage").textContent = texte;
     }
 
     async function verifierSession() {
-      const { data, error } = await db.auth.getSession();
+      try {
+        const { data, error } = await db.auth.getSession();
+        if (error) throw error;
 
-      if (error) {
+        const user = data.session?.user;
+        if (!user) {
+          afficherConnecte(false);
+          return;
+        }
+
+        if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+          await db.auth.signOut();
+          afficherConnecte(false);
+          alert("Ce compte n'est pas autorisé à administrer AFRIKORA.");
+          return;
+        }
+
+        afficherConnecte(true);
+        await chargerStats();
+      } catch (error) {
         afficherConnecte(false);
-        message("Impossible de vérifier la session Supabase.");
-        return;
+        messageConnexion("Impossible de vérifier la session : " + error.message);
       }
-
-      const user = data.session?.user;
-
-      if (!user) {
-        afficherConnecte(false);
-        return;
-      }
-
-      if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-        await db.auth.signOut();
-        afficherConnecte(false);
-        alert("Ce compte n'est pas autorisé à administrer PrixFaso.");
-        return;
-      }
-
-      afficherConnecte(true);
-      await chargerStats();
     }
 
     el("loginForm").addEventListener("submit", async event => {
       event.preventDefault();
-
+      const bouton = el("loginButton");
       const email = el("email").value.trim().toLowerCase();
       const password = el("password").value;
 
       if (email !== ADMIN_EMAIL.toLowerCase()) {
-        alert("Utilise l'adresse e-mail administrateur autorisée.");
+        messageConnexion("Utilise l'adresse e-mail administrateur autorisée.");
         return;
       }
 
-      message("Connexion en cours...");
+      bouton.disabled = true;
+      messageConnexion("Connexion en cours...");
+      try {
+        const { data, error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
 
-      const { data, error } = await db.auth.signInWithPassword({
-        email,
-        password
-      });
+        if (data.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+          await db.auth.signOut();
+          throw new Error("Ce compte n'est pas autorisé à administrer AFRIKORA.");
+        }
 
-      if (error) {
-        alert("Connexion impossible : " + error.message);
-        return;
+        messageConnexion("");
+        afficherConnecte(true);
+        await chargerStats();
+      } catch (error) {
+        messageConnexion("Connexion impossible : " + error.message);
+      } finally {
+        bouton.disabled = false;
       }
-
-      if (data.user?.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-        await db.auth.signOut();
-        alert("Ce compte n'est pas autorisé à administrer PrixFaso.");
-        return;
-      }
-
-      afficherConnecte(true);
-      await chargerStats();
     });
 
     async function chargerStats() {
@@ -250,64 +272,62 @@
       el("distincts").textContent = "—";
       el("profils").textContent = "—";
 
-      const { data: sessionData } = await db.auth.getSession();
-      const user = sessionData.session?.user;
+      try {
+        const { data: sessionData, error: sessionError } = await db.auth.getSession();
+        if (sessionError) throw sessionError;
 
-      if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-        afficherConnecte(false);
-        message("Reconnecte-toi avec le compte administrateur.");
-        return;
-      }
+        const user = sessionData.session?.user;
+        if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+          afficherConnecte(false);
+          messageConnexion("Reconnecte-toi avec le compte administrateur.");
+          return;
+        }
 
-      const visites = await db
-        .from("site_visits")
-        .select("visitor_key", { count: "exact" });
+        const visites = await db
+          .from("site_visits")
+          .select("visitor_key", { count: "exact" });
 
-      if (visites.error) {
-        message(
-          "Erreur de lecture des visites : " + visites.error.message
+        if (visites.error) throw new Error("Erreur de lecture des visites : " + visites.error.message);
+
+        const uniques = new Set(
+          (visites.data || []).map(v => v.visitor_key).filter(Boolean)
         );
-        return;
+
+        el("visites").textContent = visites.count ?? 0;
+        el("distincts").textContent = uniques.size;
+
+        const profils = await db
+          .from("profiles")
+          .select("id", { count: "exact", head: true });
+
+        if (profils.error) {
+          message("Visites chargées, mais erreur de lecture des profils : " + profils.error.message, true);
+          return;
+        }
+
+        el("profils").textContent = profils.count ?? 0;
+        message("Statistiques AFRIKORA chargées.");
+      } catch (error) {
+        message(error.message || "Une erreur est survenue pendant le chargement.", true);
       }
-
-      const uniques = new Set(
-        (visites.data || [])
-          .map(v => v.visitor_key)
-          .filter(Boolean)
-      );
-
-      el("visites").textContent = visites.count ?? 0;
-      el("distincts").textContent = uniques.size;
-
-      const profils = await db
-        .from("profiles")
-        .select("id", { count: "exact", head: true });
-
-      if (profils.error) {
-        message(
-          "Visites chargées, mais erreur de lecture des profils : " +
-          profils.error.message
-        );
-        return;
-      }
-
-      el("profils").textContent = profils.count ?? 0;
-      message("Statistiques chargées.");
     }
 
     el("refresh").addEventListener("click", chargerStats);
 
     el("logout").addEventListener("click", async () => {
-      const { error } = await db.auth.signOut();
-
-      if (error) {
-        message("Erreur de déconnexion : " + error.message);
-        return;
+      const bouton = el("logout");
+      bouton.disabled = true;
+      try {
+        const { error } = await db.auth.signOut();
+        if (error) throw error;
+        el("password").value = "";
+        afficherConnecte(false);
+        messageConnexion("Déconnecté.");
+      } catch (error) {
+        message("Erreur de déconnexion : " + error.message, true);
+      } finally {
+        bouton.disabled = false;
       }
-
-      el("password").value = "";
-      afficherConnecte(false);
-      message("Déconnecté.");
     });
 
     verifierSession();
