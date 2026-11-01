@@ -319,11 +319,11 @@ function openPhotoGallery(urls,index=0,title="Photos de l’annonce"){
  const draw=()=>{
   document.getElementById("modalBody").innerHTML=`<div class="dash-head"><h2>${esc(title)}</h2><button class="close" onclick="closeModal()">×</button></div><div class="photo-viewer">${list.length>1?`<button aria-label="Photo précédente" onclick="moveGallery(-1)">‹</button>`:""}<img src="${esc(list[at])}" alt="Photo ${at+1} sur ${list.length}">${list.length>1?`<button aria-label="Photo suivante" onclick="moveGallery(1)">›</button>`:""}</div><p class="meta" style="text-align:center">Photo ${at+1} / ${list.length} · Touchez les flèches pour parcourir les photos</p>${list.length>1?`<div class="photo-strip" style="justify-content:center">${list.map((u,i)=>`<img src="${esc(u)}" alt="Miniature ${i+1}" onclick="setGalleryPhoto(${i})" style="border:${i===at?'2px solid var(--p)':'1px solid var(--border)'}">`).join("")}</div>`:""}`;
  };
- window.__prixFasoGallery={list,getIndex:()=>at,setIndex:(n)=>{at=(n+list.length)%list.length;draw()}};
+ window.__AFRIKORAGallery={list,getIndex:()=>at,setIndex:(n)=>{at=(n+list.length)%list.length;draw()}};
  draw();document.getElementById("modal").classList.add("open");
 }
-function moveGallery(delta){const g=window.__prixFasoGallery;if(g)g.setIndex(g.getIndex()+delta)}
-function setGalleryPhoto(index){const g=window.__prixFasoGallery;if(g)g.setIndex(index)}
+function moveGallery(delta){const g=window.__AFRIKORAGallery;if(g)g.setIndex(g.getIndex()+delta)}
+function setGalleryPhoto(index){const g=window.__AFRIKORAGallery;if(g)g.setIndex(index)}
 function openPhoto(url){openPhotoGallery([url],0,"Photo du produit")}
 function openAdGallery(id,index=0){const a=allAds().find(x=>String(x.id)===String(id));if(!a)return;const photos=(a.image_urls?.length?a.image_urls:[a.image_url]).filter(Boolean);openPhotoGallery(photos,index,a.title||"Photos de l’annonce")}
 function viewAd(id){
@@ -567,7 +567,7 @@ async function deleteAd(id){
 }
 
 function adminEscape(s){return esc(s)}
-async function trackPrixFasoVisit(){
+async function trackAFRIKORAVisit(){
  if(!supabaseClient||visitTracked)return;
  visitTracked=true;
  try{
@@ -575,9 +575,9 @@ async function trackPrixFasoVisit(){
   if(!visitorId){visitorId=(crypto.randomUUID?crypto.randomUUID():"v-"+Date.now()+"-"+Math.random().toString(36).slice(2));localStorage.setItem("prixfaso_visitor_id",visitorId)}
   const {error}=await supabaseClient.rpc("track_site_visit",{p_visitor_id:visitorId});
   if(error)throw error;
- }catch(e){console.warn("Statistiques PrixFaso non disponibles :",e.message||e)}
+ }catch(e){console.warn("Statistiques AFRIKORA non disponibles :",e.message||e)}
 }
-async function updatePrixFasoPresence(){
+async function updateAFRIKORAPresence(){
  if(!supabaseClient)return;
  try{
   // Les visiteurs anonymes sont comptés dans site_visits; seuls les comptes
@@ -620,7 +620,7 @@ async function loadAdminDashboard(){
    <div class="section"><div class="row"><h3>📢 Modération des annonces</h3><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
    ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0)} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
    <div class="section"><h3>👤 Comptes utilisateurs</h3>${people.length?`<div class="msg-list">${people.map(p=>`<div class="msg-item"><b>${adminEscape(p.name||"Utilisateur")}</b><div class="meta">ID : ${adminEscape(p.id)} · Téléphone : ${adminEscape(p.phone||"Non renseigné")}</div></div>`).join("")}</div>`:'<div class="empty">Aucun profil accessible.</div>'}</div>`;
- }catch(e){console.error("Admin PrixFaso:",e);root.innerHTML=`<div class="empty">Impossible de charger l’administration. Vérifie les droits d’accès Supabase (RLS) et la présence des tables site_visits et user_activity.<br><br><small>${adminEscape(e.message||"Erreur inconnue")}</small></div>`}
+ }catch(e){console.error("Admin AFRIKORA:",e);root.innerHTML=`<div class="empty">Impossible de charger l’administration. Vérifie les droits d’accès Supabase (RLS) et la présence des tables site_visits et user_activity.<br><br><small>${adminEscape(e.message||"Erreur inconnue")}</small></div>`}
 }
 async function adminSetAdStatus(id,status){
  if(!current||!isAdmin){toast("Accès refusé");return}
@@ -640,7 +640,7 @@ function starsHtml(n){return "★★★★★".split("").map((s,i)=>`<span style
 
 async function openSeller(ownerId){
  const sellerAds=ads.filter(a=>String(a.owner)===String(ownerId));if(!sellerAds.length){toast("Vendeur introuvable");return}
- let name="Vendeur PrixFaso",reviews=[];
+ let name="Vendeur AFRIKORA",reviews=[];
  if(supabaseClient){
   const [{data:p},{data:r}]=await Promise.all([
    supabaseClient.from("profiles").select("id,name").eq("id",ownerId).maybeSingle(),
@@ -700,10 +700,10 @@ async function submitSiteReview(){
   const {data}=await supabaseClient.auth.getSession();
   if(data.session){await setCurrentFromUser(data.session.user);await loadMessages();updateAccount();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
   await loadCloudData();
-  await trackPrixFasoVisit();if(presenceTimer)clearInterval(presenceTimer);presenceTimer=setInterval(updatePrixFasoPresence,60000);
+  await trackAFRIKORAVisit();if(presenceTimer)clearInterval(presenceTimer);presenceTimer=setInterval(updateAFRIKORAPresence,60000);
   supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
-   if(session){await setCurrentFromUser(session.user);await loadMessages();updateAccount();await loadCloudData();await updatePrixFasoPresence();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
-   else{if(messagePoller)clearInterval(messagePoller);messagePoller=null;knownUnreadIds.clear();current=null;isAdmin=false;fav=[];messages=[];updateAccount();render(seed);await updatePrixFasoPresence()}
+   if(session){await setCurrentFromUser(session.user);await loadMessages();updateAccount();await loadCloudData();await updateAFRIKORAPresence();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
+   else{if(messagePoller)clearInterval(messagePoller);messagePoller=null;knownUnreadIds.clear();current=null;isAdmin=false;fav=[];messages=[];updateAccount();render(seed);await updateAFRIKORAPresence()}
   })
  }
 })();
@@ -713,10 +713,10 @@ if ("serviceWorker" in navigator && (location.protocol === "https:" || location.
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js", { scope: "/" })
       .then(registration => {
-        console.info("PrixFaso : service worker enregistré.", registration.scope);
+        console.info("AFRIKORA : service worker enregistré.", registration.scope);
       })
       .catch(error => {
-        console.warn("PrixFaso : installation hors ligne indisponible, le site reste utilisable.", error);
+        console.warn("AFRIKORA : installation hors ligne indisponible, le site reste utilisable.", error);
       });
   }, { once: true });
 }
