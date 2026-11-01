@@ -1,24 +1,23 @@
-
 {
-  "name": "PrixFaso",
-  "short_name": "PrixFaso",
+  "name": "AFRIKORA",
+  "short_name": "AFRIKORA",
   "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0f766e",
+  "theme_color": "#0D554B",
   "orientation": "any",
-  "description": "PrixFaso permet de consulter et publier des annonces de produits et de comparer les prix.",
+  "description": "AFRIKORA : produits, annonces, professionnels et services sur le marché africain.",
   "icons": [
     {
-      "src": "/prixfaso-192.png",
+      "src": "/afrikora-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/prixfaso-512.png",
+      "src": "/afrikora-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

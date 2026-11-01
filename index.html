@@ -3,14 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0f766e">
-<title>PrixFaso — Burkina Faso</title>
+<meta name="theme-color" content="#0D554B">
+<meta name="description" content="AFRIKORA : produits, annonces, professionnels et services sur le marché africain.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AFRIKORA">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" href="/afrikora-192.png">
+<link rel="apple-touch-icon" href="/afrikora-192.png">
+<title>AFRIKORA — Le marché africain des opportunités</title>
 <style>
-:root{--p:#0f766e;--p2:#115e59;--a:#f59e0b;--bg:#f6f8f7;--card:#fff;--text:#17211f;--muted:#66736f;--border:#e2e8e5;--danger:#dc2626}
+:root{--p:#0D554B;--p2:#073B36;--a:#F58220;--bg:#f7f9f8;--card:#fff;--text:#17211f;--muted:#66736f;--border:#e2e8e5;--danger:#dc2626}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
 button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.top{background:#073b36;color:#fff;padding:7px 5%;font-size:13px;text-align:center}
 nav{height:68px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:15px;padding:0 5%;position:sticky;top:0;z-index:20}
-.logo{font-weight:900;font-size:25px;color:var(--p);margin-right:auto}.logo span{color:var(--a)}
+.logo{display:flex;align-items:center;margin-right:auto;min-width:0}.brand-logo{display:block;width:min(210px,34vw);height:auto;max-height:54px;object-fit:contain;object-position:left center}
 .navlinks{display:flex;gap:6px}.navlinks button,.account button{background:transparent;color:var(--text);padding:9px 11px;border-radius:9px}
 .navlinks button:hover,.account button:hover{background:#eef5f3}.primary{background:var(--p)!important;color:#fff!important}.outline{border:1px solid var(--p)!important;color:var(--p)!important;background:#fff!important}
 main{max-width:1180px;margin:auto;padding:25px 18px 70px}.hero{background:linear-gradient(120deg,#0b5d55,#15927f);color:#fff;border-radius:24px;padding:35px 25px}
@@ -33,10 +40,10 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 </head>
 <body>
 
-<div class="top">🇧🇫 PrixFaso — trouvez, comparez et publiez au Burkina Faso</div>
+<div class="top">AFRIKORA — Le marché africain des opportunités</div>
 
 <nav>
-<div class="logo">Prix<span>Faso</span></div>
+<div class="logo"><img class="brand-logo" src="/afrikora-logo.png" alt="AFRIKORA — Le marché africain des opportunités"></div>
 <div class="navlinks">
 <button onclick="go('home')">Accueil</button>
 <button onclick="go('annonces')">Annonces</button>
@@ -52,8 +59,8 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 
 <main id="home">
 <section class="hero">
-<h1>Les prix et services, au même endroit.</h1>
-<p>Comparez les prix, trouvez des produits et des professionnels au Burkina Faso.</p>
+<h1>Tout un marché. Toutes les opportunités.</h1>
+<p>Découvrez des produits, comparez les prix, publiez vos annonces et trouvez des professionnels.</p>
 <div class="search">
 <input id="q" placeholder="Que recherchez-vous ? ex. ciment, maison, maçon...">
 <input id="city" list="burkinaLocalities" placeholder="Ville / localité (ex. Garango)" autocomplete="off"><datalist id="burkinaLocalities"></datalist>
@@ -86,7 +93,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 </section>
 
 <section class="section">
-<h2>Pourquoi PrixFaso ?</h2>
+<h2>Pourquoi AFRIKORA ?</h2>
 <div class="features">
 <div class="feature">🔎<b>Comparer</b><span>Comparez rapidement les prix proposés.</span></div>
 <div class="feature">📍<b>Localiser</b><span>Filtrez les annonces par ville.</span></div>
@@ -102,7 +109,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 
 <section class="section dash" id="adminDashboard">
 <button class="back-home" onclick="go('home')">← Retour au menu principal</button>
-<div class="dash-head"><h2>🛡️ Administration PrixFaso</h2><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
+<div class="dash-head"><h2>🛡️ Administration AFRIKORA</h2><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
 <p class="meta">Espace réservé au compte administrateur autorisé dans Supabase.</p>
 <div id="adminContent"><div class="empty">Chargement de l’administration…</div></div>
 </section>
@@ -130,10 +137,10 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 </main>
 
 <footer>
-<b>PrixFaso</b><br>Plateforme de prix, annonces et services au Burkina Faso.
-<br><br><button class="small" onclick="openSiteReview()">⭐ Noter PrixFaso</button>
+<b>AFRIKORA</b><br>Le marché africain des produits, annonces, professionnels et services.
+<br><br><button class="small" onclick="openSiteReview()">⭐ Noter AFRIKORA</button>
 <div id="siteRatingSummary" class="meta"></div>
-<br>© 2026 PrixFaso
+<br>© 2026 AFRIKORA
 </footer>
 
 <div class="modal" id="modal"><div class="box"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
@@ -443,7 +450,7 @@ function openWhatsApp(id){
  if(phone.length===8)phone="226"+phone;
  else if(phone.length===9&&phone.startsWith("0"))phone="226"+phone.slice(1);
  if(phone.length<10){toast("Le numéro WhatsApp semble incomplet. Ajoutez l'indicatif du pays.");return}
- const message=`Bonjour, je vous contacte depuis PrixFaso au sujet de votre annonce « ${a.title} » à ${a.city}. Êtes-vous disponible ?`;
+ const message=`Bonjour, je vous contacte depuis AFRIKORA au sujet de votre annonce « ${a.title} » à ${a.city}. Êtes-vous disponible ?`;
  window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(message),"_blank","noopener");
 }
 
@@ -672,12 +679,12 @@ async function loadSiteRating(){
  const {data,error}=await supabaseClient.from("avis_site").select("note");
  if(error)return;
  const rows=data||[],avg=rows.length?rows.reduce((s,r)=>s+Number(r.note),0)/rows.length:0;
- document.getElementById("siteRatingSummary").textContent=rows.length?`⭐ ${avg.toFixed(1)}/5 — ${rows.length} avis sur PrixFaso`:"Aucun avis pour le moment"
+ document.getElementById("siteRatingSummary").textContent=rows.length?`⭐ ${avg.toFixed(1)}/5 — ${rows.length} avis sur AFRIKORA`:"Aucun avis pour le moment"
 }
 async function openSiteReview(){
  if(!current){openModal("login");return}
  let old=null;if(supabaseClient){const {data}=await supabaseClient.from("avis_site").select("note,commentaire").eq("reviewer_id",current.id).maybeSingle();old=data}
- openCustom(`<h2>⭐ Noter PrixFaso</h2><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">Publier mon avis</button>`)
+ openCustom(`<h2>⭐ Noter AFRIKORA</h2><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">Publier mon avis</button>`)
 }
 async function submitSiteReview(){
  if(!current||!requireClient())return;
@@ -700,6 +707,19 @@ async function submitSiteReview(){
   })
  }
 })();
+
+// Installation PWA : l'échec du service worker ne doit jamais bloquer le site.
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js", { scope: "/" })
+      .then(registration => {
+        console.info("PrixFaso : service worker enregistré.", registration.scope);
+      })
+      .catch(error => {
+        console.warn("PrixFaso : installation hors ligne indisponible, le site reste utilisable.", error);
+      });
+  }, { once: true });
+}
 </script>
 </body>
 </html>
