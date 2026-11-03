@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0D554B">
-<meta name="description" content="AFRIKORA : produits, annonces, professionnels et services sur le marché africain.">
+<meta name="description" content="AFRIKORA : découvrez des produits, annonces, professionnels et services dans les pays africains.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AFRIKORA">
+<meta property="og:title" content="AFRIKORA — Le marché africain des opportunités">
+<meta property="og:description" content="Découvrez des produits, comparez les prix et trouvez des professionnels dans les pays africains.">
+<meta property="og:url" content="https://afrikora.vercel.app/">
+<meta name="twitter:card" content="summary">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AFRIKORA">
@@ -12,6 +19,14 @@
 <link rel="icon" type="image/png" href="/afrikora-192.png">
 <link rel="apple-touch-icon" href="/afrikora-192.png">
 <title>AFRIKORA — Le marché africain des opportunités</title>
+<script type="application/ld+json" id="siteStructuredData">{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"AFRIKORA",
+  "url":"https://afrikora.vercel.app/",
+  "inLanguage":"fr",
+  "description":"Plateforme de petites annonces, produits, services et professionnels dans les pays africains."
+}</script>
 <style>
 :root{--p:#0D554B;--p2:#073B36;--a:#F58220;--bg:#f7f9f8;--card:#fff;--text:#17211f;--muted:#66736f;--border:#e2e8e5;--danger:#dc2626}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -89,6 +104,12 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <button class="chip" data-cat="Services" onclick="filterCat('Services',this)">🛠️ Services</button>
 <button class="chip" data-cat="Alimentation" onclick="filterCat('Alimentation',this)">🌾 Alimentation</button>
 </div>
+</section>
+
+<section class="section seo-content" id="seoContent" aria-live="polite">
+ <h2 id="seoHeading">Annonces et services en Afrique</h2>
+ <p id="seoDescription">AFRIKORA facilite la découverte de produits, de services et de professionnels dans les pays africains.</p>
+ <p class="meta" id="seoCategoryText">Parcourez les catégories et choisissez un pays pour consulter les annonces disponibles.</p>
 </section>
 
 <section class="section" id="annonces">
@@ -181,11 +202,34 @@ const COUNTRY_STORE='afrikora_country_v1';
 function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);if(AFRICAN_COUNTRIES.some(c=>c.code===saved))return saved;const locale=(navigator.language||'').toUpperCase();const match=AFRICAN_COUNTRIES.find(c=>locale.endsWith('-'+c.code));return match?.code||'BF'}catch(e){return 'BF'}}
 let activeCountry=detectCountry();
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
+function normalizeSearchText(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’']/g,"'").toLocaleLowerCase("fr").trim().replace(/\s+/g," ")}
+const CATEGORY_SEO={
+ Tous:"produits, annonces, prix, services et professionnels",
+ Matériaux:"matériaux de construction, ciment, sable, gravier et équipements",
+ Immobilier:"maisons, appartements, terrains et locations immobilières",
+ Véhicules:"voitures, motos, véhicules utilitaires et pièces automobiles",
+ Électronique:"téléphones, ordinateurs, appareils et équipements électroniques",
+ Services:"services locaux, artisans et professionnels de différents métiers",
+ Alimentation:"produits agricoles, céréales et denrées alimentaires"
+};
+function updateSeoContent(){
+ const country=countryByCode(activeCountry),category=CATEGORY_SEO[currentCat]||CATEGORY_SEO.Tous;
+ const heading=currentCat==="Tous"?`Annonces et professionnels en ${country.name}`:`${currentCat} en ${country.name} — AFRIKORA`;
+ const description=`Découvrez des ${category} en ${country.name} sur AFRIKORA. Consultez les annonces, comparez les prix et contactez directement les annonceurs.`;
+ const pageTitle=currentCat==="Tous"?`AFRIKORA ${country.name} — Annonces, produits et services`:`${currentCat} en ${country.name} | AFRIKORA`;
+ document.getElementById("seoHeading")?.replaceChildren(document.createTextNode(heading));
+ document.getElementById("seoDescription")?.replaceChildren(document.createTextNode(description));
+ document.getElementById("seoCategoryText")?.replaceChildren(document.createTextNode(`Catégorie : ${currentCat}. Pays sélectionné : ${country.name}. Monnaie : ${country.currency} (${country.symbol}).`));
+ document.title=pageTitle;
+ const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description;
+ const ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle)ogTitle.content=pageTitle;
+ const ogDescription=document.querySelector('meta[property="og:description"]');if(ogDescription)ogDescription.content=description;
+}
 function countryOptions(selected){return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('')}
 function initCountries(){['countryTop','countryHome','adCountry'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=countryOptions(activeCountry)});syncCountryUI()}
-function changeCountry(code){if(!AFRICAN_COUNTRIES.some(c=>c.code===code))return;activeCountry=code;try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){};['countryTop','countryHome','adCountry'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=code});syncCountryUI();apply();}
+function changeCountry(code){if(!AFRICAN_COUNTRIES.some(c=>c.code===code))return;activeCountry=code;try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){};['countryTop','countryHome','adCountry'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=code});syncCountryUI();updateSeoContent();const cityInput=document.getElementById("city"),adCityInput=document.getElementById("adCity");if(cityInput){if(code==="BF")cityInput.setAttribute("list","burkinaLocalities");else cityInput.removeAttribute("list")}if(adCityInput){if(code==="BF")adCityInput.setAttribute("list","burkinaLocalities");else adCityInput.removeAttribute("list")}apply();}
 function syncCountryFromPublish(){const v=document.getElementById('adCountry')?.value;if(v)changeCountry(v)}
-function syncCountryUI(){const c=countryByCode(activeCountry);const hint=document.getElementById('currencyHint');if(hint)hint.textContent=`Monnaie : ${c.currency} (${c.symbol})`;const label=document.getElementById('adCurrencyLabel');if(label)label.textContent=c.symbol;const q=document.getElementById('city');if(q)q.placeholder=`Ville / localité en ${c.name}`}
+function syncCountryUI(){const c=countryByCode(activeCountry);const hint=document.getElementById('currencyHint');if(hint)hint.textContent=`Monnaie : ${c.currency} (${c.symbol})`;const label=document.getElementById('adCurrencyLabel');if(label)label.textContent=c.symbol;const q=document.getElementById('city'),adCity=document.getElementById('adCity');if(q){q.placeholder=`Ville / localité en ${c.name}`;if(activeCountry==='BF')q.setAttribute('list','burkinaLocalities');else q.removeAttribute('list')}if(adCity){if(activeCountry==='BF')adCity.setAttribute('list','burkinaLocalities');else adCity.removeAttribute('list')}}
 function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
 function openGoogleAuth(){if(!requireClient())return;supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}}).then(({error})=>{if(error)toast(error.message)});}
@@ -292,14 +336,14 @@ function updateCategoryCounts(){
  })
 }
 
-function filterCat(cat,el){currentCat=cat;document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");apply()}
+function filterCat(cat,el){currentCat=cat;updateSeoContent();document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");apply()}
 function apply(){
  updateCategoryCounts();
  const q=(document.getElementById("q").value||"").toLowerCase().trim(),city=document.getElementById("city").value;
  const minRaw=document.getElementById("minPrice").value,maxRaw=document.getElementById("maxPrice").value;
  const min=minRaw===""?null:Number(minRaw),max=maxRaw===""?null:Number(maxRaw),sort=document.getElementById("sortBy").value;
  let list=allAds().filter(a=>
-  (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry)&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||a.city===city)&&
+  (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry)&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||normalizeSearchText(a.city).includes(normalizeSearchText(city)))&&
   (!q||(`${a.title} ${a.cat} ${a.metier} ${a.city} ${a.desc}`).toLowerCase().includes(q))&&
   (min===null||a.price>=min)&&(max===null||a.price<=max)
  );
@@ -577,7 +621,7 @@ async function renderDash(){
  <div class="feature">❤️<b>${favs.length} favori(s)</b><span>Vos annonces sauvegardées</span></div>
  <div class="feature">💬<b>${unreadCount()} non lu(s)</b><span>Votre messagerie</span></div>
  </div>
- <div class="section"><h3>Mes annonces</h3>${mine.length?`<div class="grid">${mine.map(a=>`<article class="card"><div class="body"><b>${esc(a.title)}</b><div class="meta">${a.type==="service"?"🛠️ "+esc(a.metier):esc(a.cat)} · ${esc(a.city)}</div><p class="price">${money(a.price)}</p><p class="meta">${a.status==="sold"?"🔴 Vendu":"🟢 Disponible"}</p><div class="row"><button class="small" onclick="editAd('${a.id}')">✏️ Modifier</button>${a.status==="sold"?`<button class="small" onclick="updateAdStatus('${a.id}','active')">🔄 Réactiver</button>`:`<button class="small" onclick="updateAdStatus('${a.id}','sold')">✅ Vendu</button>`}<button class="small" onclick="deleteAd('${a.id}')">Supprimer</button></div></div></article>`).join("")}</div>`:'<div class="empty">Vous n’avez pas encore publié d’annonce.</div>'}</div>
+ <div class="section"><h3>Mes annonces</h3>${mine.length?`<div class="grid">${mine.map(a=>`<article class="card"><div class="body"><b>${esc(a.title)}</b><div class="meta">${a.type==="service"?"🛠️ "+esc(a.metier):esc(a.cat)} · ${esc(a.city)}</div><p class="price">${money(a.price,a.country_code||"BF")}</p><p class="meta">${a.status==="sold"?"🔴 Vendu":"🟢 Disponible"}</p><div class="row"><button class="small" onclick="editAd('${a.id}')">✏️ Modifier</button>${a.status==="sold"?`<button class="small" onclick="updateAdStatus('${a.id}','active')">🔄 Réactiver</button>`:`<button class="small" onclick="updateAdStatus('${a.id}','sold')">✅ Vendu</button>`}<button class="small" onclick="deleteAd('${a.id}')">Supprimer</button></div></div></article>`).join("")}</div>`:'<div class="empty">Vous n’avez pas encore publié d’annonce.</div>'}</div>
  <div class="section"><h3>❤️ Mes favoris</h3>${favs.length?`<div class="grid">${favs.map(a=>`<article class="card"><div class="body"><b>${esc(a.title)}</b><div class="meta">📍 ${esc(a.city)}</div><div class="price">${money(a.price,a.country_code||"BF")}</div><button class="small" onclick="viewAd('${a.id}')">Voir</button></div></article>`).join("")}</div>`:'<div class="empty">Aucun favori.</div>'}</div>
  <div class="section"><h3>💬 Messages</h3>${renderMessages()}</div>`
 }
@@ -593,7 +637,7 @@ async function editAd(id){
  if(!current||!requireClient())return;
  const ad=ads.find(a=>a.id===id);if(!ad)return;
  const title=prompt("Titre de l'annonce :",ad.title);if(title===null)return;
- const price=prompt("Prix en FCFA :",ad.price);if(price===null)return;
+ const adCurrency=countryByCode(ad.country_code||"BF").symbol;const price=prompt(`Prix en ${adCurrency} :`,ad.price);if(price===null)return;
  const desc=prompt("Description :",ad.desc);if(desc===null)return;
  const {error}=await supabaseClient.from("annonces").update({title:title.trim(),price:Number(price),description:desc.trim()}).eq("id",id).eq("user_id",current.id);
  if(error){console.error(error);toast("Impossible de modifier l'annonce");return}
@@ -642,7 +686,7 @@ async function loadAdminDashboard(){
   const since=new Date(Date.now()-5*60*1000).toISOString();
   const [usersRes,adsRes,visitsRes,activityRes,profilesRes]=await Promise.all([
    supabaseClient.from("profiles").select("id",{count:"exact",head:true}),
-   supabaseClient.from("annonces").select("id,title,status,city,price,created_at",{count:"exact"}),
+   supabaseClient.from("annonces").select("id,title,status,city,price,country_code,created_at",{count:"exact"}),
    supabaseClient.from("site_visits").select("visitor_key",{count:"exact",head:true}).gte("visited_at",todayStart).lt("visited_at",tomorrowStart),
    supabaseClient.from("user_activity").select("user_id,last_seen").gte("last_seen",since),
    supabaseClient.from("profiles").select("id,name,phone")
@@ -660,7 +704,7 @@ async function loadAdminDashboard(){
    </div>
    <p class="meta">*Le nombre de comptes actifs dépend de la mise à jour de la table user_activity. Les visites comptent les enregistrements dans site_visits, pas les personnes uniques garanties.</p>
    <div class="section"><div class="row"><h3>📢 Modération des annonces</h3><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
-   ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0)} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
+   ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0,a.country_code||"BF")} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
    <div class="section"><h3>👤 Comptes utilisateurs</h3>${people.length?`<div class="msg-list">${people.map(p=>`<div class="msg-item"><b>${adminEscape(p.name||"Utilisateur")}</b><div class="meta">ID : ${adminEscape(p.id)} · Téléphone : ${adminEscape(p.phone||"Non renseigné")}</div></div>`).join("")}</div>`:'<div class="empty">Aucun profil accessible.</div>'}</div>`;
  }catch(e){console.error("Admin AFRIKORA:",e);root.innerHTML=`<div class="empty">Impossible de charger l’administration. Vérifie les droits d’accès Supabase (RLS) et la présence des tables site_visits et user_activity.<br><br><small>${adminEscape(e.message||"Erreur inconnue")}</small></div>`}
 }
@@ -737,7 +781,7 @@ async function submitSiteReview(){
 }
 
 (async function init(){
- initCountries();populateLocalities();render(seed);updateAccount();await loadSiteRating();
+ initCountries();updateSeoContent();populateLocalities();render(seed);updateAccount();await loadSiteRating();
  if(supabaseClient){
   const {data}=await supabaseClient.auth.getSession();
   if(data.session){await setCurrentFromUser(data.session.user);await loadMessages();updateAccount();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
