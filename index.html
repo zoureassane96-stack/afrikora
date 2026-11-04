@@ -377,8 +377,11 @@ function render(list=allAds()){
 }
 
 function updateCategoryCounts(){
- const counts={Tous:allAds().length};
- allAds().forEach(a=>counts[a.cat]=(counts[a.cat]||0)+1);
+ const countryAds=allAds().filter(a=>
+  a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry
+ );
+ const counts={Tous:countryAds.length};
+ countryAds.forEach(a=>counts[a.cat]=(counts[a.cat]||0)+1);
  document.querySelectorAll(".chip[data-cat]").forEach(el=>{
   const cat=el.dataset.cat,base=el.dataset.label||el.textContent.replace(/\s*\(\d+\)\s*$/,"").trim();
   el.dataset.label=base;el.textContent=base+" ("+(counts[cat]||0)+")"
