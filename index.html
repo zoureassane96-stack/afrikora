@@ -768,9 +768,63 @@ async function loadSiteRating(){
  document.getElementById("siteRatingSummary").textContent=rows.length?`⭐ ${avg.toFixed(1)}/5 — ${rows.length} avis sur AFRIKORA`:"Aucun avis pour le moment"
 }
 async function openSiteReview(){
- if(!current){openModal("login");return}
- let old=null;if(supabaseClient){const {data}=await supabaseClient.from("avis_site").select("note,commentaire").eq("reviewer_id",current.id).maybeSingle();old=data}
- openCustom(`<h2>⭐ Noter AFRIKORA</h2><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">Publier mon avis</button>`)
+  let old = null;
+  let reviews = [];
+
+  if(supabaseClient){
+    const {data} = await supabaseClient
+      .from("avis_site")
+      .select("note,commentaire,reponse_admin,reviewer_id")
+      .order("note", {ascending:false});
+
+    reviews = data || [];
+
+    if(current){
+      old = reviews.find(a => a.reviewer_id === current.id) || null;
+    }
+  }
+
+  const avisHTML = reviews.length
+    ? reviews.map(a => `
+        <div class="avis-card">
+          <b>⭐ ${Number(a.note)}/5</b>
+          <p>${esc(a.commentaire || "Aucun commentaire.")}</p>
+          ${a.reponse_admin ? `
+            <div class="avis-reponse">
+              <b>Réponse officielle AFRIKORA</b>
+              <p>${esc(a.reponse_admin)}</p>
+            </div>
+          ` : ""}
+        </div>
+      `).join("")
+    : "<p>Aucun avis pour le moment.</p>";
+
+  const formulaire = current ? `
+    <h3>Votre avis</h3>
+    <div class="field">
+      <label>Votre note</label>
+      <select id="siteReviewNote">
+        ${[5,4,3,2,1].map(n =>
+          `<option value="${n}" ${Number(old?.note || 5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`
+        ).join("")}
+      </select>
+    </div>
+    <div class="field">
+      <label>Commentaire</label>
+      <textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire || "")}</textarea>
+    </div>
+    <button class="full" onclick="submitSiteReview()">Publier mon avis</button>
+  ` : `
+    <p>Connectez-vous pour publier votre avis.</p>
+    <button class="full" onclick="openModal('login')">Connexion</button>
+  `;
+
+  openCustom(`
+    <h2>⭐ Avis sur AFRIKORA</h2>
+    <p>${reviews.length} avis publié(s)</p>
+    <div class="avis-publics">${avisHTML}</div>
+    ${formulaire}
+  `);
 }
 async function submitSiteReview(){
  if(!current||!requireClient())return;
