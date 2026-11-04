@@ -321,6 +321,93 @@
       }
     }
 
+ async function chargerAvis() {
+  const zone = el("avisList");
+  const statut = el("avisMessage");
+  zone.replaceChildren();
+  statut.textContent = "Chargement des avis...";
+
+  try {
+    const { data: sessionData, error: sessionError } = await db.auth.getSession();
+    if (sessionError) throw sessionError;
+
+    const user = sessionData.session?.user;
+    if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+      throw new Error("Connexion administrateur requise.");
+    }
+
+    const { data, error } = await db
+      .from("avis_site")
+      .select("reviewer_id,note,commentaire,reponse_admin");
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      statut.textContent = "Aucun avis pour le moment.";
+      return;
+    }
+
+    data.forEach(avis => {
+      const carte = document.createElement("article");
+      carte.className = "avis-card";
+
+      const note = document.createElement("p");
+      note.textContent = "Note : " + avis.note + "/5";
+
+      const commentaire = document.createElement("p");
+      commentaire.textContent = avis.commentaire || "Aucun commentaire.";
+
+      const label = document.createElement("label");
+      label.textContent = "Réponse officielle AFRIKORA";
+
+      const champ = document.createElement("textarea");
+      champ.maxLength = 2000;
+      champ.value = avis.reponse_admin || "";
+      champ.placeholder = "Écris ta réponse...";
+
+      const bouton = document.createElement("button");
+      bouton.type = "button";
+      bouton.textContent = avis.reponse_admin ? "Modifier la réponse" : "Publier la réponse";
+
+      bouton.addEventListener("click", async () => {
+        const reponse = champ.value.trim();
+
+        if (!reponse) {
+          statut.textContent = "Écris une réponse avant de publier.";
+          return;
+        }
+
+        bouton.disabled = true;
+
+        try {
+          const { error } = await db
+            .from("avis_site")
+            .update({ reponse_admin: reponse })
+            .eq("reviewer_id", avis.reviewer_id);
+
+          if (error) throw error;
+
+          avis.reponse_admin = reponse;
+          bouton.textContent = "Modifier la réponse";
+          statut.textContent = "Réponse publiée avec succès.";
+        } catch (err) {
+          statut.textContent = "Erreur : " + err.message;
+        } finally {
+          bouton.disabled = false;
+        }
+      });
+
+      carte.append(note, commentaire, label, champ, bouton);
+      zone.append(carte);
+    });
+
+    statut.textContent = data.length + " avis chargé(s).";
+  } catch (err) {
+    statut.textContent = "Erreur : " + err.message;
+  }
+}
+
+el("refreshAvis").addEventListener("click", chargerAvis);
     el("refresh").addEventListener("click", chargerStats);
 
     el("logout").addEventListener("click", async () => {
