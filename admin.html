@@ -236,6 +236,7 @@
         }
 
         afficherConnecte(true);
+        await chargerAvis();
         await chargerStats();
       } catch (error) {
         afficherConnecte(false);
@@ -268,6 +269,7 @@
         messageConnexion("");
         afficherConnecte(true);
         await chargerStats();
+        await chargerAvis();
       } catch (error) {
         messageConnexion("Connexion impossible : " + error.message);
       } finally {
