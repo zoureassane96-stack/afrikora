@@ -254,7 +254,109 @@ function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AF
 function normalizeSearchText(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’']/g,"'").toLocaleLowerCase("fr").trim().replace(/\s+/g," ")}
 const CATEGORY_SEO={
  Tous:"produits, annonces, prix, services et professionnels",
- Matériaux:"matériaux de construction, ciment, sable, gravier et équipements",
+ Matériaux:"ma const ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle)ogTitle.content=pageTitle;
+ const ogDescription=document.querySelector('meta[property="og:description"]');if(ogDescription)ogDescription.content=description;
+}function countryOptions(selected){
+ return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('');
+}
+
+function marketCountryOptions(selected){
+ return `<option value="ALL" ${showAllAfrica?'selected':''}>🌍 Toute l’Afrique (54 pays)</option>`+
+ countryOptions(selected);
+}
+
+function initCountries(){
+ ['countryTop','countryHome'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.innerHTML=marketCountryOptions(activeCountry);
+ });
+ const ad=document.getElementById('adCountry');
+ if(ad)ad.innerHTML=countryOptions(activeCountry);
+ syncCountryUI();
+}
+function changeCountry(code){
+ if(code==='ALL'){
+  showAllAfrica=true;
+ }else{
+  if(!AFRICAN_COUNTRIES.some(c=>c.code===code))return;
+  activeCountry=code;
+  showAllAfrica=false;
+  try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){}
+ }
+
+ ['countryTop','countryHome'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.value=showAllAfrica?'ALL':activeCountry;
+ });
+
+ syncCountryUI();
+ updateSeoContent();
+
+ const cityInput=document.getElementById('city');
+ if(cityInput){
+  cityInput.placeholder=showAllAfrica
+   ?'Ville / localité en Afrique'
+   :`Ville / localité en ${countryByCode(activeCountry).name}`;
+
+  if(!showAllAfrica&&activeCountry==='BF')
+   cityInput.setAttribute('list','burkinaLocalities');
+  else
+   cityInput.removeAttribute('list');
+ }
+ apply();
+}
+
+function syncCountryFromPublish(){
+ const v=document.getElementById('adCountry')?.value;
+ if(!v||!AFRICAN_COUNTRIES.some(c=>c.code===v))return;
+
+ activeCountry=v;
+ showAllAfrica=false;
+
+ try{localStorage.setItem(COUNTRY_STORE,v)}catch(e){}
+
+ ['countryTop','countryHome'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.value=activeCountry;
+ });
+
+ syncCountryUI();
+ updateSeoContent();
+ apply();
+}
+
+function syncCountryUI(){
+ const c=countryByCode(activeCountry);
+
+ const hint=document.getElementById('currencyHint');
+ if(hint)hint.textContent=showAllAfrica
+  ?'Monnaie locale selon le pays de chaque annonce'
+  :`Monnaie : ${c.currency} (${c.symbol})`;
+
+ const label=document.getElementById('adCurrencyLabel');
+ if(label)label.textContent=c.symbol;
+
+ const q=document.getElementById('city');
+ const adCity=document.getElementById('adCity');
+
+ if(q){
+  q.placeholder=showAllAfrica
+   ?'Ville / localité en Afrique'
+   :`Ville / localité en ${c.name}`;
+
+  if(!showAllAfrica&&activeCountry==='BF')
+   q.setAttribute('list','burkinaLocalities');
+  else
+   q.removeAttribute('list');
+ }
+
+ if(adCity){
+  if(activeCountry==='BF')
+   adCity.setAttribute('list','burkinaLocalities');
+  else
+   adCity.removeAttribute('list');
+ }
+}tériaux de construction, ciment, sable, gravier et équipements",
  Immobilier:"maisons, appartements, terrains et locations immobilières",
  Véhicules:"voitures, motos, véhicules utilitaires et pièces automobiles",
  Électronique:"téléphones, ordinateurs, appareils et équipements électroniques",
@@ -271,14 +373,7 @@ function updateSeoContent(){
  document.getElementById("seoCategoryText")?.replaceChildren(document.createTextNode(`Catégorie : ${currentCat}. Pays sélectionné : ${country.name}. Monnaie : ${country.currency} (${country.symbol}).`));
  document.title=pageTitle;
  const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description;
- const ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle)ogTitle.content=pageTitle;
- const ogDescription=document.querySelector('meta[property="og:description"]');if(ogDescription)ogDescription.content=description;
-}
-function countryOptions(selected){return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('')}
-function initCountries(){['countryTop','countryHome','adCountry'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=countryOptions(activeCountry)});syncCountryUI()}
-function changeCountry(code){if(!AFRICAN_COUNTRIES.some(c=>c.code===code))return;activeCountry=code;try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){};['countryTop','countryHome','adCountry'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=code});syncCountryUI();updateSeoContent();const cityInput=document.getElementById("city"),adCityInput=document.getElementById("adCity");if(cityInput){if(code==="BF")cityInput.setAttribute("list","burkinaLocalities");else cityInput.removeAttribute("list")}if(adCityInput){if(code==="BF")adCityInput.setAttribute("list","burkinaLocalities");else adCityInput.removeAttribute("list")}apply();}
-function syncCountryFromPublish(){const v=document.getElementById('adCountry')?.value;if(v)changeCountry(v)}
-function syncCountryUI(){const c=countryByCode(activeCountry);const hint=document.getElementById('currencyHint');if(hint)hint.textContent=`Monnaie : ${c.currency} (${c.symbol})`;const label=document.getElementById('adCurrencyLabel');if(label)label.textContent=c.symbol;const q=document.getElementById('city'),adCity=document.getElementById('adCity');if(q){q.placeholder=`Ville / localité en ${c.name}`;if(activeCountry==='BF')q.setAttribute('list','burkinaLocalities');else q.removeAttribute('list')}if(adCity){if(activeCountry==='BF')adCity.setAttribute('list','burkinaLocalities');else adCity.removeAttribute('list')}}
+
 function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
 function openGoogleAuth(){if(!requireClient())return;supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}}).then(({error})=>{if(error)toast(error.message)});}
@@ -378,14 +473,26 @@ function render(list=allAds()){
 
 function updateCategoryCounts(){
  const countryAds=allAds().filter(a=>
-  a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry
+  showAllAfrica ||
+  (a.demo
+   ? activeCountry==="BF"
+   : (a.country_code||"BF")===activeCountry)
  );
+
  const counts={Tous:countryAds.length};
- countryAds.forEach(a=>counts[a.cat]=(counts[a.cat]||0)+1);
+
+ countryAds.forEach(a=>{
+  counts[a.cat]=(counts[a.cat]||0)+1;
+ });
+
  document.querySelectorAll(".chip[data-cat]").forEach(el=>{
-  const cat=el.dataset.cat,base=el.dataset.label||el.textContent.replace(/\s*\(\d+\)\s*$/,"").trim();
-  el.dataset.label=base;el.textContent=base+" ("+(counts[cat]||0)+")"
- })
+  const cat=el.dataset.cat;
+  const base=el.dataset.label||
+   el.textContent.replace(/\s*\(\d+\)\s*$/,"").trim();
+
+  el.dataset.label=base;
+  el.textContent=base+" ("+(counts[cat]||0)+")";
+ });
 }
 
 function filterCat(cat,el){currentCat=cat;updateSeoContent();document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");apply()}
@@ -394,8 +501,8 @@ function apply(){
  const q=(document.getElementById("q").value||"").toLowerCase().trim(),city=document.getElementById("city").value;
  const minRaw=document.getElementById("minPrice").value,maxRaw=document.getElementById("maxPrice").value;
  const min=minRaw===""?null:Number(minRaw),max=maxRaw===""?null:Number(maxRaw),sort=document.getElementById("sortBy").value;
- let list=allAds().filter(a=>
-  (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry)&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||normalizeSearchText(a.city).includes(normalizeSearchText(city)))&&
+let list=allAds().filter(a=>
+  (showAllAfrica || (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry))&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||normalizeSearchText(a.city).includes(normalizeSearchText(city)))&&
   (!q||(`${a.title} ${a.cat} ${a.metier} ${a.city} ${a.desc}`).toLowerCase().includes(q))&&
   (min===null||a.price>=min)&&(max===null||a.price<=max)
  );
