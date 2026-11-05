@@ -4,13 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0D554B">
-<meta name="description" content="AFRIKORA : produits, annonces, professionnels et services sur le marché africain.">
+<meta name="description" content="AFRIKORA, la marketplace panafricaine pour acheter et vendre des produits, publier des annonces et trouver des services et professionnels dans les 54 pays d’Afrique.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://afrikora.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="AFRIKORA">
+<meta property="og:title" content="AFRIKORA — Marketplace panafricaine">
+<meta property="og:description" content="Achetez, vendez, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.">
+<meta property="og:url" content="https://afrikora.vercel.app/">
+<meta property="og:image" content="https://afrikora.vercel.app/afrikora-logo.png">
+<meta property="og:image:alt" content="Logo AFRIKORA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AFRIKORA — Marketplace panafricaine">
+<meta name="twitter:description" content="Produits, annonces, services et professionnels dans les 54 pays d’Afrique.">
+<meta name="twitter:image" content="https://afrikora.vercel.app/afrikora-logo.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AFRIKORA">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/png" href="afrikora-192.png">
 <link rel="apple-touch-icon" href="afrikora-192.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://afrikora.vercel.app/#organization",
+      "name": "AFRIKORA",
+      "url": "https://afrikora.vercel.app/",
+      "logo": "https://afrikora.vercel.app/afrikora-logo.png",
+      "description": "Marketplace panafricaine de produits, annonces, services et professionnels."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://afrikora.vercel.app/#website",
+      "url": "https://afrikora.vercel.app/",
+      "name": "AFRIKORA",
+      "description": "Marketplace panafricaine pour acheter, vendre et trouver des services dans les 54 pays africains.",
+      "inLanguage": "fr",
+      "publisher": {"@id": "https://afrikora.vercel.app/#organization"}
+    }
+  ]
+}
+</script>
 <title>AFRIKORA — Le marché africain des opportunités</title>
 <style>
 :root{--p:#0D554B;--p2:#073B36;--a:#F58220;--bg:#f7f9f8;--card:#fff;--text:#17211f;--muted:#66736f;--border:#e2e8e5;--danger:#dc2626}
@@ -63,11 +101,11 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <main id="home">
 <div class="country-bar"><label for="countryHome">🌍 Voir les annonces de :</label><select id="countryHome" onchange="changeCountry(this.value)"></select><span class="meta" id="currencyHint">Monnaie locale</span></div>
 <section class="hero">
-<h1>Tout un marché. Toutes les opportunités.</h1>
-<p>Découvrez des produits, comparez les prix, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.</p>
+<h1>La marketplace panafricaine : produits, annonces et services</h1>
+<p>Découvrez des produits, comparez les offres, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.</p>
 <div class="search">
-<input id="q" placeholder="Que recherchez-vous ? ex. ciment, maison, maçon...">
-<input id="city" list="burkinaLocalities" placeholder="Ville / localité (ex. Garango)" autocomplete="off"><datalist id="burkinaLocalities"></datalist>
+<input id="q" type="search" aria-label="Rechercher un produit, une annonce ou un service" placeholder="Que recherchez-vous ? ex. ciment, maison, maçon...">
+<input id="city" list="burkinaLocalities" aria-label="Ville ou localité" placeholder="Ville / localité" autocomplete="off"><datalist id="burkinaLocalities"></datalist>
 <button onclick="searchAds()">Rechercher</button>
 </div>
 <div class="filters">
@@ -104,6 +142,15 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <div class="feature">🛠️<b>Trouver un professionnel</b><span>Maçon, électricien, plombier et autres métiers.</span></div>
 <div class="feature">💬<b>Échanger</b><span>Contactez directement les annonceurs.</span></div>
 </div>
+</section>
+
+<section class="section" aria-labelledby="afrikora-guide-title">
+<h2 id="afrikora-guide-title">Acheter, vendre et trouver des services en Afrique</h2>
+<p>AFRIKORA est une marketplace panafricaine qui rassemble des annonces de produits, des offres de services et des professionnels. Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.</p>
+<h3>Les principales catégories sur AFRIKORA</h3>
+<p>Parcourez les annonces de matériaux de construction, immobilier, véhicules, électronique, alimentation et services. Les professionnels peuvent présenter leurs métiers et les utilisateurs peuvent découvrir les offres disponibles dans leur pays.</p>
+<h3>Une plateforme ouverte aux 54 pays africains</h3>
+<p>Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche. Les prix sont affichés dans la monnaie locale indiquée par l’annonceur.</p>
 </section>
 
 <section class="section dash" id="dashboard">
@@ -224,7 +271,7 @@ function changeCountry(code){
  const cityInput=document.getElementById('city');
  if(cityInput){
   cityInput.placeholder=showAllAfrica?'Ville / localité en Afrique':`Ville / localité en ${countryByCode(activeCountry).name}`;
-  if(!showAllAfrica&&activeCountry==='BF')cityInput.setAttribute('list','burkinaLocalities');else cityInput.removeAttribute('list');
+  cityInput.setAttribute('list','burkinaLocalities');
  }
  apply();
 }
@@ -242,9 +289,10 @@ function syncCountryUI(){
  if(hint)hint.textContent=showAllAfrica?'Monnaie locale selon chaque annonce · tri par prix indisponible en vue Afrique':`Monnaie : ${c.currency} (${c.symbol})`;
  const label=document.getElementById('adCurrencyLabel');if(label)label.textContent=c.symbol;
  const q=document.getElementById('city');
- if(q){q.placeholder=showAllAfrica?'Ville / localité en Afrique':`Ville / localité en ${c.name}`;if(!showAllAfrica&&activeCountry==='BF')q.setAttribute('list','burkinaLocalities');else q.removeAttribute('list')}
+ if(q){q.placeholder=showAllAfrica?'Ville / localité en Afrique':`Ville / localité en ${c.name}`;q.setAttribute('list','burkinaLocalities')}
  const adCity=document.getElementById('adCity');
- if(adCity){if(activeCountry==='BF')adCity.setAttribute('list','burkinaLocalities');else adCity.removeAttribute('list')}
+ if(adCity){adCity.setAttribute('list','burkinaLocalities');adCity.placeholder=`Ex. ${localityExamples[activeCountry]?.[0]||'ville principale'}, autre localité…`}
+ populateLocalities();
 }
 function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
@@ -306,8 +354,30 @@ function previewAdImage(){
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="adImage")previewAdImage()});
 
 const burkinaLocalities=["Ouagadougou","Bobo-Dioulasso","Koudougou","Banfora","Ouahigouya","Fada N’Gourma","Fada N'Gourma","Tenkodogo","Kaya","Dori","Gaoua","Manga","Ziniaré","Réo","Koupéla","Pouytenga","Garango","Pô","Léo","Sapouy","Houndé","Orodara","Sindou","Diébougou","Dano","Batié","Bougouriba","Boromo","Solenzo","Nouna","Tougan","Djibo","Gorom-Gorom","Kongoussi","Yako","Gourcy","Séguénéga","Boussé","Zorgho","Boulsa","Korsimoro","Kombissiri","Pabré","Saaba","Tanghin-Dassouri","Komsilga","Koubri","Loumbila","Béguédo","Bittou","Zabré","Zorgho","Bagré","Toma","Yaba","Titao","Thiou","Aribinda","Sebba","Gayéri","Bogandé","Manni","Pama","Diapaga","Kantchari","Tansarga","Komtoèga","Zoundwéogo","Kokologho","Sabou","Dédougou","Tchériba","Safané","Kona","Kouka","Bama","Karangasso-Vigué","Péni","Toussiamasso","Koumbia","Faramana","Koloko","Niangoloko","Sidéradougou","Douna","Karangasso Sambla","Dissin","Tiankoura","Kampti","Loropéni","Gbomblora","Nébiélianayou","Dapélogo","Bingo","Rollo","Mané","Pissila","Barsalogho","Bourzanga","Tikaré","Imasgo","Pella","Nanoro","Toécé","Doulougou","Béré","Boura","Gomboussougou","Nobéré","Guiba","Béré","Kindi","Godyr","Didyr","Ténado","Gossina","Yé","Bondokuy","Ouarkoye","Douroula","Bana","Béréba","Koti","Koundougou","Fô","Satiri","Léna","Fo","Dandé","Békuy","Koti","Pouni","Nandiala","Ramongo","Kordié","Bingo","Boudry","Mogtédo","Méguet","Salogo","Zam","Yargo","Andemtenga","Dialgaye","Tensobentenga","Yondé","Kando","Kouritenga","Bissiga","Lalgaye","Sangha","Saponé","Béré","Bama","Garango"];
-const uniqueLocalities=[...new Set(burkinaLocalities)].sort((a,b)=>a.localeCompare(b,"fr"));
-function populateLocalities(){const d=document.getElementById("burkinaLocalities");if(d)d.innerHTML=uniqueLocalities.map(v=>`<option value="${esc(v)}"></option>`).join("")}
+// Suggestions de villes selon le pays choisi. La saisie libre reste autorisée pour les petites localités.
+const localityExamples={
+ BF:burkinaLocalities,
+ ZA:["Johannesburg","Cape Town","Le Cap","Durban","Pretoria","Tshwane","Soweto","Port Elizabeth","Gqeberha","Bloemfontein","East London","Polokwane","Nelspruit","Mbombela","Kimberley","Rustenburg","Pietermaritzburg","George","Welkom","Mthatha","Newcastle","Klerksdorp","Upington","Stellenbosch","Paarl"]
+};
+const normalizedLocality=v=>String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("fr-FR").replace(/[^a-z0-9]/g,"");
+function localitiesForCountry(code){return [...new Set(localityExamples[code]||[])].sort((a,b)=>a.localeCompare(b,"fr"))}
+function populateLocalities(){
+ const d=document.getElementById("burkinaLocalities");if(!d)return;
+ const list=localitiesForCountry(activeCountry);
+ d.innerHTML=list.map(v=>`<option value="${esc(v)}"></option>`).join("");
+}
+function validateCityCountry(city,code){
+ const value=normalizedLocality(city);
+ if(!value)return true;
+ for(const [otherCode,places] of Object.entries(localityExamples)){
+  if(otherCode!==code&&places.some(place=>normalizedLocality(place)===value)){
+   const other=countryByCode(otherCode)?.name||otherCode;
+   toast(`Cette localité correspond au ${other}. Vérifiez le pays de publication.`);
+   return false;
+  }
+ }
+ return true;
+}
 
 function normalizeAd(a){
  const service=a.type==="service";
@@ -320,7 +390,7 @@ function normalizeAd(a){
  }
 }
 
-function allAds(){return ads.length?ads:seed}
+function allAds(){return ads}
 
 function render(list=allAds()){
  list=[...list].sort((a,b)=>Number(!!b.is_featured)-Number(!!a.is_featured));
@@ -510,6 +580,7 @@ async function publishAd(){
  const imageFiles=[...(document.getElementById("adImage")?.files||[])],is_featured=document.getElementById("adFeatured")?.checked||false;
  if(!title||!price||!city.trim()){toast("Ajoutez un titre, un prix et une ville/localité");return}
  if(!AFRICAN_COUNTRIES.some(c=>c.code===publicationCountry)){toast("Choisissez un pays de publication valide");return}
+ if(!validateCityCountry(city,publicationCountry))return;
  if(whatsapp_enabled&&!whatsapp_phone){toast("Ajoutez votre numéro WhatsApp ou désactivez l'option");return}
  if(imageFiles.length>10||imageFiles.some(f=>!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>2*1024*1024)){toast("10 photos maximum, JPG/PNG/WebP de 2 Mo chacune");return}
  try{
@@ -813,7 +884,7 @@ async function submitSiteReview(){
 
 (async function init(){
  await detectCountryFromConnection();
- initCountries();populateLocalities();render(seed);updateAccount();await loadSiteRating();
+ initCountries();populateLocalities();render([]);updateAccount();await loadSiteRating();
  if(supabaseClient){
   const {data}=await supabaseClient.auth.getSession();
   if(data.session){await setCurrentFromUser(data.session.user);await loadMessages();updateAccount();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
@@ -821,7 +892,7 @@ async function submitSiteReview(){
   await trackAFRIKORAVisit();if(presenceTimer)clearInterval(presenceTimer);presenceTimer=setInterval(updateAFRIKORAPresence,60000);
   supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
    if(session){await setCurrentFromUser(session.user);await loadMessages();updateAccount();await loadCloudData();await updateAFRIKORAPresence();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
-   else{if(messagePoller)clearInterval(messagePoller);messagePoller=null;knownUnreadIds.clear();current=null;isAdmin=false;fav=[];messages=[];updateAccount();render(seed);await updateAFRIKORAPresence()}
+   else{if(messagePoller)clearInterval(messagePoller);messagePoller=null;knownUnreadIds.clear();current=null;isAdmin=false;fav=[];messages=[];updateAccount();render([]);await updateAFRIKORAPresence()}
   })
  }
 })();
