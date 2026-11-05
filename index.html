@@ -4,29 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0D554B">
-<meta name="description" content="AFRIKORA : découvrez des produits, annonces, professionnels et services dans les pays africains.">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="AFRIKORA">
-<meta property="og:title" content="AFRIKORA — Le marché africain des opportunités">
-<meta property="og:description" content="Découvrez des produits, comparez les prix et trouvez des professionnels dans les pays africains.">
-<meta property="og:url" content="https://afrikora.vercel.app/">
-<meta name="twitter:card" content="summary">
+<meta name="description" content="AFRIKORA : produits, annonces, professionnels et services sur le marché africain.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="AFRIKORA">
 <link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/png" href="/afrikora-192.png">
-<link rel="apple-touch-icon" href="/afrikora-192.png">
+<link rel="icon" type="image/png" href="afrikora-192.png">
+<link rel="apple-touch-icon" href="afrikora-192.png">
 <title>AFRIKORA — Le marché africain des opportunités</title>
-<script type="application/ld+json" id="siteStructuredData">{
-  "@context":"https://schema.org",
-  "@type":"WebSite",
-  "name":"AFRIKORA",
-  "url":"https://afrikora.vercel.app/",
-  "inLanguage":"fr",
-  "description":"Plateforme de petites annonces, produits, services et professionnels dans les pays africains."
-}</script>
 <style>
 :root{--p:#0D554B;--p2:#073B36;--a:#F58220;--bg:#f7f9f8;--card:#fff;--text:#17211f;--muted:#66736f;--border:#e2e8e5;--danger:#dc2626}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -51,55 +36,6 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 .star-choice{display:flex;gap:5px;flex-direction:row-reverse;justify-content:flex-end}.star-choice button{background:transparent;font-size:30px;color:#cbd5d1;padding:2px}.star-choice button.selected,.star-choice button:hover,.star-choice button:hover~button{color:#f59e0b}.photo-preview{display:flex;gap:8px;flex-wrap:wrap}.photo-preview img{width:92px;height:82px;object-fit:cover;border-radius:9px;border:1px solid var(--border)}.featured-card{border:2px solid #f4b740}.featured-tag{display:inline-block;background:#fff2cc;color:#805b00;padding:3px 7px;border-radius:7px;font-size:11px;font-weight:800;margin-bottom:6px}.photo-strip{display:flex;gap:6px;overflow:auto;margin:8px 0}.photo-strip img{height:74px;width:78px;object-fit:cover;border-radius:8px;flex:0 0 auto;cursor:pointer}.photo-viewer{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;touch-action:pan-y;position:relative;min-height:220px;background:#f5f8f7;border-radius:14px;overflow:hidden}.photo-viewer img{display:block;max-width:100%;width:auto;max-height:66vh;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none}.photo-viewer button{background:#eef5f3;color:var(--p);padding:10px 13px;border-radius:9px;font-weight:800;flex:0 0 auto}.gallery-count{font-weight:800;color:var(--p)}.detail-main-photo{width:100%;height:min(58vw,390px);object-fit:contain;background:#f5f8f7;border-radius:14px;cursor:zoom-in}.detail-title{font-size:23px;line-height:1.25;margin:14px 0 8px}.detail-price{font-size:27px;font-weight:900;color:var(--p);margin:12px 0}.detail-panel{border:1px solid var(--border);border-radius:14px;padding:14px;margin:12px 0;background:#fff}.photo-strip img.active{outline:3px solid var(--p);outline-offset:1px}.back-home{display:inline-flex;align-items:center;gap:7px;margin:0 0 14px;padding:10px 14px;border-radius:10px;background:#eef5f3;color:var(--p);font-weight:800;border:1px solid #cfe5df}.dash-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 @media(max-width:800px){.navlinks{display:none}.mobile-menu{display:inline-block}.country-switch{max-width:145px}.grid{grid-template-columns:1fr 1fr}.features{grid-template-columns:1fr 1fr}.search{flex-wrap:wrap}.search input{flex-basis:100%}.thumb{height:205px}}
 @media(max-width:520px){main{padding:14px 10px 45px}.hero{padding:24px 15px;border-radius:17px}.hero p{font-size:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.features{grid-template-columns:1fr}.logo{font-size:21px}nav{height:auto;min-height:60px;padding:10px 12px;gap:6px}.account button{padding:8px 9px;font-size:12px}.thumb{height:185px}.body{padding:11px}.card .row{align-items:flex-start}.card .row strong{font-size:14px;overflow-wrap:anywhere}.price{font-size:17px}.card .meta{font-size:12px}.small{padding:8px 9px;font-size:12px}.box{padding:16px}.search{gap:6px}.search select,.search input{width:100%;flex-basis:100%}.search button{width:100%}.filters input,.filters select{width:100%;min-width:0}.filters{display:grid;grid-template-columns:1fr 1fr}.filters button{grid-column:1/-1}.reply-row{flex-wrap:wrap}.reply-row textarea{min-width:100%}}
-/* Présentation des avis publics AFRIKORA */
-.avis-publics {
-  display: grid;
-  gap: 12px;
-  margin: 16px 0;
-  max-height: 42vh;
-  overflow-y: auto;
-  padding: 4px;
-}
-
-.avis-card {
-  background: #ffffff;
-  border: 1px solid #e3ebe8;
-  border-radius: 14px;
-  padding: 14px;
-  margin: 0;
-  overflow-wrap: anywhere;
-  box-shadow: 0 2px 8px rgba(7, 59, 54, 0.06);
-}
-
-.avis-card > b {
-  color: #0D554B;
-  font-size: 15px;
-}
-
-.avis-card p {
-  margin: 9px 0 0;
-  line-height: 1.6;
-  color: #34433f;
-}
-
-.avis-reponse {
-  margin-top: 13px;
-  padding: 12px;
-  background: #eef7f4;
-  border-left: 4px solid #0D554B;
-  border-radius: 9px;
-}
-
-.avis-reponse b {
-  color: #0D554B;
-  font-size: 13px;
-}
-
-.avis-reponse p {
-  margin: 7px 0 0;
-  color: #34433f;
-  line-height: 1.5;
-}
 </style>
 </head>
 <body>
@@ -107,7 +43,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <div class="top">AFRIKORA — Le marché africain des opportunités</div>
 
 <nav>
-<div class="logo"><img class="brand-logo" src="/afrikora-logo.png" alt="AFRIKORA — Le marché africain des opportunités"></div>
+<div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA — Le marché africain des opportunités"></div>
 <div class="navlinks">
 <button onclick="go('home')">Accueil</button>
 <button onclick="go('annonces')">Annonces</button>
@@ -153,12 +89,6 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <button class="chip" data-cat="Services" onclick="filterCat('Services',this)">🛠️ Services</button>
 <button class="chip" data-cat="Alimentation" onclick="filterCat('Alimentation',this)">🌾 Alimentation</button>
 </div>
-</section>
-
-<section class="section seo-content" id="seoContent" aria-live="polite">
- <h2 id="seoHeading">Annonces et services en Afrique</h2>
- <p id="seoDescription">AFRIKORA facilite la découverte de produits, de services et de professionnels dans les pays africains.</p>
- <p class="meta" id="seoCategoryText">Parcourez les catégories et choisissez un pays pour consulter les annonces disponibles.</p>
 </section>
 
 <section class="section" id="annonces">
@@ -250,130 +180,55 @@ const AFRICAN_COUNTRIES=[
 const COUNTRY_STORE='afrikora_country_v1';
 function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);if(AFRICAN_COUNTRIES.some(c=>c.code===saved))return saved;const locale=(navigator.language||'').toUpperCase();const match=AFRICAN_COUNTRIES.find(c=>locale.endsWith('-'+c.code));return match?.code||'BF'}catch(e){return 'BF'}}
 let activeCountry=detectCountry();
+// Mode de consultation : le pays actif reste mémorisé même en vue panafricaine.
+let showAllAfrica=false;
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
-function normalizeSearchText(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’']/g,"'").toLocaleLowerCase("fr").trim().replace(/\s+/g," ")}
-const CATEGORY_SEO={
- Tous:"produits, annonces, prix, services et professionnels",
- Matériaux:"ma const ogTitle=document.querySelector('meta[property="og:title"]');if(ogTitle)ogTitle.content=pageTitle;
- const ogDescription=document.querySelector('meta[property="og:description"]');if(ogDescription)ogDescription.content=description;
-}function countryOptions(selected){
+function countryOptions(selected){
  return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('');
 }
-
 function marketCountryOptions(selected){
- return `<option value="ALL" ${showAllAfrica?'selected':''}>🌍 Toute l’Afrique (54 pays)</option>`+
- countryOptions(selected);
+ return `<option value="ALL" ${showAllAfrica?'selected':''}>🌍 Toute l’Afrique (54 pays)</option>`+countryOptions(selected);
 }
-
 function initCountries(){
- ['countryTop','countryHome'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el)el.innerHTML=marketCountryOptions(activeCountry);
- });
+ ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=marketCountryOptions(activeCountry)});
  const ad=document.getElementById('adCountry');
  if(ad)ad.innerHTML=countryOptions(activeCountry);
  syncCountryUI();
 }
 function changeCountry(code){
- if(code==='ALL'){
-  showAllAfrica=true;
- }else{
+ if(code==='ALL'){showAllAfrica=true;}
+ else{
   if(!AFRICAN_COUNTRIES.some(c=>c.code===code))return;
-  activeCountry=code;
-  showAllAfrica=false;
+  activeCountry=code;showAllAfrica=false;
   try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){}
  }
-
- ['countryTop','countryHome'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el)el.value=showAllAfrica?'ALL':activeCountry;
- });
-
+ ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=showAllAfrica?'ALL':activeCountry});
  syncCountryUI();
- updateSeoContent();
-
  const cityInput=document.getElementById('city');
  if(cityInput){
-  cityInput.placeholder=showAllAfrica
-   ?'Ville / localité en Afrique'
-   :`Ville / localité en ${countryByCode(activeCountry).name}`;
-
-  if(!showAllAfrica&&activeCountry==='BF')
-   cityInput.setAttribute('list','burkinaLocalities');
-  else
-   cityInput.removeAttribute('list');
+  cityInput.placeholder=showAllAfrica?'Ville / localité en Afrique':`Ville / localité en ${countryByCode(activeCountry).name}`;
+  if(!showAllAfrica&&activeCountry==='BF')cityInput.setAttribute('list','burkinaLocalities');else cityInput.removeAttribute('list');
  }
  apply();
 }
-
 function syncCountryFromPublish(){
  const v=document.getElementById('adCountry')?.value;
  if(!v||!AFRICAN_COUNTRIES.some(c=>c.code===v))return;
-
- activeCountry=v;
- showAllAfrica=false;
-
+ activeCountry=v;showAllAfrica=false;
  try{localStorage.setItem(COUNTRY_STORE,v)}catch(e){}
-
- ['countryTop','countryHome'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el)el.value=activeCountry;
- });
-
- syncCountryUI();
- updateSeoContent();
- apply();
+ ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=activeCountry});
+ syncCountryUI();apply();
 }
-
 function syncCountryUI(){
  const c=countryByCode(activeCountry);
-
  const hint=document.getElementById('currencyHint');
- if(hint)hint.textContent=showAllAfrica
-  ?'Monnaie locale selon le pays de chaque annonce'
-  :`Monnaie : ${c.currency} (${c.symbol})`;
-
- const label=document.getElementById('adCurrencyLabel');
- if(label)label.textContent=c.symbol;
-
+ if(hint)hint.textContent=showAllAfrica?'Monnaie locale selon chaque annonce · tri par prix indisponible en vue Afrique':`Monnaie : ${c.currency} (${c.symbol})`;
+ const label=document.getElementById('adCurrencyLabel');if(label)label.textContent=c.symbol;
  const q=document.getElementById('city');
+ if(q){q.placeholder=showAllAfrica?'Ville / localité en Afrique':`Ville / localité en ${c.name}`;if(!showAllAfrica&&activeCountry==='BF')q.setAttribute('list','burkinaLocalities');else q.removeAttribute('list')}
  const adCity=document.getElementById('adCity');
-
- if(q){
-  q.placeholder=showAllAfrica
-   ?'Ville / localité en Afrique'
-   :`Ville / localité en ${c.name}`;
-
-  if(!showAllAfrica&&activeCountry==='BF')
-   q.setAttribute('list','burkinaLocalities');
-  else
-   q.removeAttribute('list');
- }
-
- if(adCity){
-  if(activeCountry==='BF')
-   adCity.setAttribute('list','burkinaLocalities');
-  else
-   adCity.removeAttribute('list');
- }
-}tériaux de construction, ciment, sable, gravier et équipements",
- Immobilier:"maisons, appartements, terrains et locations immobilières",
- Véhicules:"voitures, motos, véhicules utilitaires et pièces automobiles",
- Électronique:"téléphones, ordinateurs, appareils et équipements électroniques",
- Services:"services locaux, artisans et professionnels de différents métiers",
- Alimentation:"produits agricoles, céréales et denrées alimentaires"
-};
-function updateSeoContent(){
- const country=countryByCode(activeCountry),category=CATEGORY_SEO[currentCat]||CATEGORY_SEO.Tous;
- const heading=currentCat==="Tous"?`Annonces et professionnels en ${country.name}`:`${currentCat} en ${country.name} — AFRIKORA`;
- const description=`Découvrez des ${category} en ${country.name} sur AFRIKORA. Consultez les annonces, comparez les prix et contactez directement les annonceurs.`;
- const pageTitle=currentCat==="Tous"?`AFRIKORA ${country.name} — Annonces, produits et services`:`${currentCat} en ${country.name} | AFRIKORA`;
- document.getElementById("seoHeading")?.replaceChildren(document.createTextNode(heading));
- document.getElementById("seoDescription")?.replaceChildren(document.createTextNode(description));
- document.getElementById("seoCategoryText")?.replaceChildren(document.createTextNode(`Catégorie : ${currentCat}. Pays sélectionné : ${country.name}. Monnaie : ${country.currency} (${country.symbol}).`));
- document.title=pageTitle;
- const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description;
-
+ if(adCity){if(activeCountry==='BF')adCity.setAttribute('list','burkinaLocalities');else adCity.removeAttribute('list')}
+}
 function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
 function openGoogleAuth(){if(!requireClient())return;supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}}).then(({error})=>{if(error)toast(error.message)});}
@@ -461,7 +316,7 @@ function render(list=allAds()){
  ${a.is_featured?'<div class="featured-tag">⭐ À LA UNE · GRATUIT</div>':""}
  ${a.image_urls?.length>1?`<div class="meta">📷 ${a.image_urls.length} photos · toucher pour voir</div>`:""}
  <div class="row"><strong>${esc(a.title)}</strong>${a.demo?"":`<button class="heart" onclick="toggleFav('${a.id}')">${fav.includes(a.id)?"❤️":"♡"}</button>`}</div>
- <div class="meta">📍 ${esc(a.city)} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
+ <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · 🌍 ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
  ${a.status==="sold"?'<div class="meta" style="color:#dc2626;font-weight:800">🔴 Vendu</div>':""}
  <div class="price">${money(a.price,a.country_code||"BF")}</div>
  <p class="meta">${esc(a.desc)}</p>
@@ -472,42 +327,28 @@ function render(list=allAds()){
 }
 
 function updateCategoryCounts(){
- const countryAds=allAds().filter(a=>
-  showAllAfrica ||
-  (a.demo
-   ? activeCountry==="BF"
-   : (a.country_code||"BF")===activeCountry)
- );
-
- const counts={Tous:countryAds.length};
-
- countryAds.forEach(a=>{
-  counts[a.cat]=(counts[a.cat]||0)+1;
- });
-
+ const visibleAds=allAds().filter(a=>showAllAfrica||(a.demo?activeCountry==='BF':(a.country_code||'BF')===activeCountry));
+ const counts={Tous:visibleAds.length};
+ visibleAds.forEach(a=>counts[a.cat]=(counts[a.cat]||0)+1);
  document.querySelectorAll(".chip[data-cat]").forEach(el=>{
-  const cat=el.dataset.cat;
-  const base=el.dataset.label||
-   el.textContent.replace(/\s*\(\d+\)\s*$/,"").trim();
-
-  el.dataset.label=base;
-  el.textContent=base+" ("+(counts[cat]||0)+")";
+  const cat=el.dataset.cat,base=el.dataset.label||el.textContent.replace(/\s*\(\d+\)\s*$/,'').trim();
+  el.dataset.label=base;el.textContent=base+" ("+(counts[cat]||0)+")";
  });
 }
 
-function filterCat(cat,el){currentCat=cat;updateSeoContent();document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");apply()}
+function filterCat(cat,el){currentCat=cat;document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");apply()}
 function apply(){
  updateCategoryCounts();
  const q=(document.getElementById("q").value||"").toLowerCase().trim(),city=document.getElementById("city").value;
  const minRaw=document.getElementById("minPrice").value,maxRaw=document.getElementById("maxPrice").value;
  const min=minRaw===""?null:Number(minRaw),max=maxRaw===""?null:Number(maxRaw),sort=document.getElementById("sortBy").value;
-let list=allAds().filter(a=>
-  (showAllAfrica || (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry))&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||normalizeSearchText(a.city).includes(normalizeSearchText(city)))&&
+ let list=allAds().filter(a=>
+  (showAllAfrica || (a.demo ? activeCountry==="BF" : (a.country_code||"BF")===activeCountry))&&(currentCat==="Tous"||a.cat===currentCat)&&(!city||(a.city||"").toLocaleLowerCase("fr-FR").includes(city.toLocaleLowerCase("fr-FR")))&&
   (!q||(`${a.title} ${a.cat} ${a.metier} ${a.city} ${a.desc}`).toLowerCase().includes(q))&&
-  (min===null||a.price>=min)&&(max===null||a.price<=max)
+  ((showAllAfrica||min===null)||a.price>=min)&&((showAllAfrica||max===null)||a.price<=max)
  );
- if(sort==="priceAsc")list.sort((a,b)=>a.price-b.price);
- else if(sort==="priceDesc")list.sort((a,b)=>b.price-a.price);
+ if(!showAllAfrica&&sort==="priceAsc")list.sort((a,b)=>a.price-b.price);
+ else if(!showAllAfrica&&sort==="priceDesc")list.sort((a,b)=>b.price-a.price);
  else list.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
  render(list)
 }
@@ -569,7 +410,7 @@ function viewAd(id){
  ${photoBlock}
  <h2 class="detail-title">${esc(a.title)}</h2>
  <div class="detail-price">${money(a.price,a.country_code||"BF")}</div>
- <div class="meta">📍 ${esc(a.city)} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
+ <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · 🌍 ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
  ${a.status==="sold"?'<p style="color:#dc2626;font-weight:800">🔴 Cette annonce est vendue.</p>':""}
  <div class="detail-panel"><b>Description</b><p style="white-space:pre-wrap;line-height:1.55">${esc(a.desc||"Aucune description fournie.")}</p></div>
  <div class="row">${sellerLine}</div>
@@ -647,17 +488,18 @@ async function publishAd(){
  if(!current){openModal("login");return}
  if(!current.verified){toast("Vérifiez votre email ou votre téléphone avant de publier.");return}
  if(!requireClient())return;
- const title=document.getElementById("adTitle").value.trim(),price=Number(document.getElementById("adPrice").value),description=document.getElementById("adDesc").value.trim(),category=document.getElementById("adCat").value,city=document.getElementById("adCity").value,type=document.getElementById("adType").value,metier=type==="service"?document.getElementById("adMetier").value:"";
+ const title=document.getElementById("adTitle").value.trim(),price=Number(document.getElementById("adPrice").value),description=document.getElementById("adDesc").value.trim(),category=document.getElementById("adCat").value,city=document.getElementById("adCity").value,type=document.getElementById("adType").value,metier=type==="service"?document.getElementById("adMetier").value:"",publicationCountry=document.getElementById("adCountry").value;
  const whatsapp_enabled=document.getElementById("waEnabled").checked,whatsapp_phone=document.getElementById("waPhone").value.trim();
  const imageFiles=[...(document.getElementById("adImage")?.files||[])],is_featured=document.getElementById("adFeatured")?.checked||false;
  if(!title||!price||!city.trim()){toast("Ajoutez un titre, un prix et une ville/localité");return}
+ if(!AFRICAN_COUNTRIES.some(c=>c.code===publicationCountry)){toast("Choisissez un pays de publication valide");return}
  if(whatsapp_enabled&&!whatsapp_phone){toast("Ajoutez votre numéro WhatsApp ou désactivez l'option");return}
  if(imageFiles.length>10||imageFiles.some(f=>!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>2*1024*1024)){toast("10 photos maximum, JPG/PNG/WebP de 2 Mo chacune");return}
  try{
   const image_urls=[];
   for(let i=0;i<imageFiles.length;i++){const file=imageFiles[i],ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg",path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${ext}`;const {error:uploadError}=await supabaseClient.storage.from("annonce-photos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});if(uploadError)throw uploadError;image_urls.push(supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl)}
   const image_url=image_urls[0]||null;
-  const {error}=await supabaseClient.from("annonces").insert({user_id:current.id,title,category,price,city,description,type,metier,status:"active",image_url,image_urls,is_featured,whatsapp_enabled,whatsapp_phone:whatsapp_enabled?whatsapp_phone:null,country_code:activeCountry});
+  const {error}=await supabaseClient.from("annonces").insert({user_id:current.id,title,category,price,city,description,type,metier,status:"active",image_url,image_urls,is_featured,whatsapp_enabled,whatsapp_phone:whatsapp_enabled?whatsapp_phone:null,country_code:publicationCountry});
   if(error)throw error;
   document.getElementById("adTitle").value="";document.getElementById("adPrice").value="";document.getElementById("adDesc").value="";document.getElementById("adImage").value="";document.getElementById("adImagePreview").innerHTML="";document.getElementById("adFeatured").checked=false;
   document.getElementById("waEnabled").checked=false;document.getElementById("waPhone").value="";toggleWhatsappFields();
@@ -796,7 +638,7 @@ async function editAd(id){
  if(!current||!requireClient())return;
  const ad=ads.find(a=>a.id===id);if(!ad)return;
  const title=prompt("Titre de l'annonce :",ad.title);if(title===null)return;
- const adCurrency=countryByCode(ad.country_code||"BF").symbol;const price=prompt(`Prix en ${adCurrency} :`,ad.price);if(price===null)return;
+ const price=prompt("Prix en FCFA :",ad.price);if(price===null)return;
  const desc=prompt("Description :",ad.desc);if(desc===null)return;
  const {error}=await supabaseClient.from("annonces").update({title:title.trim(),price:Number(price),description:desc.trim()}).eq("id",id).eq("user_id",current.id);
  if(error){console.error(error);toast("Impossible de modifier l'annonce");return}
@@ -845,7 +687,7 @@ async function loadAdminDashboard(){
   const since=new Date(Date.now()-5*60*1000).toISOString();
   const [usersRes,adsRes,visitsRes,activityRes,profilesRes]=await Promise.all([
    supabaseClient.from("profiles").select("id",{count:"exact",head:true}),
-   supabaseClient.from("annonces").select("id,title,status,city,price,country_code,created_at",{count:"exact"}),
+   supabaseClient.from("annonces").select("id,title,status,city,price,created_at",{count:"exact"}),
    supabaseClient.from("site_visits").select("visitor_key",{count:"exact",head:true}).gte("visited_at",todayStart).lt("visited_at",tomorrowStart),
    supabaseClient.from("user_activity").select("user_id,last_seen").gte("last_seen",since),
    supabaseClient.from("profiles").select("id,name,phone")
@@ -863,7 +705,7 @@ async function loadAdminDashboard(){
    </div>
    <p class="meta">*Le nombre de comptes actifs dépend de la mise à jour de la table user_activity. Les visites comptent les enregistrements dans site_visits, pas les personnes uniques garanties.</p>
    <div class="section"><div class="row"><h3>📢 Modération des annonces</h3><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
-   ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0,a.country_code||"BF")} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
+   ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0)} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
    <div class="section"><h3>👤 Comptes utilisateurs</h3>${people.length?`<div class="msg-list">${people.map(p=>`<div class="msg-item"><b>${adminEscape(p.name||"Utilisateur")}</b><div class="meta">ID : ${adminEscape(p.id)} · Téléphone : ${adminEscape(p.phone||"Non renseigné")}</div></div>`).join("")}</div>`:'<div class="empty">Aucun profil accessible.</div>'}</div>`;
  }catch(e){console.error("Admin AFRIKORA:",e);root.innerHTML=`<div class="empty">Impossible de charger l’administration. Vérifie les droits d’accès Supabase (RLS) et la présence des tables site_visits et user_activity.<br><br><small>${adminEscape(e.message||"Erreur inconnue")}</small></div>`}
 }
@@ -927,63 +769,9 @@ async function loadSiteRating(){
  document.getElementById("siteRatingSummary").textContent=rows.length?`⭐ ${avg.toFixed(1)}/5 — ${rows.length} avis sur AFRIKORA`:"Aucun avis pour le moment"
 }
 async function openSiteReview(){
-  let old = null;
-  let reviews = [];
-
-  if(supabaseClient){
-    const {data} = await supabaseClient
-      .from("avis_site")
-      .select("note,commentaire,reponse_admin,reviewer_id")
-      .order("note", {ascending:false});
-
-    reviews = data || [];
-
-    if(current){
-      old = reviews.find(a => a.reviewer_id === current.id) || null;
-    }
-  }
-
-  const avisHTML = reviews.length
-    ? reviews.map(a => `
-        <div class="avis-card">
-          <b>⭐ ${Number(a.note)}/5</b>
-          <p>${esc(a.commentaire || "Aucun commentaire.")}</p>
-          ${a.reponse_admin ? `
-            <div class="avis-reponse">
-              <b>Réponse officielle AFRIKORA</b>
-              <p>${esc(a.reponse_admin)}</p>
-            </div>
-          ` : ""}
-        </div>
-      `).join("")
-    : "<p>Aucun avis pour le moment.</p>";
-
-  const formulaire = current ? `
-    <h3>Votre avis</h3>
-    <div class="field">
-      <label>Votre note</label>
-      <select id="siteReviewNote">
-        ${[5,4,3,2,1].map(n =>
-          `<option value="${n}" ${Number(old?.note || 5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`
-        ).join("")}
-      </select>
-    </div>
-    <div class="field">
-      <label>Commentaire</label>
-      <textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire || "")}</textarea>
-    </div>
-    <button class="full" onclick="submitSiteReview()">Publier mon avis</button>
-  ` : `
-    <p>Connectez-vous pour publier votre avis.</p>
-    <button class="full" onclick="openModal('login')">Connexion</button>
-  `;
-
-  openCustom(`
-    <h2>⭐ Avis sur AFRIKORA</h2>
-    <p>${reviews.length} avis publié(s)</p>
-    <div class="avis-publics">${avisHTML}</div>
-    ${formulaire}
-  `);
+ if(!current){openModal("login");return}
+ let old=null;if(supabaseClient){const {data}=await supabaseClient.from("avis_site").select("note,commentaire").eq("reviewer_id",current.id).maybeSingle();old=data}
+ openCustom(`<h2>⭐ Noter AFRIKORA</h2><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">Publier mon avis</button>`)
 }
 async function submitSiteReview(){
  if(!current||!requireClient())return;
@@ -994,7 +782,7 @@ async function submitSiteReview(){
 }
 
 (async function init(){
- initCountries();updateSeoContent();populateLocalities();render(seed);updateAccount();await loadSiteRating();
+ initCountries();populateLocalities();render(seed);updateAccount();await loadSiteRating();
  if(supabaseClient){
   const {data}=await supabaseClient.auth.getSession();
   if(data.session){await setCurrentFromUser(data.session.user);await loadMessages();updateAccount();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
