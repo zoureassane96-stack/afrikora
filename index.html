@@ -890,9 +890,35 @@ async function submitSiteReview(){
   if(data.session){await setCurrentFromUser(data.session.user);await loadMessages();updateAccount();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
   await loadCloudData();
   await trackAFRIKORAVisit();if(presenceTimer)clearInterval(presenceTimer);presenceTimer=setInterval(updateAFRIKORAPresence,60000);
-  supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
-   if(session){await setCurrentFromUser(session.user);await loadMessages();updateAccount();await loadCloudData();await updateAFRIKORAPresence();if(messagePoller)clearInterval(messagePoller);messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000)}
-   else{if(messagePoller)clearInterval(messagePoller);messagePoller=null;knownUnreadIds.clear();current=null;isAdmin=false;fav=[];messages=[];updateAccount();render([]);await updateAFRIKORAPresence()}
+  // Ne pas attendre d'opérations Supabase dans onAuthStateChange :
+  // cela peut bloquer le verrou d'authentification pendant le retour OAuth Google.
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+   setTimeout(async()=>{
+    try{
+     if(session){
+      await setCurrentFromUser(session.user);
+      await loadMessages();
+      updateAccount();
+      await loadCloudData();
+      await updateAFRIKORAPresence();
+      if(messagePoller)clearInterval(messagePoller);
+      messagePoller=setInterval(async()=>{if(current){await loadMessages();updateAccount()}},30000);
+     }else{
+      if(messagePoller)clearInterval(messagePoller);
+      messagePoller=null;
+      knownUnreadIds.clear();
+      current=null;
+      isAdmin=false;
+      fav=[];
+      messages=[];
+      updateAccount();
+      render([]);
+      await updateAFRIKORAPresence();
+     }
+    }catch(error){
+     console.error("AFRIKORA : erreur lors de la mise à jour de la session.",error);
+    }
+   },0);
   })
  }
 })();
