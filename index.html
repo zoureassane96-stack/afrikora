@@ -199,6 +199,7 @@ async function detectCountryFromConnection(){
 // Mode de consultation : le pays actif reste mémorisé même en vue panafricaine.
 let showAllAfrica=false;
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
+function countryFlag(code){const cc=String(code||'BF').toUpperCase();if(!/^[A-Z]{2}$/.test(cc))return '🌍';return String.fromCodePoint(...[...cc].map(ch=>127397+ch.charCodeAt(0)))}
 function countryOptions(selected){
  return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('');
 }
@@ -332,7 +333,7 @@ function render(list=allAds()){
  ${a.is_featured?'<div class="featured-tag">⭐ À LA UNE · GRATUIT</div>':""}
  ${a.image_urls?.length>1?`<div class="meta">📷 ${a.image_urls.length} photos · toucher pour voir</div>`:""}
  <div class="row"><strong>${esc(a.title)}</strong>${a.demo?"":`<button class="heart" onclick="toggleFav('${a.id}')">${fav.includes(a.id)?"❤️":"♡"}</button>`}</div>
- <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · 🌍 ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
+ <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · ${countryFlag(a.country_code||"BF")} ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
  ${a.status==="sold"?'<div class="meta" style="color:#dc2626;font-weight:800">🔴 Vendu</div>':""}
  <div class="price">${money(a.price,a.country_code||"BF")}</div>
  <p class="meta">${esc(a.desc)}</p>
@@ -426,7 +427,7 @@ function viewAd(id){
  ${photoBlock}
  <h2 class="detail-title">${esc(a.title)}</h2>
  <div class="detail-price">${money(a.price,a.country_code||"BF")}</div>
- <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · 🌍 ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
+ <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · ${countryFlag(a.country_code||"BF")} ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
  ${a.status==="sold"?'<p style="color:#dc2626;font-weight:800">🔴 Cette annonce est vendue.</p>':""}
  <div class="detail-panel"><b>Description</b><p style="white-space:pre-wrap;line-height:1.55">${esc(a.desc||"Aucune description fournie.")}</p></div>
  <div class="row">${sellerLine}</div>
