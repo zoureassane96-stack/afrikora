@@ -51,7 +51,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <button onclick="go('dashboard')">Mon espace</button>
 <button id="adminNavButton" style="display:none" onclick="go('admin')">🛡️ Administration</button>
 </div>
-<select id="countryTop" class="country-switch" aria-label="Choisir le pays" onchange="changeCountry(this.value)"></select>
+<select id="countryTop" class="country-switch" aria-label="Filtrer les annonces par pays ou toute l’Afrique" onchange="changeCountry(this.value)"></select>
 <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu">☰</button>
 <div class="account" id="account">
 <button class="outline" onclick="openModal('login')">Connexion</button>
@@ -61,7 +61,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <div id="mobileNav" style="display:none;background:#fff;padding:8px 12px;border-bottom:1px solid var(--border);position:sticky;top:60px;z-index:19"><div class="row" style="justify-content:space-around"><button class="small" onclick="go('home');toggleMobileMenu(false)">Accueil</button><button class="small" onclick="go('annonces');toggleMobileMenu(false)">Annonces</button><button class="small" onclick="go('publier');toggleMobileMenu(false)">Publier</button><button class="small" onclick="go('dashboard');toggleMobileMenu(false)">Mon espace</button></div></div>
 
 <main id="home">
-<div class="country-bar"><label for="countryHome">🌍 Pays du marché :</label><select id="countryHome" onchange="changeCountry(this.value)"></select><span class="meta" id="currencyHint">Monnaie locale</span></div>
+<div class="country-bar"><label for="countryHome">🌍 Voir les annonces de :</label><select id="countryHome" onchange="changeCountry(this.value)"></select><span class="meta" id="currencyHint">Monnaie locale</span></div>
 <section class="hero">
 <h1>Tout un marché. Toutes les opportunités.</h1>
 <p>Découvrez des produits, comparez les prix, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.</p>
@@ -180,6 +180,22 @@ const AFRICAN_COUNTRIES=[
 const COUNTRY_STORE='afrikora_country_v1';
 function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);if(AFRICAN_COUNTRIES.some(c=>c.code===saved))return saved;const locale=(navigator.language||'').toUpperCase();const match=AFRICAN_COUNTRIES.find(c=>locale.endsWith('-'+c.code));return match?.code||'BF'}catch(e){return 'BF'}}
 let activeCountry=detectCountry();
+// Première visite : détecte le pays approximatif via l'adresse IP. Un choix manuel enregistré reste prioritaire.
+async function detectCountryFromConnection(){
+ try{
+  if(localStorage.getItem(COUNTRY_STORE))return;
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),3500);
+  const response=await fetch('https://ipapi.co/country_code/',{cache:'no-store',signal:controller.signal});
+  clearTimeout(timer);
+  if(!response.ok)return;
+  const code=(await response.text()).trim().toUpperCase();
+  if(AFRICAN_COUNTRIES.some(c=>c.code===code)){
+   activeCountry=code;
+   try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){}
+  }
+ }catch(e){/* Si la détection échoue, conserver le pays de secours et laisser le visiteur choisir. */}
+}
 // Mode de consultation : le pays actif reste mémorisé même en vue panafricaine.
 let showAllAfrica=false;
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
@@ -770,8 +786,21 @@ async function loadSiteRating(){
 }
 async function openSiteReview(){
  if(!current){openModal("login");return}
- let old=null;if(supabaseClient){const {data}=await supabaseClient.from("avis_site").select("note,commentaire").eq("reviewer_id",current.id).maybeSingle();old=data}
- openCustom(`<h2>⭐ Noter AFRIKORA</h2><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">Publier mon avis</button>`)
+ if(!supabaseClient){toast("Les avis sont momentanément indisponibles");return}
+ let old=null,reviews=[];
+ const {data:mine,error:mineError}=await supabaseClient.from("avis_site").select("note,commentaire").eq("reviewer_id",current.id).maybeSingle();
+ if(!mineError)old=mine;
+ const {data:rows,error}=await supabaseClient.from("avis_site").select("reviewer_id,note,commentaire,reponse_admin,created_at").order("created_at",{ascending:false});
+ if(error){console.error("Chargement des avis AFRIKORA :",error);toast("Impossible de charger les commentaires : vérifiez les autorisations Supabase");}
+ else reviews=rows||[];
+ const reviewerIds=[...new Set(reviews.map(r=>r.reviewer_id).filter(Boolean))];
+ let names={};
+ if(reviewerIds.length){
+  const {data:profiles}=await supabaseClient.from("profiles").select("id,name").in("id",reviewerIds);
+  (profiles||[]).forEach(p=>{names[p.id]=p.name||"Utilisateur AFRIKORA"});
+ }
+ const reviewsHtml=reviews.length?reviews.map(r=>`<article class="review-card"><div class="row" style="justify-content:space-between"><b>${esc(String(r.reviewer_id)===String(current.id)?"Vous":names[r.reviewer_id]||"Utilisateur AFRIKORA")}</b><span class="stars">${starsHtml(r.note)}</span></div><p style="margin:8px 0">${esc(r.commentaire||"Aucun commentaire écrit.")}</p><div class="meta">${r.created_at?new Date(r.created_at).toLocaleDateString("fr-FR"):""}</div>${r.reponse_admin?`<div class="review-card" style="background:#eef7f4;border-left:4px solid var(--p);margin-top:10px"><b>Réponse officielle d’AFRIKORA</b><p style="margin:7px 0 0">${esc(r.reponse_admin)}</p></div>`:""}</article>`).join(""):`<div class="rating-box">Aucun avis publié pour le moment.</div>`;
+ openCustom(`<h2>⭐ Avis sur AFRIKORA</h2><p class="meta">Découvrez les commentaires des utilisateurs et les réponses officielles.</p><h3>⭐ Les avis des utilisateurs (${reviews.length})</h3>${reviewsHtml}<div class="divider" style="margin:18px 0;border-top:1px solid var(--border)"></div><h3>✍️ ${old?"Modifier votre avis":"Donner votre avis"}</h3><div class="field"><label>Votre note</label><select id="siteReviewNote">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(old?.note||5)===n?"selected":""}>${"⭐".repeat(n)} — ${n}/5</option>`).join("")}</select></div><div class="field"><label>Commentaire</label><textarea id="siteReviewComment" rows="4" maxlength="500">${esc(old?.commentaire||"")}</textarea></div><button class="full" onclick="submitSiteReview()">${old?"Modifier mon avis":"Publier mon avis"}</button>`)
 }
 async function submitSiteReview(){
  if(!current||!requireClient())return;
@@ -782,6 +811,7 @@ async function submitSiteReview(){
 }
 
 (async function init(){
+ await detectCountryFromConnection();
  initCountries();populateLocalities();render(seed);updateAccount();await loadSiteRating();
  if(supabaseClient){
   const {data}=await supabaseClient.auth.getSession();
