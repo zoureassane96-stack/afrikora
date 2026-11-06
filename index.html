@@ -961,9 +961,10 @@ async function updateReportStatus(id, statut){
       <div class="meta">Motif : ${adminEscape(r.motif)}</div>
     <div class="meta">Statut : ${adminEscape(r.statut||"nouveau")} · ${r.created_at?new Date(r.created_at).toLocaleString("fr-FR"):""}</div>
 <div class="actions">
+ <button class="small" onclick="viewAd('${adminEscape(r.annonce_id)}')">👁️ Voir l'annonce</button>
  <button class="small" onclick="updateReportStatus('${adminEscape(r.id)}','traite')">✅ Traité</button>
  <button class="small" onclick="updateReportStatus('${adminEscape(r.id)}','rejete')">❌ Rejeté</button>
-</div> 
+</div>
   </div>  `).join("")}</div>`:'<div class="empty">Aucun signalement pour le moment.</div>'}
    </div>
    <div class="section"><h3>👤 Comptes utilisateurs</h3>${people.length?`<div class="msg-list">${people.map(p=>`<div class="msg-item"><b>${adminEscape(p.name||"Utilisateur")}</b><div class="meta">ID : ${adminEscape(p.id)} · Téléphone : ${adminEscape(p.phone||"Non renseigné")}</div></div>`).join("")}</div>`:'<div class="empty">Aucun profil accessible.</div>'}</div>`;
