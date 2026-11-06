@@ -296,7 +296,27 @@ function syncCountryUI(){
 }
 function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
-function openGoogleAuth(){if(!requireClient())return;supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}}).then(({error})=>{if(error)toast(error.message)});}
+async function openGoogleAuth(){
+  if(!requireClient()) return;
+
+  try{
+    const {data,error}=await supabaseClient.auth.signInWithOAuth({
+      provider:'google',
+      options:{
+        redirectTo:'https://afrikora.vercel.app/',
+        queryParams:{
+          prompt:'select_account'
+        }
+      }
+    });
+
+    if(error) throw error;
+
+  }catch(error){
+    console.error('AFRIKORA Google Auth:',error);
+    toast(error.message||'Connexion Google impossible. Réessayez.');
+  }
+}
 function openPhoneAuth(){openCustom(`<h2>Connexion par téléphone</h2><p class="meta">Choisissez le pays, recevez un code SMS et confirmez votre numéro.</p><div class="field"><label>Pays</label><select id="otpCountry">${countryOptions(activeCountry)}</select></div><div class="field"><label>Numéro de téléphone</label><input id="otpPhone" type="tel" placeholder="Numéro sans indicatif"></div><button class="full" onclick="sendPhoneOtp()">Recevoir mon code SMS</button><div id="otpVerifyArea"></div><p class="meta">Le service SMS doit être activé et configuré dans Supabase.</p>`)}
 async function sendPhoneOtp(){if(!requireClient())return;const dial=countryByCode(document.getElementById('otpCountry').value).dial;let raw=document.getElementById('otpPhone').value.replace(/[^0-9]/g,'');if(raw.startsWith('0'))raw=raw.slice(1);if(raw.length<6){toast('Entrez un numéro valide');return}const phone=dial+raw;try{const {error}=await supabaseClient.auth.signInWithOtp({phone,options:{channel:'sms',shouldCreateUser:true,data:{name:'Utilisateur AFRIKORA',country_code:document.getElementById('otpCountry').value}}});if(error)throw error;document.getElementById('otpVerifyArea').innerHTML=`<div class="field"><label>Code reçu par SMS</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8"></div><button class="full" onclick="verifyPhoneOtp('${phone}')">Valider le numéro et continuer</button>`;toast('Code envoyé par SMS')}catch(e){toast(e.message||'Envoi du SMS impossible')}}
 async function verifyPhoneOtp(phone){if(!requireClient())return;const token=document.getElementById('otpCode')?.value.trim();if(!token){toast('Saisissez le code reçu');return}try{const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'});if(error)throw error;await setCurrentFromUser(data.user);await ensureProfile(data.user,current?.name||'Utilisateur',phone);await loadMessages();await loadCloudData();closeModal();updateAccount();toast('Numéro vérifié. Bienvenue sur AFRIKORA.')}catch(e){toast(e.message||'Code incorrect ou expiré')}}
