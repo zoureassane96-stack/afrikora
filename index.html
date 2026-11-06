@@ -504,7 +504,29 @@ function moveGallery(delta){const g=window.__AFRIKORAGallery;if(g)g.setIndex(g.g
 function setGalleryPhoto(index){const g=window.__AFRIKORAGallery;if(g)g.setIndex(index)}
 function openPhoto(url){openPhotoGallery([url],0,"Photo du produit")}
 function openAdGallery(id,index=0){const a=allAds().find(x=>String(x.id)===String(id));if(!a)return;const photos=(a.image_urls?.length?a.image_urls:[a.image_url]).filter(Boolean);openPhotoGallery(photos,index,a.title||"Photos de l’annonce")}
-function viewAd(id){
+async function reportAd(id){
+ if(!current){openModal("login");return}
+ if(!requireClient())return;
+
+ const motif=prompt("Pourquoi signalez-vous cette annonce ?\n1. Arnaque ou fraude\n2. Produit interdit ou dangereux\n3. Fausse annonce\n4. Autre");
+
+ if(!motif)return;
+
+ const {error}=await supabaseClient.from("signalements_annonces").insert({
+  annonce_id:String(id),
+  reporter_id:current.id,
+  motif:motif.trim()
+ });
+
+ if(error){
+  console.error(error);
+  toast("Impossible d’envoyer le signalement");
+  return;
+ }
+
+ toast("Merci. Votre signalement a été envoyé à l’administration.");
+}
+  function viewAd(id){
  const a=allAds().find(x=>String(x.id)===String(id));if(!a)return;
  const photos=(a.image_urls?.length?a.image_urls:[a.image_url]).filter(Boolean);
  const photoBlock=photos.length
