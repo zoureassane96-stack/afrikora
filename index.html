@@ -521,8 +521,9 @@ function viewAd(id){
  ${a.status==="sold"?'<p style="color:#dc2626;font-weight:800">🔴 Cette annonce est vendue.</p>':""}
  <div class="detail-panel"><b>Description</b><p style="white-space:pre-wrap;line-height:1.55">${esc(a.desc||"Aucune description fournie.")}</p></div>
  <div class="row">${sellerLine}</div>
- <button class="full" onclick="contactAd('${a.id}');closeModal()">💬 Contacter l'annonceur</button>
- ${a.whatsapp_enabled&&a.whatsapp_phone&&!a.demo?`<button class="small full" style="background:#25D366;color:#fff" onclick="openWhatsApp('${a.id}');closeModal()">🟢 Contacter sur WhatsApp</button>`:""}`)
+${!a.demo?`<button class="small full" onclick="reportAd('${a.id}')">🚩 Signaler cette annonce</button>`:""}
+<button class="full" onclick="contactAd('${a.id}');closeModal()">💬 Contacter l'annonceur</button>
+${a.whatsapp_enabled&&a.whatsapp_phone&&!a.demo?`<button class="small full" style="background:#25D366;color:#fff" onclick="openWhatsApp('${a.id}');closeModal()">🟢 Contacter sur WhatsApp</button>`:""}`)
 }
 async function register(){
  if(!requireClient())return;
