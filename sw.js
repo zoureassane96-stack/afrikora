@@ -1,22 +1,32 @@
-self.addEventListener("install", (event) => {
-self.skipWaiting();
-});
-
-self.addEventListener("activate", (event) => {
-event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener("fetch", (event) => {
-if (event.request.method !== "GET") return;
-
-event.respondWith(
-fetch(event.request).catch(() => {
-return new Response(
-"Vous êtes hors connexion. Reconnectez-vous pour utiliser AFRIKORA.",
-{
-headers: { "Content-Type": "text/plain; charset=utf-8" }
-}
-);
-})
-);
-});
+1<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0D554B">
+<title>AFRIKORA — Hors connexion</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:#f7f9f8;color:#17211f;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+main{width:min(440px,100%);padding:30px 22px;text-align:center;background:#fff;border:1px solid #e2e8e5;border-radius:20px;box-shadow:0 12px 35px #073b3610}
+.logo{font-size:30px;font-weight:900;letter-spacing:1px;color:#0D554B}
+.symbol{font-size:46px;margin:20px 0 8px}
+h1{font-size:23px;margin:8px 0 10px}
+p{color:#66736f;line-height:1.6;margin:8px 0}
+button{margin-top:18px;padding:13px 20px;border:0;border-radius:10px;background:#0D554B;color:#fff;font:inherit;font-weight:800;cursor:pointer}
+small{display:block;margin-top:16px;color:#66736f}
+</style>
+</head>
+<body>
+<main>
+<div class="logo">AFRIKORA</div>
+<div class="symbol" aria-hidden="true">📡</div>
+<h1>Vous êtes hors connexion</h1>
+<p>Votre connexion Internet semble interrompue.</p>
+<p>Les pages et annonces qui n’ont pas déjà été enregistrées sur cet appareil ne sont pas disponibles pour le moment.</p>
+<p>Reconnectez-vous à Internet pour rechercher des produits, consulter les nouvelles annonces, envoyer des messages ou publier.</p>
+<button type="button" onclick="window.location.reload()">Réessayer</button>
+<small>Le marché africain des opportunités</small>
+</main>
+</body>
+</html>
