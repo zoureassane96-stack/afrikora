@@ -913,7 +913,13 @@ async function loadAdminDashboard(){
   ]);
   const err=[usersRes,adsRes,visitsRes,activityRes,profilesRes].find(x=>x.error);
   if(err)throw err.error;
-  const all=adsRes.data||[],people=profilesRes.data||[],presence=activityRes.data||[];
+    const {data:reports,error:reportsError}=await supabaseClient
+   .from("signalements_annonces")
+   .select("id,annonce_id,reporter_id,motif,statut,created_at")
+   .order("created_at",{ascending:false});
+
+  if(reportsError)throw reportsError;
+   const all=adsRes.data||[],people=profilesRes.data||[],presence=activityRes.data||[];
   const active=all.filter(a=>a.status!=="hidden"&&a.status!=="deleted").length, onlineUsers=new Set(presence.map(p=>p.user_id)).size;
   root.innerHTML=`
    <div class="features">
