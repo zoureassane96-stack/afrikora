@@ -897,7 +897,29 @@ async function updateAFRIKORAPresence(){
   }
  }catch(e){console.warn("Présence non actualisée (vérifier les droits RLS de user_activity):",e.message||e)}
 }
-async function loadAdminDashboard(){
+async function updateReportStatus(id, statut){
+ if(!current || !isAdmin){
+  toast("Accès réservé à l’administration");
+  return;
+ }
+
+ if(!requireClient())return;
+
+ const {error}=await supabaseClient
+  .from("signalements_annonces")
+  .update({statut:statut})
+  .eq("id",id);
+
+ if(error){
+  console.error(error);
+  toast("Impossible de modifier le signalement");
+  return;
+ }
+
+ toast("Statut du signalement mis à jour");
+ await loadAdminDashboard();
+}
+  async function loadAdminDashboard(){
  const root=document.getElementById("adminContent");
  if(!current||!isAdmin){root.innerHTML='<div class="empty">Accès refusé.</div>';return}
  root.innerHTML='<div class="empty">Chargement des statistiques et des annonces…</div>';
