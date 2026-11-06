@@ -931,6 +931,16 @@ async function loadAdminDashboard(){
    <p class="meta">*Le nombre de comptes actifs dépend de la mise à jour de la table user_activity. Les visites comptent les enregistrements dans site_visits, pas les personnes uniques garanties.</p>
    <div class="section"><div class="row"><h3>📢 Modération des annonces</h3><button class="small" onclick="loadAdminDashboard()">↻ Actualiser</button></div>
    ${all.length?`<div class="msg-list">${all.map(a=>`<div class="msg-item"><b>${adminEscape(a.title||"Annonce")}</b><div class="meta">${adminEscape(a.city||"")} · ${money(a.price||0)} · Statut : ${adminEscape(a.status||"active")}</div><div class="row"><button class="small" onclick="adminSetAdStatus('${a.id}','active')">Activer</button><button class="small" onclick="adminSetAdStatus('${a.id}','hidden')">Masquer</button><button class="small" onclick="adminDeleteAd('${a.id}')" style="color:#b91c1c">Supprimer</button></div></div>`).join("")}</div>`:'<div class="empty">Aucune annonce enregistrée.</div>'}</div>
+      <div class="section">
+    <h3>🚩 Signalements des annonces (${reports.length})</h3>
+    ${reports.length?`<div class="msg-list">${reports.map(r=>`
+     <div class="msg-item">
+      <b>Annonce : ${adminEscape(r.annonce_id)}</b>
+      <div class="meta">Motif : ${adminEscape(r.motif)}</div>
+      <div class="meta">Statut : ${adminEscape(r.statut||"nouveau")} · ${r.created_at?new Date(r.created_at).toLocaleString("fr-FR"):""}</div>
+     </div>
+    `).join("")}</div>`:'<div class="empty">Aucun signalement pour le moment.</div>'}
+   </div>
    <div class="section"><h3>👤 Comptes utilisateurs</h3>${people.length?`<div class="msg-list">${people.map(p=>`<div class="msg-item"><b>${adminEscape(p.name||"Utilisateur")}</b><div class="meta">ID : ${adminEscape(p.id)} · Téléphone : ${adminEscape(p.phone||"Non renseigné")}</div></div>`).join("")}</div>`:'<div class="empty">Aucun profil accessible.</div>'}</div>`;
  }catch(e){console.error("Admin AFRIKORA:",e);root.innerHTML=`<div class="empty">Impossible de charger l’administration. Vérifie les droits d’accès Supabase (RLS) et la présence des tables site_visits et user_activity.<br><br><small>${adminEscape(e.message||"Erreur inconnue")}</small></div>`}
 }
