@@ -744,21 +744,109 @@ async function updateAdStatus(id,status){
 
 async function editAd(id){
  if(!current||!requireClient())return;
- const ad=ads.find(a=>a.id===id);if(!ad)return;
- const title=prompt("Titre de l'annonce :",ad.title);if(title===null)return;
- const price=prompt("Prix en FCFA :",ad.price);if(price===null)return;
- const desc=prompt("Description :",ad.desc);if(desc===null)return;
- const {error}=await supabaseClient.from("annonces").update({title:title.trim(),price:Number(price),description:desc.trim()}).eq("id",id).eq("user_id",current.id);
- if(error){console.error(error);toast("Impossible de modifier l'annonce");return}
- await loadCloudData();renderDash();toast("Annonce modifiée")
+ const ad=ads.find(a=>String(a.id)===String(id));
+ if(!ad)return;
+
+ const title=prompt("Titre de l'annonce :",ad.title);
+ if(title===null)return;
+ const price=prompt("Prix :",ad.price);
+ if(price===null)return;
+ const desc=prompt("Description :",ad.desc);
+ if(desc===null)return;
+
+ const photos=(ad.image_urls?.length?ad.image_urls:[ad.image_url]).filter(Boolean);
+ window.__editAdData={id,title:title.trim(),price:Number(price),desc:desc.trim(),photos};
+
+ openCustom(`
+  <h2>Modifier les photos</h2>
+  <p class="meta">Décoche les photos à supprimer. Les autres seront conservées.</p>
+  <div class="photo-preview">
+   ${photos.map((url,i)=>`
+    <label style="display:flex;flex-direction:column;align-items:center;gap:5px">
+     <img src="${esc(url)}" alt="Photo ${i+1}">
+     <input type="checkbox" class="editKeepPhoto" value="${i}" checked>
+     <small>Garder</small>
+    </label>
+   `).join("")}
+  </div>
+  <div class="field" style="margin-top:15px">
+   <label>Ajouter de nouvelles photos</label>
+   <input id="editAdImages" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+   <small class="meta">10 photos maximum au total · 2 Mo par photo.</small>
+   <div id="editAdImagePreview" class="photo-preview"></div>
+  </div>
+  <button class="full" onclick="saveAdEditPhotos()">Enregistrer les modifications</button>
+  <button class="full outline" onclick="closeModal()">Annuler</button>
+ `);
+
+ document.getElementById("editAdImages").addEventListener("change",()=>{
+  const input=document.getElementById("editAdImages");
+  const preview=document.getElementById("editAdImagePreview");
+  const files=[...input.files];
+  if(files.some(f=>!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>2*1024*1024)){
+   input.value="";
+   preview.innerHTML="";
+   toast("Chaque photo doit être JPG, PNG ou WebP de 2 Mo maximum");
+   return;
+  }
+  preview.innerHTML=files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="Nouvelle photo">`).join("");
+ });
 }
 
-async function deleteAd(id){
- if(!current||!requireClient())return;
- if(!confirm("Supprimer cette annonce ?"))return;
- const {error}=await supabaseClient.from("annonces").delete().eq("id",id).eq("user_id",current.id);
- if(error){console.error(error);toast("Impossible de supprimer l'annonce");return}
- await loadCloudData();renderDash();toast("Annonce supprimée")
+async function saveAdEditPhotos(){
+ const edit=window.__editAdData;
+ if(!edit||!current||!requireClient())return;
+
+ const input=document.getElementById("editAdImages");
+ const files=[...(input?.files||[])];
+ const kept=[...document.querySelectorAll(".editKeepPhoto:checked")]
+  .map(el=>edit.photos[Number(el.value)])
+  .filter(Boolean);
+
+ if(kept.length+files.length>10){
+  toast("10 photos maximum au total");
+  return;
+ }
+
+ try{
+  const image_urls=[...kept];
+
+  for(let i=0;i<files.length;i++){
+   const file=files[i];
+   const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+   const path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${ext}`;
+
+   const {error:uploadError}=await supabaseClient.storage
+    .from("annonce-photos")
+    .upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+
+   if(uploadError)throw uploadError;
+
+   image_urls.push(
+    supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl
+   );
+  }
+
+  const {error}=await supabaseClient.from("annonces").update({
+   title:edit.title,
+   price:edit.price,
+   description:edit.desc,
+   image_urls,
+   image_url:image_urls[0]||null
+  }).eq("id",edit.id).eq("user_id",current.id);
+
+  if(error)throw error;
+
+  window.__editAdData=null;
+  closeModal();
+  await loadCloudData();
+  renderDash();
+  toast("Annonce et photos modifiées avec succès");
+
+ }catch(e){
+  console.error("Modification des photos :",e);
+  toast(e.message||"Impossible de modifier les photos");
+ }
 }
 
 function adminEscape(s){return esc(s)}
