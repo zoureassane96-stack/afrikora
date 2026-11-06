@@ -12,7 +12,7 @@ if (event.request.method !== "GET") return;
 event.respondWith(
 fetch(event.request).catch(() => {
 return new Response(
-"Vous êtes hors connexion. Reconnectez-vous pour utiliser PrixFaso.",
+"Vous êtes hors connexion. Reconnectez-vous pour utiliser AFRIKORA.",
 {
 headers: { "Content-Type": "text/plain; charset=utf-8" }
 }
