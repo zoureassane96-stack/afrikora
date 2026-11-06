@@ -987,6 +987,7 @@ async function updateReportStatus(id, statut){
     <div class="meta">Statut : ${adminEscape(r.statut||"nouveau")} · ${r.created_at?new Date(r.created_at).toLocaleString("fr-FR"):""}</div>
 <div class="actions">
  <button class="small" onclick="viewAd('${adminEscape(r.annonce_id)}')">👁️ Voir l'annonce</button>
+ <button class="small" onclick="adminSetAdStatus('${adminEscape(r.annonce_id)}','hidden')">🚫 Masquer l'annonce</button>
  <button class="small" onclick="updateReportStatus('${adminEscape(r.id)}','traite')">✅ Traité</button>
  <button class="small" onclick="updateReportStatus('${adminEscape(r.id)}','rejete')">❌ Rejeté</button>
 </div>
