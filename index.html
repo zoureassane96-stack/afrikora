@@ -78,6 +78,10 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 </head>
 <body>
 
+<div id="offlineNotice" style="display:none;background:#fff3cd;color:#664d03;text-align:center;padding:10px;font-weight:bold;">
+  📡 Mode hors connexion — annonces enregistrées sur cet appareil.
+</div>
+
 <div class="top">AFRIKORA — Le marché africain des opportunités</div>
 
 <nav>
@@ -1134,6 +1138,18 @@ if ("serviceWorker" in navigator && (location.protocol === "https:" || location.
       });
   }, { once: true });
 }
+
+function updateConnectionStatus() {
+  const notice = document.getElementById("offlineNotice");
+
+  if (notice) {
+    notice.style.display = navigator.onLine ? "none" : "block";
+  }
+}
+
+window.addEventListener("online", updateConnectionStatus);
+window.addEventListener("offline", updateConnectionStatus);
+updateConnectionStatus();
 </script>
 </body>
 </html>
