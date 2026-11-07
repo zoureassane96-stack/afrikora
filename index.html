@@ -245,6 +245,151 @@ html[dir="rtl"] .country-bar label{display:block}
 #modal{z-index:10060}
 #mobileNav{z-index:40!important}
 
+
+/* AFRIKORA — cartes marketplace compactes, cohérentes et mobiles */
+#cards.grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:16px;
+}
+#cards .card{
+  position:relative;
+  min-width:0;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  border:1px solid #e4eae7;
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 2px 9px rgba(7,59,54,.045);
+}
+#cards .card.featured-card{border:1.5px solid #e9b84e}
+#cards .thumb{
+  height:auto;
+  aspect-ratio:4/3;
+  flex:0 0 auto;
+  position:relative;
+  background:#f0f5f2;
+  font-size:40px;
+}
+#cards .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+#cards .featured-tag{
+  position:absolute;
+  top:8px;
+  left:8px;
+  z-index:2;
+  margin:0;
+  padding:5px 7px;
+  border-radius:6px;
+  font-size:9px;
+  line-height:1.15;
+  box-shadow:0 1px 5px #0002;
+}
+#cards .photo-count{
+  position:absolute;
+  right:8px;
+  bottom:8px;
+  z-index:2;
+  background:#102b27d9;
+  color:#fff;
+  border-radius:20px;
+  padding:4px 7px;
+  font-size:10px;
+  font-weight:700;
+}
+#cards .body{
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+  padding:11px;
+}
+#cards .card-title-row{
+  min-height:36px;
+  flex-wrap:nowrap;
+  align-items:flex-start;
+  gap:5px;
+}
+#cards .card-title-row strong{
+  min-width:0;
+  font-size:14px;
+  line-height:1.3;
+  font-weight:750;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  overflow-wrap:anywhere;
+}
+#cards .heart{
+  flex:0 0 auto;
+  padding:0 2px;
+  font-size:19px;
+  line-height:1.1;
+}
+#cards .card-location{
+  min-height:30px;
+  margin:0;
+  font-size:11px;
+  line-height:1.35;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+#cards .price{
+  margin:0;
+  font-size:17px;
+  line-height:1.25;
+  font-weight:850;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+#cards .body > p.meta,
+#cards .body > .meta:not(.card-location){display:none}
+#cards .sold-label{
+  color:#dc2626;
+  font-size:11px;
+  font-weight:800;
+}
+#cards .card-view-button{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  margin-top:auto;
+  padding:9px 7px;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:800;
+  background:#eaf3f0;
+  color:var(--p);
+}
+#cards .card-view-button:active{transform:scale(.98)}
+@media(max-width:800px){
+  #cards.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:520px){
+  #cards.grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:stretch;
+    gap:10px;
+  }
+  #cards .thumb{aspect-ratio:1/1;height:auto}
+  #cards .body{padding:9px;gap:6px}
+  #cards .card-title-row{min-height:34px}
+  #cards .card-title-row strong{font-size:12.5px;line-height:1.3}
+  #cards .heart{font-size:18px}
+  #cards .card-location{font-size:10px;min-height:27px}
+  #cards .price{font-size:15px}
+  #cards .card-view-button{font-size:11px;padding:8px 5px}
+  #cards .featured-tag{top:6px;left:6px;font-size:8px;padding:4px 5px}
+  #cards .photo-count{right:6px;bottom:6px;font-size:9px}
+}
+
 </style>
 </head>
 <body>
@@ -623,18 +768,17 @@ function render(list=allAds()){
  if(!list.length){c.innerHTML='<div class="empty" style="grid-column:1/-1">Aucune annonce trouvée.</div>';return}
  c.innerHTML=list.map(a=>`
  <article class="card ${a.is_featured?"featured-card":""}">
- <div class="thumb" onclick="viewAd('${a.id}')" role="button" tabindex="0" aria-label="Voir l’annonce ${esc(a.title)}" style="cursor:pointer">${(a.image_urls?.[0]||a.image_url)?`<img src="${esc(a.image_urls?.[0]||a.image_url)}" alt="Voir les photos de ${esc(a.title)}" style="width:100%;height:100%;object-fit:cover;cursor:pointer">`:(a.icon||"📦")}</div>
+ <div class="thumb" onclick="viewAd('${a.id}')" role="button" tabindex="0" aria-label="Voir l’annonce ${esc(a.title)}" style="cursor:pointer">
+ ${(a.image_urls?.[0]||a.image_url)?`<img src="${esc(a.image_urls?.[0]||a.image_url)}" alt="${esc(a.title)}" loading="lazy" style="width:100%;height:100%;object-fit:cover">`:`<span>${a.icon||"📦"}</span>`}
+ ${a.is_featured?'<span class="featured-tag">⭐ À LA UNE</span>':""}
+ ${a.image_urls?.length>1?`<span class="photo-count">📷 ${a.image_urls.length}</span>`:""}
+ </div>
  <div class="body">
- ${a.is_featured?'<div class="featured-tag">⭐ À LA UNE · GRATUIT</div>':""}
- ${a.image_urls?.length>1?`<div class="meta">📷 ${a.image_urls.length} photos · toucher pour voir</div>`:""}
- <div class="row"><strong>${esc(a.title)}</strong>${a.demo?"":`<button class="heart" onclick="toggleFav('${a.id}')">${fav.includes(a.id)?"❤️":"♡"}</button>`}</div>
- <div class="meta">📍 ${esc(a.city)}${showAllAfrica?` · ${countryFlag(a.country_code||"BF")} ${esc(countryByCode(a.country_code||"BF").name)}`:""} · ${a.type==="service"?"🛠️ "+esc(a.metier||"Service"):esc(a.cat)}</div>
- ${a.status==="sold"?'<div class="meta" style="color:#dc2626;font-weight:800">🔴 Vendu</div>':""}
+ <div class="row card-title-row"><strong>${esc(a.title)}</strong>${a.demo?"":`<button class="heart" aria-label="Ajouter aux favoris" onclick="toggleFav('${a.id}')">${fav.includes(a.id)?"❤️":"♡"}</button>`}</div>
+ <div class="meta card-location">📍 ${esc(a.city)}${showAllAfrica?` · ${countryFlag(a.country_code||"BF")} ${esc(countryByCode(a.country_code||"BF").name)}`:""}</div>
  <div class="price">${money(a.price,a.country_code||"BF")}</div>
- <p class="meta">${esc(a.desc)}</p>
- <div class="row"><button class="small" onclick="viewAd('${a.id}')">Voir l'annonce</button><button class="small" onclick="contactAd('${a.id}')">💬 Contacter</button></div>
- ${a.whatsapp_enabled&&a.whatsapp_phone&&!a.demo?`<button class="small full" style="background:#25D366;color:#fff;margin-top:8px" onclick="openWhatsApp('${a.id}')">🟢 Contacter sur WhatsApp</button>`:""}
- ${a.owner&&!a.demo?`<button class="small full" onclick="openSeller('${a.owner}')">👤 Voir le vendeur</button>`:""}
+ ${a.status==="sold"?'<div class="sold-label">🔴 Vendu</div>':""}
+ <button class="small card-view-button" onclick="viewAd('${a.id}')">Voir l’annonce <span aria-hidden="true">→</span></button>
  </div></article>`).join("")
 }
 
