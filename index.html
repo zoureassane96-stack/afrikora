@@ -74,6 +74,177 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 .star-choice{display:flex;gap:5px;flex-direction:row-reverse;justify-content:flex-end}.star-choice button{background:transparent;font-size:30px;color:#cbd5d1;padding:2px}.star-choice button.selected,.star-choice button:hover,.star-choice button:hover~button{color:#f59e0b}.photo-preview{display:flex;gap:8px;flex-wrap:wrap}.photo-preview img{width:92px;height:82px;object-fit:cover;border-radius:9px;border:1px solid var(--border)}.featured-card{border:2px solid #f4b740}.featured-tag{display:inline-block;background:#fff2cc;color:#805b00;padding:3px 7px;border-radius:7px;font-size:11px;font-weight:800;margin-bottom:6px}.photo-strip{display:flex;gap:6px;overflow:auto;margin:8px 0}.photo-strip img{height:74px;width:78px;object-fit:cover;border-radius:8px;flex:0 0 auto;cursor:pointer}.photo-viewer{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;touch-action:pan-y;position:relative;min-height:220px;background:#f5f8f7;border-radius:14px;overflow:hidden}.photo-viewer img{display:block;max-width:100%;width:auto;max-height:66vh;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none}.photo-viewer button{background:#eef5f3;color:var(--p);padding:10px 13px;border-radius:9px;font-weight:800;flex:0 0 auto}.gallery-count{font-weight:800;color:var(--p)}.detail-main-photo{width:100%;height:min(58vw,390px);object-fit:contain;background:#f5f8f7;border-radius:14px;cursor:zoom-in}.detail-title{font-size:23px;line-height:1.25;margin:14px 0 8px}.detail-price{font-size:27px;font-weight:900;color:var(--p);margin:12px 0}.detail-panel{border:1px solid var(--border);border-radius:14px;padding:14px;margin:12px 0;background:#fff}.photo-strip img.active{outline:3px solid var(--p);outline-offset:1px}.back-home{display:inline-flex;align-items:center;gap:7px;margin:0 0 14px;padding:10px 14px;border-radius:10px;background:#eef5f3;color:var(--p);font-weight:800;border:1px solid #cfe5df}.dash-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 @media(max-width:800px){.navlinks{display:none}.mobile-menu{display:inline-block}.country-switch{max-width:145px}.grid{grid-template-columns:1fr 1fr}.features{grid-template-columns:1fr 1fr}.search{flex-wrap:wrap}.search input{flex-basis:100%}.thumb{height:205px}}
 @media(max-width:520px){main{padding:14px 10px 45px}.hero{padding:24px 15px;border-radius:17px}.hero p{font-size:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.features{grid-template-columns:1fr}.logo{font-size:21px}nav{height:auto;min-height:60px;padding:10px 12px;gap:6px}.account button{padding:8px 9px;font-size:12px}.thumb{height:185px}.body{padding:11px}.card .row{align-items:flex-start}.card .row strong{font-size:14px;overflow-wrap:anywhere}.price{font-size:17px}.card .meta{font-size:12px}.small{padding:8px 9px;font-size:12px}.box{padding:16px}.search{gap:6px}.search select,.search input{width:100%;flex-basis:100%}.search button{width:100%}.filters input,.filters select{width:100%;min-width:0}.filters{display:grid;grid-template-columns:1fr 1fr}.filters button{grid-column:1/-1}.reply-row{flex-wrap:wrap}.reply-row textarea{min-width:100%}}
+
+/* Mobile header refinement for AFRIKORA */
+@media(max-width:800px){
+  nav{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:
+      "brand brand"
+      "country language"
+      "menu account";
+    align-items:center;
+    gap:9px;
+    height:auto;
+    min-height:0;
+    padding:12px 14px;
+  }
+  nav .logo{grid-area:brand;display:flex;justify-content:center;width:100%;margin:0;min-height:42px}
+  nav .brand-logo{width:auto;max-width:180px;max-height:48px}
+  nav #countryTop{grid-area:country;width:100%;max-width:none;min-width:0;padding:10px 7px;font-size:14px}
+  nav #languageSelect{grid-area:language;width:100%;max-width:none;min-width:0;padding:10px 7px;font-size:14px}
+  nav .mobile-menu{grid-area:menu;display:block;width:100%;min-height:44px}
+  nav .account{grid-area:account;display:flex;justify-content:flex-end;gap:6px;min-width:0}
+  nav .account button{flex:1;min-width:0;white-space:nowrap;padding:9px 6px;font-size:13px}
+  nav .navlinks{display:none}
+}
+@media(max-width:520px){
+  nav{padding:10px 12px;gap:8px}
+  nav #countryTop,nav #languageSelect{font-size:13px;padding:9px 5px}
+  nav .account button{font-size:12px;padding:8px 4px}
+  nav .mobile-menu{padding:8px 10px}
+}
+@media(min-width:801px){
+  nav #languageSelect{max-width:145px}
+}
+/* If a local preview has no accompanying logo asset, show a clean text fallback. */
+.brand-logo{min-height:1px}
+
+
+/* Localization polish: preserve readable mixed content and Arabic RTL flow */
+html[dir="rtl"] .hero,html[dir="rtl"] .section,html[dir="rtl"] .country-bar{direction:rtl;text-align:right}
+html[dir="rtl"] .hero input,html[dir="rtl"] .section input,html[dir="rtl"] .section textarea{text-align:right}
+html[dir="rtl"] .country-bar label{display:block}
+#countryTop,#countryHome{direction:auto}
+
+
+/* Final mobile navigation/account overflow fix */
+@media(max-width:800px){
+  nav .account{
+    grid-area:account;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-end;
+    gap:6px;
+    overflow:hidden;
+  }
+  nav .account > *{
+    box-sizing:border-box;
+    max-width:100%;
+    min-width:0;
+    flex:0 1 auto;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  nav .account button{
+    flex:1 1 92px;
+    min-height:40px;
+    padding:8px 7px;
+    font-size:12px;
+  }
+  nav .account .user-name,
+  nav .account .account-name{
+    flex:1 1 100%;
+    text-align:center;
+  }
+  #mobileNav{max-width:100%;overflow:hidden}
+  #mobileNav .row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center!important;
+    gap:7px;
+  }
+  #mobileNav .row button{
+    flex:1 1 105px;
+    min-width:0;
+    max-width:100%;
+    white-space:normal;
+    padding:9px 7px;
+    font-size:13px;
+  }
+}
+@media(max-width:520px){
+  nav .account{justify-content:stretch}
+  nav .account button{flex:1 1 88px}
+  #mobileNav .row button{flex:1 1 42%;font-size:12px}
+}
+
+
+/* Compact and balanced mobile action row */
+@media(max-width:800px){
+  nav{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:
+      "brand brand"
+      "country language"
+      "menu account";
+    column-gap:9px;
+    row-gap:9px;
+  }
+  nav #countryTop,nav #languageSelect{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+    font-size:13px;
+    padding-left:6px;
+    padding-right:6px;
+  }
+  nav .mobile-menu{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    min-height:48px;
+    justify-self:stretch;
+    align-self:stretch;
+  }
+  nav .account{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:8px;
+    align-items:stretch;
+    overflow:visible;
+  }
+  nav .account > button{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    min-height:48px;
+    margin:0;
+    padding:8px 4px;
+    font-size:13px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  nav .account > :not(button){grid-column:1/-1;min-width:0;max-width:100%;text-align:center}
+}
+@media(max-width:380px){
+  nav #countryTop,nav #languageSelect{font-size:11px}
+  nav .account{gap:5px}
+  nav .account > button{font-size:12px}
+}
+
+
+/* Mobile menu opens as a visible overlay below the complete header */
+@media(max-width:800px){
+  #mobileNav[data-open="1"]{display:block!important}
+  #mobileNav .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  #mobileNav .row button{width:100%;min-width:0;min-height:46px;white-space:normal}
+}
+
+
+/* Modal priority: product details and photo viewer must cover mobile menu */
+#modal{z-index:10060}
+#mobileNav{z-index:40!important}
+
 </style>
 </head>
 <body>
@@ -85,7 +256,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <div class="top">AFRIKORA — Le marché africain des opportunités</div>
 
 <nav>
-<div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA — Le marché africain des opportunités"></div>
+<div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<strong style=&quot;font-size:25px;color:#0D554B;letter-spacing:1px&quot;>AFRIKORA</strong>')"></div>
 <div class="navlinks">
 <button onclick="go('home')">Accueil</button>
 <button onclick="go('annonces')">Annonces</button>
@@ -94,6 +265,7 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
 <button id="adminNavButton" style="display:none" onclick="go('admin')">🛡️ Administration</button>
 </div>
 <select id="countryTop" class="country-switch" aria-label="Filtrer les annonces par pays ou toute l’Afrique" onchange="changeCountry(this.value)"></select>
+<select id="languageSelect" class="country-switch" aria-label="Choisir la langue" title="Choisir la langue"><option value="fr">🌐 Français</option><option value="en">English</option><option value="ar">العربية</option><option value="pt">Português</option><option value="sw">Kiswahili</option></select>
 <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu">☰</button>
 <div class="account" id="account">
 <button class="outline" onclick="openModal('login')">Connexion</button>
@@ -228,7 +400,7 @@ const seed=[
 const AFRICAN_COUNTRIES=[
 ['DZ','Algérie','DZD','DA','+213'],['TD','Tchad','XAF','FCFA','+235'],['AO','Angola','AOA','Kz','+244'],['BJ','Bénin','XOF','FCFA','+229'],['BW','Botswana','BWP','P','+267'],['BF','Burkina Faso','XOF','FCFA','+226'],['BI','Burundi','BIF','FBu','+257'],['CV','Cap-Vert','CVE','Esc','+238'],['CM','Cameroun','XAF','FCFA','+237'],['CF','République centrafricaine','XAF','FCFA','+236'],['KM','Comores','KMF','FC','+269'],['CG','Congo','XAF','FCFA','+242'],['CD','République démocratique du Congo','CDF','FC','+243'],['CI',"Côte d’Ivoire",'XOF','FCFA','+225'],['DJ','Djibouti','DJF','Fdj','+253'],['EG','Égypte','EGP','£E','+20'],['GQ','Guinée équatoriale','XAF','FCFA','+240'],['ER','Érythrée','ERN','Nfk','+291'],['SZ','Eswatini','SZL','L','+268'],['ET','Éthiopie','ETB','Br','+251'],['GA','Gabon','XAF','FCFA','+241'],['GM','Gambie','GMD','D','+220'],['GH','Ghana','GHS','GH₵','+233'],['GN','Guinée','GNF','FG','+224'],['GW','Guinée-Bissau','XOF','FCFA','+245'],['KE','Kenya','KES','KSh','+254'],['LS','Lesotho','LSL','L','+266'],['LR','Liberia','LRD','L$','+231'],['LY','Libye','LYD','LD','+218'],['MG','Madagascar','MGA','Ar','+261'],['MW','Malawi','MWK','MK','+265'],['ML','Mali','XOF','FCFA','+223'],['MR','Mauritanie','MRU','UM','+222'],['MU','Maurice','MUR','₨','+230'],['MA','Maroc','MAD','DH','+212'],['MZ','Mozambique','MZN','MT','+258'],['NA','Namibie','NAD','N$','+264'],['NE','Niger','XOF','FCFA','+227'],['NG','Nigeria','NGN','₦','+234'],['RW','Rwanda','RWF','FRw','+250'],['ST','Sao Tomé-et-Principe','STN','Db','+239'],['SN','Sénégal','XOF','FCFA','+221'],['SC','Seychelles','SCR','₨','+248'],['SL','Sierra Leone','SLE','Le','+232'],['SO','Somalie','SOS','Sh','+252'],['ZA','Afrique du Sud','ZAR','R','+27'],['SS','Soudan du Sud','SSP','£','+211'],['SD','Soudan','SDG','ج.س','+249'],['TZ','Tanzanie','TZS','TSh','+255'],['TG','Togo','XOF','FCFA','+228'],['TN','Tunisie','TND','DT','+216'],['UG','Ouganda','UGX','USh','+256'],['ZM','Zambie','ZMW','ZK','+260'],['ZW','Zimbabwe','ZiG','ZiG','+263']
 ].map(([code,name,currency,symbol,dial])=>({code,name,currency,symbol,dial}));
-const COUNTRY_STORE='afrikora_country_v1';
+const COUNTRY_STORE='afrikora_country_v2';
 function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);if(AFRICAN_COUNTRIES.some(c=>c.code===saved))return saved;const locale=(navigator.language||'').toUpperCase();const match=AFRICAN_COUNTRIES.find(c=>locale.endsWith('-'+c.code));return match?.code||'BF'}catch(e){return 'BF'}}
 let activeCountry=detectCountry();
 // Première visite : détecte le pays approximatif via l'adresse IP. Un choix manuel enregistré reste prioritaire.
@@ -248,14 +420,14 @@ async function detectCountryFromConnection(){
  }catch(e){/* Si la détection échoue, conserver le pays de secours et laisser le visiteur choisir. */}
 }
 // Mode de consultation : le pays actif reste mémorisé même en vue panafricaine.
-let showAllAfrica=false;
+let showAllAfrica=true;
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
 function countryFlag(code){const cc=String(code||'BF').toUpperCase();if(!/^[A-Z]{2}$/.test(cc))return '🌍';return String.fromCodePoint(...[...cc].map(ch=>127397+ch.charCodeAt(0)))}
 function countryOptions(selected){
  return AFRICAN_COUNTRIES.map(c=>`<option value="${c.code}" ${c.code===selected?'selected':''}>${c.name} (${c.dial})</option>`).join('');
 }
 function marketCountryOptions(selected){
- return `<option value="ALL" ${showAllAfrica?'selected':''}>🌍 Toute l’Afrique (54 pays)</option>`+countryOptions(selected);
+ return `<option value="ALL" ${showAllAfrica?'selected':''}>🌍 Toute l’Afrique (54 pays)</option>`+countryOptions(showAllAfrica?null:selected);
 }
 function initCountries(){
  ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=marketCountryOptions(activeCountry)});
@@ -298,7 +470,36 @@ function syncCountryUI(){
  if(adCity){adCity.setAttribute('list','burkinaLocalities');adCity.placeholder=`Ex. ${localityExamples[activeCountry]?.[0]||'ville principale'}, autre localité…`}
  populateLocalities();
 }
-function toggleMobileMenu(force){const el=document.getElementById('mobileNav');if(!el)return;el.style.display=force===false?'none':el.style.display==='none'?'block':'none'}
+function toggleMobileMenu(force){
+  const el=document.getElementById('mobileNav');
+  const nav=document.querySelector('body > nav');
+  if(!el||!nav)return;
+  const shouldOpen = force===false ? false : (el.dataset.open!=='1');
+  if(!shouldOpen){
+    el.dataset.open='0';
+    el.style.display='none';
+    return;
+  }
+  const placeMenu=()=>{
+    const rect=nav.getBoundingClientRect();
+    el.style.top=Math.max(8,Math.min(rect.bottom+8,window.innerHeight-100))+'px';
+  };
+  el.dataset.open='1';
+  el.style.display='block';
+  el.style.position='fixed';
+  el.style.left='12px';
+  el.style.right='12px';
+  el.style.width='auto';
+  el.style.zIndex='40';
+  el.style.maxHeight='min(55vh, 360px)';
+  el.style.overflowY='auto';
+  el.style.overscrollBehavior='contain';
+  el.style.border='1px solid var(--border)';
+  el.style.borderRadius='14px';
+  el.style.boxShadow='0 12px 32px rgba(0,0,0,.18)';
+  placeMenu();
+  window.addEventListener('resize',placeMenu,{passive:true});
+}
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
 async function openGoogleAuth(){
   if(!requireClient()) return;
@@ -329,7 +530,7 @@ function money(n,countryCode=activeCountry){const c=countryByCode(countryCode);r
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>x.classList.remove("show"),2600)}
 function requireClient(){if(!supabaseClient){toast("Connexion au service indisponible. Réessayez.");return false}return true}
 
-function openCustom(html){document.getElementById("modalBody").innerHTML=html;document.getElementById("modal").classList.add("open")}
+function openCustom(html){toggleMobileMenu(false);document.getElementById("modalBody").innerHTML=html;document.getElementById("modal").classList.add("open")}
 function closeModal(){document.getElementById("modal").classList.remove("open")}
 function openModal(type){
  const html=type==="login"
@@ -497,7 +698,7 @@ function openPhotoGallery(urls,index=0,title="Photos de l’annonce"){
   ${list.length>1?`<div class="photo-strip" style="justify-content:center">${list.map((u,i)=>`<img class="${i===at?'active':''}" src="${esc(u)}" alt="Miniature ${i+1}" onclick="setGalleryPhoto(${i})" style="border:1px solid var(--border)">`).join("")}</div>`:""}`;
  };
  window.__AFRIKORAGallery={list,getIndex:()=>at,setIndex:(n)=>{at=(n+list.length)%list.length;draw()}};
- draw();document.getElementById("modal").classList.add("open");
+ draw();toggleMobileMenu(false);document.getElementById("modal").classList.add("open");
 }
 function galleryTouchStart(event){window.__AFRIKORATouchX=event.changedTouches?.[0]?.clientX||0}
 function galleryTouchEnd(event){
@@ -1086,7 +1287,6 @@ async function submitSiteReview(){
 }
 
 (async function init(){
- await detectCountryFromConnection();
  initCountries();populateLocalities();render([]);updateAccount();await loadSiteRating();
  if(supabaseClient){
   const {data}=await supabaseClient.auth.getSession();
@@ -1151,5 +1351,257 @@ window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 updateConnectionStatus();
 </script>
+
+<script id="afrikora-i18n">
+(function(){
+  "use strict";
+  const dictionaries = {
+    en: {
+      "AFRIKORA — Le marché africain des opportunités":"AFRIKORA — Africa's marketplace of opportunities",
+      "📡 Mode hors connexion — annonces enregistrées sur cet appareil.":"📡 Offline mode — listings saved on this device.",
+      "Accueil":"Home","Annonces":"Listings","Publier":"Post","Mon espace":"My account",
+      "🛡️ Administration":"🛡️ Administration","Connexion":"Log in","Inscription":"Sign up",
+      "🌍 Voir les annonces de :":"🌍 View listings from:","Monnaie locale":"Local currency",
+      "La marketplace panafricaine : produits, annonces et services":"The Pan-African marketplace: products, listings and services",
+      "Découvrez des produits, comparez les offres, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.":"Discover products, compare offers, post listings and find professionals in all 54 African countries.",
+      "Que recherchez-vous ? ex. ciment, maison, maçon...":"What are you looking for? e.g. cement, house, mason...",
+      "Ville / localité":"City / locality","Rechercher":"Search",
+      "Rechercher":"Search","Plus récentes":"Newest","Prix : moins cher":"Price: lowest first",
+      "Prix : plus cher":"Price: highest first","Réinitialiser":"Reset","Catégories":"Categories",
+      "Tous":"All","🏗️ Matériaux":"🏗️ Building materials","🏠 Immobilier":"🏠 Real estate",
+      "🚗 Véhicules":"🚗 Vehicles","📱 Électronique":"📱 Electronics","🛠️ Services":"🛠️ Services",
+      "🌾 Alimentation":"🌾 Food","Annonces récentes":"Recent listings","+ Publier":"+ Post",
+      "Pourquoi AFRIKORA ?":"Why AFRIKORA?","Comparer":"Compare","Comparez rapidement les prix proposés.":"Compare offered prices quickly.",
+      "Localiser":"Find locally","Filtrez les annonces par ville.":"Filter listings by city.",
+      "Trouver un professionnel":"Find a professional","Maçon, électricien, plombier et autres métiers.":"Mason, electrician, plumber and other trades.",
+      "Échanger":"Connect","Contactez directement les annonceurs.":"Contact advertisers directly.",
+      "Acheter, vendre et trouver des services en Afrique":"Buy, sell and find services across Africa",
+      "Les principales catégories sur AFRIKORA":"Main categories on AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"A platform open to all 54 African countries",
+      "← Retour au menu principal":"← Back to main menu","🛡️ Administration AFRIKORA":"🛡️ AFRIKORA administration",
+      "↻ Actualiser":"↻ Refresh","Espace réservé au compte administrateur autorisé dans Supabase.":"Area reserved for the authorized administrator account in Supabase.",
+      "Chargement de l’administration…":"Loading administration…","Publier une annonce":"Post a listing",
+      "Titre":"Title","Type d'annonce":"Listing type","🛒 Produit":"🛒 Product","🛠️ Service":"🛠️ Service",
+      "Métier":"Trade","Catégorie":"Category","Matériaux":"Building materials","Immobilier":"Real estate",
+      "Véhicules":"Vehicles","Électronique":"Electronics","Services":"Services","Alimentation":"Food",
+      "Pays de publication":"Country of publication","Ville / localité":"City / locality",
+      "Vous pouvez saisir toute localité, même si elle n’apparaît pas dans la liste.":"You can enter any locality, even if it does not appear in the list.",
+      "Description":"Description","Photos du produit ou du service (facultatif, jusqu'à 10)":"Product or service photos (optional, up to 10)",
+      "JPG, PNG ou WebP · 2 Mo maximum par photo · 10 photos maximum.":"JPG, PNG or WebP · 2 MB maximum per photo · 10 photos maximum.",
+      "⭐ Mettre cette annonce en avant gratuitement (offre de lancement)":"⭐ Feature this listing for free (launch offer)",
+      "J'accepte d'être contacté sur WhatsApp pour cette annonce":"I agree to be contacted on WhatsApp about this listing",
+      "Numéro WhatsApp avec indicatif pays":"WhatsApp number with country code",
+      "Publier l'annonce":"Post listing","Le marché africain des produits, annonces, professionnels et services.":"The African marketplace for products, listings, professionals and services.",
+      "⭐ Noter AFRIKORA":"⭐ Rate AFRIKORA","Présent dans les 54 pays africains ·":"Available in all 54 African countries ·",
+      "Choisir son pays":"Choose your country","© 2026 AFRIKORA":"© 2026 AFRIKORA",
+      "AFRIKORA est une marketplace panafricaine qui rassemble des annonces de produits, des offres de services et des professionnels. Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"AFRIKORA is a pan-African marketplace bringing together product listings, service offers and professionals. Search by category and country, review the information provided by sellers, and contact them directly to arrange delivery and payment.",
+      "Parcourez les annonces de matériaux de construction, immobilier, véhicules, électronique, alimentation et services. Les professionnels peuvent présenter leurs métiers et les utilisateurs peuvent découvrir les offres disponibles dans leur pays.":"Browse listings for building materials, real estate, vehicles, electronics, food and services. Professionals can present their skills, and users can discover offers available in their country.",
+      "Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche. Les prix sont affichés dans la monnaie locale indiquée par l’annonceur.":"Choose a country to view its listings, or select all of Africa to broaden your search. Prices are displayed in the local currency specified by the advertiser.",
+      "Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"Search by category and country, review seller information and contact sellers directly to arrange delivery and payment.",
+      "Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche.":"Choose a country to view matching listings, or select all of Africa to broaden your search.",
+      "Mon espace":"My account",
+      "Acheter, vendre et trouver des services en Afrique":"Buy, sell and find services across Africa",
+      "Les principales catégories sur AFRIKORA":"Main categories on AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"A platform open to all 54 African countries",
+      "Monnaie :":"Currency:"
+    },
+    pt: {
+      "AFRIKORA — Le marché africain des opportunités":"AFRIKORA — O mercado africano de oportunidades",
+      "📡 Mode hors connexion — annonces enregistrées sur cet appareil.":"📡 Modo offline — anúncios guardados neste dispositivo.",
+      "Accueil":"Início","Annonces":"Anúncios","Publier":"Publicar","Mon espace":"Minha conta",
+      "Connexion":"Entrar","Inscription":"Criar conta","🌍 Voir les annonces de :":"🌍 Ver anúncios de:",
+      "Monnaie locale":"Moeda local","La marketplace panafricaine : produits, annonces et services":"O marketplace pan-africano: produtos, anúncios e serviços",
+      "Découvrez des produits, comparez les offres, publiez vos annonces et trouvez des professionnels dans les 54 pays africains.":"Descubra produtos, compare ofertas, publique anúncios e encontre profissionais nos 54 países africanos.",
+      "Que recherchez-vous ? ex. ciment, maison, maçon...":"O que procura? Ex.: cimento, casa, pedreiro...",
+      "Ville / localité":"Cidade / localidade","Rechercher":"Pesquisar",
+      "Rechercher":"Pesquisar","Plus récentes":"Mais recentes","Prix : moins cher":"Preço: menor primeiro",
+      "Prix : plus cher":"Preço: maior primeiro","Réinitialiser":"Repor","Catégories":"Categorias","Tous":"Todos",
+      "🏗️ Matériaux":"🏗️ Materiais de construção","🏠 Immobilier":"🏠 Imobiliário","🚗 Véhicules":"🚗 Veículos",
+      "📱 Électronique":"📱 Eletrónica","🛠️ Services":"🛠️ Serviços","🌾 Alimentation":"🌾 Alimentação",
+      "Annonces récentes":"Anúncios recentes","+ Publier":"+ Publicar","Pourquoi AFRIKORA ?":"Porquê AFRIKORA?",
+      "Comparer":"Comparar","Comparez rapidement les prix proposés.":"Compare rapidamente os preços apresentados.",
+      "Localiser":"Localizar","Filtrez les annonces par ville.":"Filtre os anúncios por cidade.",
+      "Trouver un professionnel":"Encontrar um profissional","Maçon, électricien, plombier et autres métiers.":"Pedreiro, eletricista, canalizador e outras profissões.",
+      "Échanger":"Contactar","Contactez directement les annonceurs.":"Contacte diretamente os anunciantes.",
+      "Acheter, vendre et trouver des services en Afrique":"Comprar, vender e encontrar serviços em África",
+      "Les principales catégories sur AFRIKORA":"Principais categorias no AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"Uma plataforma aberta aos 54 países africanos",
+      "← Retour au menu principal":"← Voltar ao menu principal","Publier une annonce":"Publicar um anúncio",
+      "Titre":"Título","Type d'annonce":"Tipo de anúncio","🛒 Produit":"🛒 Produto","🛠️ Service":"🛠️ Serviço",
+      "Métier":"Profissão","Catégorie":"Categoria","Pays de publication":"País de publicação",
+      "Ville / localité":"Cidade / localidade","Description":"Descrição",
+      "Photos du produit ou du service (facultatif, jusqu'à 10)":"Fotos do produto ou serviço (opcional, até 10)",
+      "Publier l'annonce":"Publicar anúncio","⭐ Noter AFRIKORA":"⭐ Avaliar AFRIKORA",
+      "Choisir son pays":"Escolher o país",
+      "AFRIKORA est une marketplace panafricaine qui rassemble des annonces de produits, des offres de services et des professionnels. Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"AFRIKORA é um marketplace pan-africano que reúne anúncios de produtos, ofertas de serviços e profissionais. Pesquise por categoria e país, consulte as informações publicadas pelos vendedores e contacte-os diretamente para combinar a entrega e o pagamento.",
+      "Parcourez les annonces de matériaux de construction, immobilier, véhicules, électronique, alimentation et services. Les professionnels peuvent présenter leurs métiers et les utilisateurs peuvent découvrir les offres disponibles dans leur pays.":"Explore anúncios de materiais de construção, imóveis, veículos, eletrónica, alimentos e serviços. Os profissionais podem apresentar as suas atividades e os utilizadores podem descobrir as ofertas disponíveis no seu país.",
+      "Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche. Les prix sont affichés dans la monnaie locale indiquée par l’annonceur.":"Escolha um país para consultar os anúncios correspondentes ou selecione toda a África para ampliar a pesquisa. Os preços são apresentados na moeda local indicada pelo anunciante.",
+      "Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"Pesquise por categoria e país, consulte as informações dos vendedores e contacte-os diretamente para combinar a entrega e o pagamento.",
+      "Mon espace":"Minha conta",
+      "Acheter, vendre et trouver des services en Afrique":"Comprar, vender e encontrar serviços em África",
+      "Les principales catégories sur AFRIKORA":"Principais categorias no AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"Uma plataforma aberta aos 54 países africanos"
+    },
+    sw: {
+      "AFRIKORA — Le marché africain des opportunités":"AFRIKORA — Soko la fursa za Afrika",
+      "📡 Mode hors connexion — annonces enregistrées sur cet appareil.":"📡 Hali ya nje ya mtandao — matangazo yamehifadhiwa kwenye kifaa hiki.",
+      "Accueil":"Nyumbani","Annonces":"Matangazo","Publier":"Weka tangazo","Mon espace":"Akaunti yangu",
+      "Connexion":"Ingia","Inscription":"Jisajili","🌍 Voir les annonces de :":"🌍 Tazama matangazo kutoka:",
+      "Monnaie locale":"Sarafu ya eneo","Rechercher":"Tafuta","Plus récentes":"Mapya zaidi",
+      "Prix : moins cher":"Bei: ya chini kwanza","Prix : plus cher":"Bei: ya juu kwanza",
+      "Réinitialiser":"Weka upya","Catégories":"Aina","Tous":"Yote","Annonces récentes":"Matangazo ya hivi karibuni",
+      "+ Publier":"+ Weka tangazo","Pourquoi AFRIKORA ?":"Kwa nini AFRIKORA?","Comparer":"Linganisha",
+      "Comparez rapidement les prix proposés.":"Linganisha bei zinazotolewa kwa haraka.",
+      "Localiser":"Tafuta eneo","Filtrez les annonces par ville.":"Chuja matangazo kwa mji.",
+      "Trouver un professionnel":"Pata mtaalamu","Maçon, électricien, plombier et autres métiers.":"Fundi ujenzi, umeme, bomba na taaluma nyingine.",
+      "Échanger":"Wasiliana","Contactez directement les annonceurs.":"Wasiliana moja kwa moja na watangazaji.",
+      "Acheter, vendre et trouver des services en Afrique":"Nunua, uza na pata huduma kote Afrika",
+      "Publier une annonce":"Weka tangazo","Titre":"Kichwa","Type d'annonce":"Aina ya tangazo",
+      "🛒 Produit":"🛒 Bidhaa","🛠️ Service":"🛠️ Huduma","Métier":"Kazi","Catégorie":"Aina",
+      "Pays de publication":"Nchi ya tangazo","Ville / localité":"Mji / eneo","Description":"Maelezo",
+      "Publier l'annonce":"Weka tangazo","⭐ Noter AFRIKORA":"⭐ Kadiria AFRIKORA","Choisir son pays":"Chagua nchi",
+      "AFRIKORA est une marketplace panafricaine qui rassemble des annonces de produits, des offres de services et des professionnels. Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"AFRIKORA ni soko la Afrika linalokusanya matangazo ya bidhaa, huduma na wataalamu. Tafuta kwa aina ya bidhaa na nchi, soma maelezo ya wauzaji na uwasiliane nao moja kwa moja kupanga usafirishaji na malipo.",
+      "Parcourez les annonces de matériaux de construction, immobilier, véhicules, électronique, alimentation et services. Les professionnels peuvent présenter leurs métiers et les utilisateurs peuvent découvrir les offres disponibles dans leur pays.":"Vinjari matangazo ya vifaa vya ujenzi, nyumba na ardhi, magari, vifaa vya elektroniki, chakula na huduma. Wataalamu wanaweza kutangaza ujuzi wao na watumiaji kugundua huduma zinazopatikana nchini mwao.",
+      "Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche. Les prix sont affichés dans la monnaie locale indiquée par l’annonceur.":"Chagua nchi ili kuona matangazo yake, au chagua Afrika yote ili kupanua utafutaji wako. Bei huonyeshwa kwa sarafu ya eneo iliyowekwa na mtangazaji.",
+      "Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"Tafuta kwa aina na nchi, soma taarifa za wauzaji na uwasiliane nao moja kwa moja kupanga usafirishaji na malipo.",
+      "Mon espace":"Akaunti yangu",
+      "Acheter, vendre et trouver des services en Afrique":"Nunua, uza na pata huduma kote Afrika",
+      "Les principales catégories sur AFRIKORA":"Aina kuu kwenye AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"Jukwaa linalopatikana katika nchi zote 54 za Afrika"
+    },
+    ar: {
+      "AFRIKORA — Le marché africain des opportunités":"AFRIKORA — سوق الفرص الأفريقي",
+      "📡 Mode hors connexion — annonces enregistrées sur cet appareil.":"📡 وضع عدم الاتصال — الإعلانات محفوظة على هذا الجهاز.",
+      "Accueil":"الرئيسية","Annonces":"الإعلانات","Publier":"نشر إعلان","Mon espace":"حسابي",
+      "Connexion":"تسجيل الدخول","Inscription":"إنشاء حساب","🌍 Voir les annonces de :":"🌍 عرض إعلانات:",
+      "Monnaie locale":"العملة المحلية","Rechercher":"بحث","Plus récentes":"الأحدث",
+      "Prix : moins cher":"السعر: الأقل أولاً","Prix : plus cher":"السعر: الأعلى أولاً",
+      "Réinitialiser":"إعادة ضبط","Catégories":"الفئات","Tous":"الكل",
+      "🏗️ Matériaux":"🏗️ مواد البناء","🏠 Immobilier":"🏠 العقارات","🚗 Véhicules":"🚗 المركبات",
+      "📱 Électronique":"📱 الإلكترونيات","🛠️ Services":"🛠️ الخدمات","🌾 Alimentation":"🌾 الأغذية",
+      "Annonces récentes":"أحدث الإعلانات","+ Publier":"+ نشر إعلان","Pourquoi AFRIKORA ?":"لماذا AFRIKORA؟",
+      "Comparer":"قارن","Comparez rapidement les prix proposés.":"قارن الأسعار المعروضة بسرعة.",
+      "Localiser":"تحديد الموقع","Filtrez les annonces par ville.":"تصفية الإعلانات حسب المدينة.",
+      "Trouver un professionnel":"اعثر على متخصص","Maçon, électricien, plombier et autres métiers.":"بنّاء وكهربائي وسباك ومهن أخرى.",
+      "Échanger":"تواصل","Contactez directement les annonceurs.":"تواصل مباشرة مع المعلنين.",
+      "Acheter, vendre et trouver des services en Afrique":"اشترِ وبِع واعثر على الخدمات في أفريقيا",
+      "Les principales catégories sur AFRIKORA":"الفئات الرئيسية في AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"منصة متاحة في 54 دولة أفريقية",
+      "← Retour au menu principal":"← العودة إلى القائمة الرئيسية","Publier une annonce":"نشر إعلان",
+      "Titre":"العنوان","Type d'annonce":"نوع الإعلان","🛒 Produit":"🛒 منتج","🛠️ Service":"🛠️ خدمة",
+      "Métier":"المهنة","Catégorie":"الفئة","Pays de publication":"بلد النشر",
+      "Ville / localité":"المدينة / المنطقة","Description":"الوصف",
+      "Photos du produit ou du service (facultatif, jusqu'à 10)":"صور المنتج أو الخدمة (اختياري، حتى 10 صور)",
+      "Publier l'annonce":"نشر الإعلان","⭐ Noter AFRIKORA":"⭐ قيّم AFRIKORA","Choisir son pays":"اختر بلدك",
+      "AFRIKORA est une marketplace panafricaine qui rassemble des annonces de produits, des offres de services et des professionnels. Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"AFRIKORA سوق أفريقية تجمع إعلانات المنتجات وعروض الخدمات والمهنيين. ابحث حسب الفئة والبلد، واطّلع على معلومات البائعين وتواصل معهم مباشرة لترتيب التسليم والدفع.",
+      "Parcourez les annonces de matériaux de construction, immobilier, véhicules, électronique, alimentation et services. Les professionnels peuvent présenter leurs métiers et les utilisateurs peuvent découvrir les offres disponibles dans leur pays.":"تصفح إعلانات مواد البناء والعقارات والمركبات والإلكترونيات والأغذية والخدمات. يمكن للمهنيين عرض أعمالهم ويمكن للمستخدمين اكتشاف العروض المتاحة في بلدانهم.",
+      "Choisissez un pays pour consulter les annonces correspondantes ou sélectionnez toute l’Afrique pour élargir votre recherche. Les prix sont affichés dans la monnaie locale indiquée par l’annonceur.":"اختر بلداً لعرض إعلاناته، أو اختر أفريقيا بأكملها لتوسيع البحث. تُعرض الأسعار بالعملة المحلية التي يحددها المعلن.",
+      "Recherchez par catégorie et par pays, consultez les informations publiées par les vendeurs et contactez-les directement pour organiser la livraison et le paiement.":"ابحث حسب الفئة والبلد، واطّلع على معلومات البائعين وتواصل معهم مباشرة لترتيب التسليم والدفع.",
+      "Mon espace":"حسابي",
+      "Acheter, vendre et trouver des services en Afrique":"اشترِ وبِع واعثر على الخدمات في أفريقيا",
+      "Les principales catégories sur AFRIKORA":"الفئات الرئيسية في AFRIKORA",
+      "Une plateforme ouverte aux 54 pays africains":"منصة متاحة في 54 دولة أفريقية"
+    }
+  };
+
+  const languageNames = {fr:"Français",en:"English",ar:"العربية",pt:"Português",sw:"Kiswahili"};
+  function supportedLanguage(value){
+    const code = String(value || "").toLowerCase().split("-")[0];
+    return dictionaries[code] ? code : "fr";
+  }
+  function detectLanguage(){
+    const candidates = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "fr"]);
+    for (const candidate of candidates) {
+      const code = String(candidate).toLowerCase().split("-")[0];
+      if (code === "fr" || dictionaries[code]) return code;
+    }
+    return "fr";
+  }
+  let currentLanguage = "fr";
+  function translateText(value){
+    const key = value.replace(/\s+/g," ").trim();
+    if (!key || currentLanguage === "fr") return value;
+    const translated = dictionaries[currentLanguage] && dictionaries[currentLanguage][key];
+    if (!translated) return value;
+    const leading = value.match(/^\s*/)[0], trailing = value.match(/\s*$/)[0];
+    return leading + translated + trailing;
+  }
+  function translateNode(node){
+    if (!node || node.nodeType !== Node.TEXT_NODE) return;
+    const original = node.nodeValue;
+    if (!node.__afrikoraOriginal) node.__afrikoraOriginal = original;
+    const source = node.__afrikoraOriginal;
+    const result = translateText(source);
+    if (node.nodeValue !== result) node.nodeValue = result;
+  }
+  function applyLanguage(lang, save){
+    currentLanguage = supportedLanguage(lang);
+    document.documentElement.lang = currentLanguage;
+    document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("afrikora-rtl", currentLanguage === "ar");
+    document.querySelectorAll("body *").forEach(el => {
+      if (el.children.length === 0) {
+        Array.from(el.childNodes).forEach(translateNode);
+      }
+      ["placeholder","title","aria-label"].forEach(attr => {
+        if (el.hasAttribute(attr)) {
+          const originalAttr = "data-afrikora-" + attr;
+          if (!el.hasAttribute(originalAttr)) el.setAttribute(originalAttr, el.getAttribute(attr));
+          const source = el.getAttribute(originalAttr);
+          const translated = translateText(source);
+          if (translated !== source) el.setAttribute(attr, translated);
+          else el.setAttribute(attr, source);
+        }
+      });
+    });
+    const select = document.getElementById("languageSelect");
+    if (select) select.value = currentLanguage;
+    if (save) {
+      try { localStorage.setItem("afrikora_language", currentLanguage); } catch(e) {}
+    }
+  }
+  function start(){
+    const select = document.getElementById("languageSelect");
+    let saved = null;
+    try { saved = localStorage.getItem("afrikora_language"); } catch(e) {}
+    const initial = saved ? supportedLanguage(saved) : detectLanguage();
+    if (select) select.addEventListener("change", () => applyLanguage(select.value, true));
+    applyLanguage(initial, false);
+    // Re-translate newly rendered interface labels, while leaving user content untouched
+    // unless it exactly matches a known interface phrase.
+    const observer = new MutationObserver(records => {
+      records.forEach(record => {
+        record.addedNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) translateNode(node);
+          else if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.children.length === 0) Array.from(node.childNodes).forEach(translateNode);
+            node.querySelectorAll("*").forEach(el => {
+              if (el.children.length === 0) Array.from(el.childNodes).forEach(translateNode);
+            });
+          }
+        });
+      });
+    });
+    observer.observe(document.body, {childList:true,subtree:true});
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, {once:true});
+  else start();
+  window.AFRIKORA_LANGUAGE = {
+    get: () => currentLanguage,
+    set: lang => applyLanguage(lang, true),
+    t: text => translateText(String(text))
+  };
+})();
+</script>
+<style id="afrikora-language-styles">
+#languageSelect{min-width:112px;max-width:145px}
+html[dir="rtl"] body{direction:rtl}
+html[dir="rtl"] nav,html[dir="rtl"] .country-bar{direction:rtl}
+html[dir="rtl"] .brand-logo{object-position:right center}
+html[dir="rtl"] input,html[dir="rtl"] textarea,html[dir="rtl"] select{text-align:right}
+html[dir="rtl"] .navlinks{direction:rtl}
+@media(max-width:800px){#languageSelect{max-width:116px;min-width:100px}}
+</style>
+
 </body>
 </html>
