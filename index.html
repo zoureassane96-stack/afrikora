@@ -887,6 +887,14 @@ html[dir="rtl"] .country-bar label{display:block}
 }
 @media(min-width:801px){#mobileMenuToggle{display:none!important}}
 
+
+/* Ajustements mobile : formulaires lisibles et modales accessibles */
+@media(max-width:520px){
+ #modal .box{width:calc(100vw - 20px);max-width:calc(100vw - 20px);max-height:88dvh;overflow-y:auto;box-sizing:border-box}
+ #modal input,#modal select,#modal textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px}
+ #modal .field{min-width:0}
+ #modal button.full{min-height:44px}
+}
 </style>
 </head>
 <body>
@@ -1184,6 +1192,11 @@ function syncCountryUI(){
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
 async function openGoogleAuth(){
   if(!requireClient()) return;
+  const registrationCountry=document.getElementById('regCountry')?.value;
+  if(document.getElementById('regCountry')){
+    if(!registrationCountry || !AFRICAN_COUNTRIES.some(c=>c.code===registrationCountry)){toast('Choisissez votre pays de résidence pour créer votre compte.');return;}
+    try{localStorage.setItem('afrikora_pending_signup_country',registrationCountry)}catch(e){}
+  }
 
   try{
     const {data,error}=await supabaseClient.auth.signInWithOAuth({
@@ -1204,8 +1217,8 @@ async function openGoogleAuth(){
   }
 }
 function openPhoneAuth(){openCustom(`<h2>Connexion par téléphone</h2><p class="meta">Choisissez le pays, recevez un code SMS et confirmez votre numéro.</p><div class="field"><label for="otpCountry">Pays</label><select id="otpCountry" aria-label="Choisir le pays du numéro de téléphone">${countryOptions(activeCountry)}</select></div><div class="field"><label>Numéro de téléphone</label><input id="otpPhone" type="tel" placeholder="Numéro sans indicatif"></div><button class="full" onclick="sendPhoneOtp()">Recevoir mon code SMS</button><div id="otpVerifyArea"></div><p class="meta">Le service SMS doit être activé et configuré dans Supabase.</p>`)}
-async function sendPhoneOtp(){if(!requireClient())return;const dial=countryByCode(document.getElementById('otpCountry').value).dial;let raw=document.getElementById('otpPhone').value.replace(/[^0-9]/g,'');if(raw.startsWith('0'))raw=raw.slice(1);if(raw.length<6){toast('Entrez un numéro valide');return}const phone=dial+raw;try{const {error}=await supabaseClient.auth.signInWithOtp({phone,options:{channel:'sms',shouldCreateUser:true,data:{name:'Utilisateur AFRIKORA',country_code:document.getElementById('otpCountry').value}}});if(error)throw error;document.getElementById('otpVerifyArea').innerHTML=`<div class="field"><label>Code reçu par SMS</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8"></div><button class="full" onclick="verifyPhoneOtp('${phone}')">Valider le numéro et continuer</button>`;toast('Code envoyé par SMS')}catch(e){toast(e.message||'Envoi du SMS impossible')}}
-async function verifyPhoneOtp(phone){if(!requireClient())return;const token=document.getElementById('otpCode')?.value.trim();if(!token){toast('Saisissez le code reçu');return}try{const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'});if(error)throw error;await setCurrentFromUser(data.user);await ensureProfile(data.user,current?.name||'Utilisateur',phone);await loadMessages();await loadCloudData();closeModal();updateAccount();toast('Numéro vérifié. Bienvenue sur AFRIKORA.')}catch(e){toast(e.message||'Code incorrect ou expiré')}}
+async function sendPhoneOtp(){if(!requireClient())return;const chosenCountry=document.getElementById('otpCountry')?.value;if(!chosenCountry||!AFRICAN_COUNTRIES.some(c=>c.code===chosenCountry)){toast('Choisissez votre pays de résidence');return}try{localStorage.setItem('afrikora_pending_signup_country',chosenCountry)}catch(e){}const dial=countryByCode(chosenCountry).dial;let raw=document.getElementById('otpPhone').value.replace(/[^0-9]/g,'');if(raw.startsWith('0'))raw=raw.slice(1);if(raw.length<6){toast('Entrez un numéro valide');return}const phone=dial+raw;try{const {error}=await supabaseClient.auth.signInWithOtp({phone,options:{channel:'sms',shouldCreateUser:true,data:{name:'Utilisateur AFRIKORA',country_code:document.getElementById('otpCountry').value}}});if(error)throw error;document.getElementById('otpVerifyArea').innerHTML=`<div class="field"><label>Code reçu par SMS</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8"></div><button class="full" onclick="verifyPhoneOtp('${phone}')">Valider le numéro et continuer</button>`;toast('Code envoyé par SMS')}catch(e){toast(e.message||'Envoi du SMS impossible')}}
+async function verifyPhoneOtp(phone){if(!requireClient())return;const token=document.getElementById('otpCode')?.value.trim();if(!token){toast('Saisissez le code reçu');return}try{const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'});if(error)throw error;const signupCountry=(()=>{try{return localStorage.getItem('afrikora_pending_signup_country')}catch(e){return null}})()||activeCountry;activeCountry=signupCountry;try{localStorage.setItem(COUNTRY_STORE,signupCountry);localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}await setCurrentFromUser(data.user);await ensureProfile(data.user,current?.name||'Utilisateur',phone,signupCountry);await loadMessages();await loadCloudData();closeModal();updateAccount();toast('Numéro vérifié. Bienvenue sur AFRIKORA.')}catch(e){toast(e.message||'Code incorrect ou expiré')}}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function money(n,countryCode=activeCountry){const c=countryByCode(countryCode);return Number(n||0).toLocaleString("fr-FR")+" "+c.symbol}
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>x.classList.remove("show"),2600)}
@@ -1216,7 +1229,7 @@ function closeModal(){document.getElementById("modal").classList.remove("open")}
 function openModal(type){
  const html=type==="login"
  ?`<h2>Connexion à AFRIKORA</h2><button class="full" onclick="openGoogleAuth()">Continuer avec Google</button><button class="full outline" onclick="openPhoneAuth()">Continuer avec mon numéro de téléphone</button><div class="verify-note">Les comptes Google confirmés et les numéros validés par SMS sont vérifiés automatiquement.</div><p style="text-align:center">Ou se connecter avec son email</p><div class="field"><label>Email</label><input id="loginId" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="loginPass" type="password"></div><button class="full" onclick="login()">Se connecter</button><p style="text-align:center">Pas encore de compte ? <a href="#" onclick="openModal('register');return false">Créer un compte</a></p>`
- :`<h2>Créer un compte AFRIKORA</h2><div class="field"><label>Nom complet</label><input id="regName" placeholder="Votre nom"></div><button class="full" onclick="openGoogleAuth()">S'inscrire avec Google</button><button class="full outline" onclick="openPhoneAuth()">S'inscrire avec mon numéro (SMS)</button><div class="verify-note">La confirmation est automatique : Google confirme l'email ou le code SMS confirme le téléphone. Aucune validation manuelle par l'administrateur.</div><p class="meta">Vous pouvez aussi utiliser l'inscription e-mail ci-dessous.</p><div class="field"><label>Email</label><input id="regEmail" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="regPass" type="password" placeholder="Au moins 6 caractères"></div><button class="full" onclick="register()">Créer mon compte par email</button><p style="text-align:center">Déjà inscrit ? <a href="#" onclick="openModal('login');return false">Se connecter</a></p>`;
+ :`<h2>Créer un compte AFRIKORA</h2><div class="field"><label for="regName">Nom complet</label><input id="regName" autocomplete="name" placeholder="Votre nom"></div><div class="field"><label for="regCountry">Pays de résidence <span style="color:#c62828">*</span></label><select id="regCountry" required>${countryOptions(activeCountry)}</select><small class="meta">Ce pays sera enregistré sur votre profil. Vous pourrez ensuite consulter les annonces de n’importe quel pays.</small></div><button class="full" onclick="openGoogleAuth()">S'inscrire avec Google</button><button class="full outline" onclick="openPhoneAuth()">S'inscrire avec mon numéro (SMS)</button><div class="verify-note">La confirmation est automatique : Google confirme l'email ou le code SMS confirme le téléphone. Aucune validation manuelle par l'administrateur.</div><p class="meta">Vous pouvez aussi utiliser l'inscription e-mail ci-dessous.</p><div class="field"><label>Email</label><input id="regEmail" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="regPass" type="password" placeholder="Au moins 6 caractères"></div><button class="full" onclick="register()">Créer mon compte par email</button><p style="text-align:center">Déjà inscrit ? <a href="#" onclick="openModal('login');return false">Se connecter</a></p>`;
  openCustom(html)
 }
 
@@ -1491,14 +1504,16 @@ ${a.whatsapp_enabled&&a.whatsapp_phone&&!a.demo?`<button class="small full" styl
 }
 async function register(){
  if(!requireClient())return;
- const name=document.getElementById("regName")?.value.trim()||"",email=document.getElementById("regEmail").value.trim().toLowerCase(),pass=document.getElementById("regPass").value;
+ const name=document.getElementById("regName")?.value.trim()||"",email=document.getElementById("regEmail").value.trim().toLowerCase(),pass=document.getElementById("regPass").value,country=document.getElementById("regCountry")?.value||"";
+ if(!country||!AFRICAN_COUNTRIES.some(c=>c.code===country)){toast("Choisissez obligatoirement votre pays de résidence");return}
  if(!email||pass.length<6){toast("Entrez une adresse email valide et un mot de passe de 6 caractères minimum");return}
  try{
-  const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name:document.getElementById("regName")?.value.trim()||email.split("@")[0],country_code:activeCountry}}});
+  const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name:name||email.split("@")[0],country_code:country}}});
   if(error)throw error;
   if(data.session){
-   current={id:data.user.id,name:document.getElementById("regName")?.value.trim()||email.split("@")[0],phone:"",email,avatar_url:"",verified:isVerifiedUser(data.user)};
-   await ensureProfile(data.user,current.name,"");await loadMessages();await loadCloudData();closeModal();updateAccount();toast("Compte créé avec succès")
+   activeCountry=country;try{localStorage.setItem(COUNTRY_STORE,country)}catch(e){}
+   current={id:data.user.id,name:name||email.split("@")[0],phone:"",email,avatar_url:"",verified:isVerifiedUser(data.user)};
+   await ensureProfile(data.user,current.name,"",country);await loadMessages();await loadCloudData();closeModal();updateAccount();toast("Compte créé avec succès")
   }else{openCustom(`<h2>Confirmez votre adresse email</h2><p>Un lien de confirmation vient d’être envoyé à <b>${esc(email)}</b>. Ouvrez-le pour activer votre compte et publier sur AFRIKORA.</p><button class="full" onclick="closeModal()">J’ai compris</button>`)}
  }catch(e){console.error(e);toast(e.message||"Impossible de créer le compte")}
 }
@@ -1519,9 +1534,10 @@ async function logout(){
  current=null;fav=[];messages=[];updateAccount();render();go("home");toast("Déconnexion effectuée")
 }
 
-async function ensureProfile(user,name,phone){
+async function ensureProfile(user,name,phone,countryCode){
  if(!supabaseClient)return;
- const {error}=await supabaseClient.from("profiles").upsert({id:user.id,name,phone,country_code:activeCountry},{onConflict:"id"});
+ const country=countryCode||user?.user_metadata?.country_code||activeCountry;
+ const {error}=await supabaseClient.from("profiles").upsert({id:user.id,name,phone,country_code:country},{onConflict:"id"});
  if(error)console.error("profile",error)
 }
 
@@ -1530,10 +1546,15 @@ async function setCurrentFromUser(user){
  if(!supabaseClient)return;
  let {data:profile,error:profileError}=await supabaseClient.from("profiles").select("id,name,phone,avatar_url").eq("id",user.id).maybeSingle();
  if(profileError && !String(profileError.message||"").toLowerCase().includes("avatar_url")) console.warn("Lecture du profil:",profileError.message);
- if(profileError && String(profileError.message||"").toLowerCase().includes("avatar_url")){ const retry=await supabaseClient.from("profiles").select("id,name,phone").eq("id",user.id).maybeSingle(); profile=retry.data; }
+ if(profileError && String(profileError.message||"").toLowerCase().includes("avatar_url")){ const retry=await supabaseClient.from("profiles").select("id,name,phone,country_code").eq("id",user.id).maybeSingle(); profile=retry.data; }
  if(!profile){
   const name=user.user_metadata?.name||user.email?.split("@")[0]||"Utilisateur",phone=user.user_metadata?.phone||"";
-  await ensureProfile(user,name,phone);profile={id:user.id,name,phone,avatar_url:""}
+  const pendingCountry=(()=>{try{return localStorage.getItem('afrikora_pending_signup_country')}catch(e){return null}})();
+  const savedResidence=user.user_metadata?.country_code||pendingCountry||activeCountry;
+  if(pendingCountry){activeCountry=pendingCountry;try{localStorage.setItem(COUNTRY_STORE,pendingCountry);localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}initCountries()}
+  await ensureProfile(user,name,phone,savedResidence);
+  profile={id:user.id,name,phone,avatar_url:"",country_code:user.user_metadata?.country_code||pendingCountry||activeCountry};
+  if(pendingCountry){try{localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}}
  }
  const adminEmail="zoureassane96@gmail.com";isAdmin=String(user.email||"").toLowerCase()===adminEmail;current={id:user.id,name:profile.name||"Utilisateur",phone:profile.phone||"",email:user.email||"",avatar_url:profile.avatar_url||"",role:isAdmin?"admin":"user",verified:isVerifiedUser(user)}
 }
