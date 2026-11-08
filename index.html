@@ -620,8 +620,10 @@ html[dir="rtl"] .country-bar label{display:block}
 .af-other-category-arrow{font-size:18px;font-weight:900;color:#0D7668}
 .af-other-category-link.active{background:#edf8f5;border:2px solid #0D7668;padding:8px 12px}
 
-/* AFRIKORA V10.2 — réservation d'espace pour limiter les CLS du haut de page.
-   Les hauteurs minimales couvrent les libellés FR/EN/AR/PT/SW sans masquer le texte. */
+/* AFRIKORA V10.3 — stabilisation ciblée de la barre des pays.
+   Le select et l'indication de monnaie reçoivent des dimensions réservées avant
+   l'insertion des 54 pays et la mise à jour de la langue/monnaie. Aucun texte
+   n'est masqué et aucune logique métier n'est modifiée. */
 #home > .country-bar{
   min-height:58px;
   align-content:start;
@@ -638,22 +640,46 @@ html[dir="rtl"] .country-bar label{display:block}
 }
 @media(max-width:800px){
   #home > .country-bar{
-    min-height:124px;
+    box-sizing:border-box;
+    height:136px;
+    min-height:136px;
     display:grid;
     grid-template-columns:minmax(0,1fr);
-    grid-template-rows:minmax(18px,auto) 48px minmax(34px,auto);
+    grid-template-rows:20px 48px 52px;
     align-content:start;
     row-gap:6px;
   }
   #home > .country-bar label,
   #home > .country-bar select,
   #home > .country-bar .meta{
+    box-sizing:border-box;
+    display:block;
     width:100%;
     min-width:0;
+    max-width:100%;
     margin:0;
   }
-  #home > .country-bar select{min-height:48px;}
-  #home > .country-bar .meta{min-height:34px;line-height:1.3;}
+  #home > .country-bar label{
+    height:20px;
+    line-height:20px;
+    white-space:nowrap;
+  }
+  #home > .country-bar select{
+    height:48px;
+    min-height:48px;
+    padding-top:0;
+    padding-bottom:0;
+    white-space:nowrap;
+  }
+  #home > .country-bar .meta{
+    height:52px;
+    min-height:52px;
+    max-height:52px;
+    overflow-wrap:anywhere;
+    line-height:16px;
+    font-size:12px;
+    overflow:visible;
+  }
   #home > .hero{
     min-height:510px;
     contain:layout style;
