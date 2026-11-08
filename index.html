@@ -1148,6 +1148,14 @@ html[dir="rtl"] .country-bar label{display:block}
 </div>
 
 <script>
+document.addEventListener("click",function(event){
+ const navItem=event.target.closest("#afBottomNav [data-dest]");
+ if(navItem){
+  const modal=document.getElementById("modal");
+  if(modal)modal.classList.remove("open");
+  window.__AFRIKORAGallery=null;
+ }
+},true);
 function toggleAfrikoraMenu(){const nav=document.getElementById('siteNav');const btn=document.getElementById('mobileMenuToggle');if(!nav||!btn)return;const open=nav.classList.toggle('mobile-menu-open');btn.setAttribute('aria-expanded',open?'true':'false');btn.setAttribute('aria-label',open?'Fermer le menu':'Ouvrir le menu');btn.textContent=open?'×':'☰';}
 </script>
 <div class="modal" id="modal"><div class="box"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
@@ -1299,8 +1307,11 @@ function setBottomNavActive(id){
  });
 }
 function go(id){
- // Ferme automatiquement la galerie photo lorsqu’un visiteur change de rubrique/menu.
- if(window.__AFRIKORAGallery){closeModal();window.__AFRIKORAGallery=null;}
+ // Ferme toujours la fenêtre superposée avant de changer de rubrique.
+ // Cela garantit que la galerie photo ne reste jamais au-dessus de Mon espace,
+ // même si son état interne a été réinitialisé.
+ closeModal();
+ window.__AFRIKORAGallery=null;
  const navMenu=document.getElementById("siteNav");const menuButton=document.getElementById("mobileMenuToggle");if(navMenu)navMenu.classList.remove("mobile-menu-open");if(menuButton){menuButton.textContent="☰";menuButton.setAttribute("aria-expanded","false");menuButton.setAttribute("aria-label","Ouvrir le menu");}
  setBottomNavActive(id);
  document.querySelectorAll(".dash").forEach(x=>x.classList.remove("show"));
