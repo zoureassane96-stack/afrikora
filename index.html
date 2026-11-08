@@ -888,13 +888,73 @@ html[dir="rtl"] .country-bar label{display:block}
 @media(min-width:801px){#mobileMenuToggle{display:none!important}}
 
 
-/* Ajustements mobile : formulaires lisibles et modales accessibles */
-@media(max-width:520px){
- #modal .box{width:calc(100vw - 20px);max-width:calc(100vw - 20px);max-height:88dvh;overflow-y:auto;box-sizing:border-box}
- #modal input,#modal select,#modal textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px}
- #modal .field{min-width:0}
- #modal button.full{min-height:44px}
+
+/* Correctifs responsive : recherche sans débordement et menu mobile stable */
+.search{width:100%;min-width:0;box-sizing:border-box;flex-wrap:wrap}
+.search input,.search select,.search button{min-width:0;max-width:100%;box-sizing:border-box}
+.search input{flex:1 1 220px;width:100%}
+#q{min-width:0;overflow:hidden;text-overflow:ellipsis}
+#city{min-width:0}
+@media(max-width:800px){
+ main#home,.search{max-width:100%;min-width:0}
+ .search{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:9px}
+ .search input,.search select,.search button{width:100%;min-width:0;max-width:100%}
+ .search input{flex:none}
+ nav#siteNav{overflow:visible}
+ nav#siteNav.mobile-menu-open{z-index:1000}
+ nav#siteNav.mobile-menu-open .navlinks{max-width:calc(100vw - 20px);box-sizing:border-box;overflow-x:hidden}
+ nav#siteNav.mobile-menu-open .navlinks button{width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere}
 }
+
+
+
+/* AFRIKORA — correction finale navigation mobile et champ de recherche */
+@media (max-width:800px){
+  /* La barre inférieure devient l'unique navigation principale mobile. */
+  nav#siteNav{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-areas:"brand brand" "country language" "account account"!important;
+    align-items:center!important;
+    gap:8px 9px!important;
+    width:100%!important;max-width:100%!important;
+    box-sizing:border-box!important;
+    padding:10px 12px!important;
+    overflow:visible!important;
+  }
+  nav#siteNav #mobileMenuToggle{display:none!important;visibility:hidden!important}
+  nav#siteNav .logo{grid-area:brand!important;justify-content:center!important;width:100%!important;min-width:0!important;margin:0!important}
+  nav#siteNav .navlinks{display:none!important}
+  nav#siteNav #countryTop{grid-area:country!important;display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  nav#siteNav #languageSelect{grid-area:language!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  nav#siteNav .account{grid-area:account!important;display:flex!important;justify-content:center!important;width:100%!important;min-width:0!important;gap:8px!important}
+  nav#siteNav .account button{flex:1 1 0!important;min-width:0!important;max-width:220px!important}
+
+  /* Empêche le champ de recherche et son placeholder de déborder sur mobile. */
+  main#home,#home,.hero,.search{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #home{width:100%!important;overflow-x:clip!important}
+  #home .hero{width:100%!important;overflow:hidden!important}
+  #home .search{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;min-width:0!important;max-width:100%!important;
+    box-sizing:border-box!important;overflow:hidden!important;
+    padding:8px!important;gap:8px!important;
+  }
+  #home .search input,#home .search select,#home .search button{
+    display:block!important;width:100%!important;min-width:0!important;
+    max-width:100%!important;box-sizing:border-box!important;
+    margin:0!important;
+  }
+  #home .search input{padding-left:11px!important;padding-right:11px!important;font-size:16px!important}
+  #home #q{min-width:0!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+}
+@media(max-width:380px){
+  nav#siteNav{padding-left:9px!important;padding-right:9px!important}
+  #home .hero{padding-left:12px!important;padding-right:12px!important}
+  #home .search{padding:6px!important}
+  #home .search input{font-size:15px!important}
+}
+
 </style>
 </head>
 <body>
@@ -906,7 +966,7 @@ html[dir="rtl"] .country-bar label{display:block}
 <div class="top">AFRIKORA — Le marché africain des opportunités</div>
 
 <nav id="siteNav">
-<button type="button" id="mobileMenuToggle" aria-label="Ouvrir le menu" aria-expanded="false" onclick="toggleAfrikoraMenu()">☰</button>
+<button type="button" id="mobileMenuToggle" aria-label="Menu secondaire" aria-expanded="false" onclick="toggleAfrikoraMenu()">☰</button>
 <div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA" width="250" height="62" decoding="async" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<strong style=&quot;font-size:25px;color:#0D554B;letter-spacing:1px&quot;>AFRIKORA</strong>')"></div>
 <div class="navlinks">
 <button onclick="go('home')">Accueil</button>
@@ -1049,7 +1109,7 @@ html[dir="rtl"] .country-bar label{display:block}
 <small class="meta">Cette précision sera ajoutée à la description de votre annonce.</small>
 </div>
 <small class="meta">Vous vendez quelque chose qui ne figure pas dans les six catégories ? Choisissez « Autres produits & services ».</small></div>
-<div class="field"><label for="adCountry">Pays de publication</label><select id="adCountry" onchange="syncCountryFromPublish()" aria-label="Choisir le pays de publication"></select></div>
+<div class="field"><label for="adCountry">Pays de publication <span style="color:#dc2626">*</span></label><select id="adCountry" required onchange="syncCountryFromPublish()" aria-label="Choisir le pays de publication"><option value="">— Choisissez le pays où se trouve le produit ou le service —</option></select><small class="meta">Choisissez obligatoirement le pays de votre annonce. Ce choix ne change pas le pays que vous consultez sur AFRIKORA.</small></div>
 <div class="field"><label for="adPrice">Prix (<span id="adCurrencyLabel">FCFA</span>)</label><input id="adPrice" type="number" placeholder="15000"></div>
 <div class="field"><label for="adCity">Ville / localité</label><input id="adCity" list="burkinaLocalities" placeholder="Ex. Garango, Tenkodogo, Dori…" required autocomplete="address-level2"><small class="meta">Vous pouvez saisir toute localité, même si elle n’apparaît pas dans la liste.</small></div>
 <div class="field"><label for="adDesc">Description</label><textarea id="adDesc" rows="4" placeholder="Décrivez votre produit ou service"></textarea></div>
@@ -1120,24 +1180,9 @@ const AFRICAN_COUNTRIES=[
 ['DZ','Algérie','DZD','DA','+213'],['TD','Tchad','XAF','FCFA','+235'],['AO','Angola','AOA','Kz','+244'],['BJ','Bénin','XOF','FCFA','+229'],['BW','Botswana','BWP','P','+267'],['BF','Burkina Faso','XOF','FCFA','+226'],['BI','Burundi','BIF','FBu','+257'],['CV','Cap-Vert','CVE','Esc','+238'],['CM','Cameroun','XAF','FCFA','+237'],['CF','République centrafricaine','XAF','FCFA','+236'],['KM','Comores','KMF','FC','+269'],['CG','Congo','XAF','FCFA','+242'],['CD','République démocratique du Congo','CDF','FC','+243'],['CI',"Côte d’Ivoire",'XOF','FCFA','+225'],['DJ','Djibouti','DJF','Fdj','+253'],['EG','Égypte','EGP','£E','+20'],['GQ','Guinée équatoriale','XAF','FCFA','+240'],['ER','Érythrée','ERN','Nfk','+291'],['SZ','Eswatini','SZL','L','+268'],['ET','Éthiopie','ETB','Br','+251'],['GA','Gabon','XAF','FCFA','+241'],['GM','Gambie','GMD','D','+220'],['GH','Ghana','GHS','GH₵','+233'],['GN','Guinée','GNF','FG','+224'],['GW','Guinée-Bissau','XOF','FCFA','+245'],['KE','Kenya','KES','KSh','+254'],['LS','Lesotho','LSL','L','+266'],['LR','Liberia','LRD','L$','+231'],['LY','Libye','LYD','LD','+218'],['MG','Madagascar','MGA','Ar','+261'],['MW','Malawi','MWK','MK','+265'],['ML','Mali','XOF','FCFA','+223'],['MR','Mauritanie','MRU','UM','+222'],['MU','Maurice','MUR','₨','+230'],['MA','Maroc','MAD','DH','+212'],['MZ','Mozambique','MZN','MT','+258'],['NA','Namibie','NAD','N$','+264'],['NE','Niger','XOF','FCFA','+227'],['NG','Nigeria','NGN','₦','+234'],['RW','Rwanda','RWF','FRw','+250'],['ST','Sao Tomé-et-Principe','STN','Db','+239'],['SN','Sénégal','XOF','FCFA','+221'],['SC','Seychelles','SCR','₨','+248'],['SL','Sierra Leone','SLE','Le','+232'],['SO','Somalie','SOS','Sh','+252'],['ZA','Afrique du Sud','ZAR','R','+27'],['SS','Soudan du Sud','SSP','£','+211'],['SD','Soudan','SDG','ج.س','+249'],['TZ','Tanzanie','TZS','TSh','+255'],['TG','Togo','XOF','FCFA','+228'],['TN','Tunisie','TND','DT','+216'],['UG','Ouganda','UGX','USh','+256'],['ZM','Zambie','ZMW','ZK','+260'],['ZW','Zimbabwe','ZiG','ZiG','+263']
 ].map(([code,name,currency,symbol,dial])=>({code,name,currency,symbol,dial}));
 const COUNTRY_STORE='afrikora_country_v2';
-function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);if(AFRICAN_COUNTRIES.some(c=>c.code===saved))return saved;const locale=(navigator.language||'').toUpperCase();const match=AFRICAN_COUNTRIES.find(c=>locale.endsWith('-'+c.code));return match?.code||'BF'}catch(e){return 'BF'}}
+// Le pays de consultation peut être mémorisé, mais il n'est jamais imposé à l'inscription.
+function detectCountry(){try{const saved=localStorage.getItem(COUNTRY_STORE);return AFRICAN_COUNTRIES.some(c=>c.code===saved)?saved:'BF'}catch(e){return 'BF'}}
 let activeCountry=detectCountry();
-// Première visite : détecte le pays approximatif via l'adresse IP. Un choix manuel enregistré reste prioritaire.
-async function detectCountryFromConnection(){
- try{
-  if(localStorage.getItem(COUNTRY_STORE))return;
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),3500);
-  const response=await fetch('https://ipapi.co/country_code/',{cache:'no-store',signal:controller.signal});
-  clearTimeout(timer);
-  if(!response.ok)return;
-  const code=(await response.text()).trim().toUpperCase();
-  if(AFRICAN_COUNTRIES.some(c=>c.code===code)){
-   activeCountry=code;
-   try{localStorage.setItem(COUNTRY_STORE,code)}catch(e){}
-  }
- }catch(e){/* Si la détection échoue, conserver le pays de secours et laisser le visiteur choisir. */}
-}
 // Mode de consultation : le pays actif reste mémorisé même en vue panafricaine.
 let showAllAfrica=true;
 function countryByCode(code){return AFRICAN_COUNTRIES.find(c=>c.code===code)||AFRICAN_COUNTRIES.find(c=>c.code==='BF')}
@@ -1151,7 +1196,7 @@ function marketCountryOptions(selected){
 function initCountries(){
  ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=marketCountryOptions(activeCountry)});
  const ad=document.getElementById('adCountry');
- if(ad)ad.innerHTML=countryOptions(activeCountry);
+ if(ad)ad.innerHTML='<option value="">— Choisissez le pays où se trouve le produit ou le service —</option>'+countryOptions('');
  syncCountryUI();
 }
 function changeCountry(code){
@@ -1171,13 +1216,21 @@ function changeCountry(code){
  apply();
 }
 function syncCountryFromPublish(){
- const v=document.getElementById('adCountry')?.value;
- if(!v||!AFRICAN_COUNTRIES.some(c=>c.code===v))return;
- activeCountry=v;showAllAfrica=false;
- try{localStorage.setItem(COUNTRY_STORE,v)}catch(e){}
- ['countryTop','countryHome'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=activeCountry});
- syncCountryUI();apply();
+ const code=document.getElementById('adCountry')?.value||'';
+ const label=document.getElementById('adCurrencyLabel');
+ const city=document.getElementById('adCity');
+ if(!AFRICAN_COUNTRIES.some(c=>c.code===code)){
+  if(label)label.textContent='Monnaie locale';
+  return;
+ }
+ const selected=countryByCode(code);
+ if(label)label.textContent=selected.symbol;
+ if(city){
+  city.placeholder=`Ex. ${localityExamples[code]?.[0]||'ville principale'}, autre localité…`;
+  city.setAttribute('list','burkinaLocalities');
+ }
 }
+
 function syncCountryUI(){
  const c=countryByCode(activeCountry);
  const hint=document.getElementById('currencyHint');
@@ -1190,13 +1243,15 @@ function syncCountryUI(){
  populateLocalities();
 }
 function isVerifiedUser(user){return !!(user&&(user.email_confirmed_at||user.phone_confirmed_at||user.confirmed_at))}
+function getSignupCountry(){
+ const value=document.getElementById('regCountry')?.value||'';
+ return AFRICAN_COUNTRIES.some(c=>c.code===value)?value:'';
+}
 async function openGoogleAuth(){
   if(!requireClient()) return;
-  const registrationCountry=document.getElementById('regCountry')?.value;
-  if(document.getElementById('regCountry')){
-    if(!registrationCountry || !AFRICAN_COUNTRIES.some(c=>c.code===registrationCountry)){toast('Choisissez votre pays de résidence pour créer votre compte.');return;}
-    try{localStorage.setItem('afrikora_pending_signup_country',registrationCountry)}catch(e){}
-  }
+  const signupCountry=getSignupCountry();
+  if(document.getElementById('regCountry')&&!signupCountry){toast('Choisissez votre pays de résidence avant de continuer');document.getElementById('regCountry').focus();return}
+  if(signupCountry){try{localStorage.setItem('afrikora_pending_signup_country',signupCountry)}catch(e){}}
 
   try{
     const {data,error}=await supabaseClient.auth.signInWithOAuth({
@@ -1216,9 +1271,13 @@ async function openGoogleAuth(){
     toast(error.message||'Connexion Google impossible. Réessayez.');
   }
 }
-function openPhoneAuth(){openCustom(`<h2>Connexion par téléphone</h2><p class="meta">Choisissez le pays, recevez un code SMS et confirmez votre numéro.</p><div class="field"><label for="otpCountry">Pays</label><select id="otpCountry" aria-label="Choisir le pays du numéro de téléphone">${countryOptions(activeCountry)}</select></div><div class="field"><label>Numéro de téléphone</label><input id="otpPhone" type="tel" placeholder="Numéro sans indicatif"></div><button class="full" onclick="sendPhoneOtp()">Recevoir mon code SMS</button><div id="otpVerifyArea"></div><p class="meta">Le service SMS doit être activé et configuré dans Supabase.</p>`)}
-async function sendPhoneOtp(){if(!requireClient())return;const chosenCountry=document.getElementById('otpCountry')?.value;if(!chosenCountry||!AFRICAN_COUNTRIES.some(c=>c.code===chosenCountry)){toast('Choisissez votre pays de résidence');return}try{localStorage.setItem('afrikora_pending_signup_country',chosenCountry)}catch(e){}const dial=countryByCode(chosenCountry).dial;let raw=document.getElementById('otpPhone').value.replace(/[^0-9]/g,'');if(raw.startsWith('0'))raw=raw.slice(1);if(raw.length<6){toast('Entrez un numéro valide');return}const phone=dial+raw;try{const {error}=await supabaseClient.auth.signInWithOtp({phone,options:{channel:'sms',shouldCreateUser:true,data:{name:'Utilisateur AFRIKORA',country_code:document.getElementById('otpCountry').value}}});if(error)throw error;document.getElementById('otpVerifyArea').innerHTML=`<div class="field"><label>Code reçu par SMS</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8"></div><button class="full" onclick="verifyPhoneOtp('${phone}')">Valider le numéro et continuer</button>`;toast('Code envoyé par SMS')}catch(e){toast(e.message||'Envoi du SMS impossible')}}
-async function verifyPhoneOtp(phone){if(!requireClient())return;const token=document.getElementById('otpCode')?.value.trim();if(!token){toast('Saisissez le code reçu');return}try{const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'});if(error)throw error;const signupCountry=(()=>{try{return localStorage.getItem('afrikora_pending_signup_country')}catch(e){return null}})()||activeCountry;activeCountry=signupCountry;try{localStorage.setItem(COUNTRY_STORE,signupCountry);localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}await setCurrentFromUser(data.user);await ensureProfile(data.user,current?.name||'Utilisateur',phone,signupCountry);await loadMessages();await loadCloudData();closeModal();updateAccount();toast('Numéro vérifié. Bienvenue sur AFRIKORA.')}catch(e){toast(e.message||'Code incorrect ou expiré')}}
+function openPhoneAuth(isSignup=false){
+ const signupCountry=isSignup?getSignupCountry():'';
+ if(isSignup&&!signupCountry){toast('Choisissez votre pays de résidence avant de continuer');document.getElementById('regCountry')?.focus();return}
+ if(isSignup){try{localStorage.setItem('afrikora_pending_signup_country',signupCountry)}catch(e){}}
+ openCustom(`<h2>${isSignup?'Inscription':'Connexion'} par téléphone</h2><p class="meta">Choisissez le pays de votre numéro, recevez un code SMS et confirmez-le.</p><div class="field"><label for="otpCountry">Pays du numéro de téléphone</label><select id="otpCountry" aria-label="Choisir le pays du numéro de téléphone">${countryOptions(activeCountry)}</select></div><div class="field"><label>Numéro de téléphone</label><input id="otpPhone" type="tel" placeholder="Numéro sans indicatif"></div><button class="full" onclick="sendPhoneOtp()">Recevoir mon code SMS</button><div id="otpVerifyArea"></div><p class="meta">Le service SMS doit être activé et configuré dans Supabase.</p>`)}
+async function sendPhoneOtp(){if(!requireClient())return;const dial=countryByCode(document.getElementById('otpCountry').value).dial;let raw=document.getElementById('otpPhone').value.replace(/[^0-9]/g,'');if(raw.startsWith('0'))raw=raw.slice(1);if(raw.length<6){toast('Entrez un numéro valide');return}const phone=dial+raw;try{const {error}=await supabaseClient.auth.signInWithOtp({phone,options:{channel:'sms',shouldCreateUser:true,data:{name:'Utilisateur AFRIKORA',country_code:(localStorage.getItem('afrikora_pending_signup_country')||document.getElementById('otpCountry').value)}}});if(error)throw error;document.getElementById('otpVerifyArea').innerHTML=`<div class="field"><label>Code reçu par SMS</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" maxlength="8"></div><button class="full" onclick="verifyPhoneOtp('${phone}')">Valider le numéro et continuer</button>`;toast('Code envoyé par SMS')}catch(e){toast(e.message||'Envoi du SMS impossible')}}
+async function verifyPhoneOtp(phone){if(!requireClient())return;const token=document.getElementById('otpCode')?.value.trim();if(!token){toast('Saisissez le code reçu');return}try{const {data,error}=await supabaseClient.auth.verifyOtp({phone,token,type:'sms'});if(error)throw error;await setCurrentFromUser(data.user);await loadMessages();await loadCloudData();closeModal();updateAccount();toast('Numéro vérifié. Bienvenue sur AFRIKORA.')}catch(e){toast(e.message||'Code incorrect ou expiré')}}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function money(n,countryCode=activeCountry){const c=countryByCode(countryCode);return Number(n||0).toLocaleString("fr-FR")+" "+c.symbol}
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>x.classList.remove("show"),2600)}
@@ -1229,7 +1288,7 @@ function closeModal(){document.getElementById("modal").classList.remove("open")}
 function openModal(type){
  const html=type==="login"
  ?`<h2>Connexion à AFRIKORA</h2><button class="full" onclick="openGoogleAuth()">Continuer avec Google</button><button class="full outline" onclick="openPhoneAuth()">Continuer avec mon numéro de téléphone</button><div class="verify-note">Les comptes Google confirmés et les numéros validés par SMS sont vérifiés automatiquement.</div><p style="text-align:center">Ou se connecter avec son email</p><div class="field"><label>Email</label><input id="loginId" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="loginPass" type="password"></div><button class="full" onclick="login()">Se connecter</button><p style="text-align:center">Pas encore de compte ? <a href="#" onclick="openModal('register');return false">Créer un compte</a></p>`
- :`<h2>Créer un compte AFRIKORA</h2><div class="field"><label for="regName">Nom complet</label><input id="regName" autocomplete="name" placeholder="Votre nom"></div><div class="field"><label for="regCountry">Pays de résidence <span style="color:#c62828">*</span></label><select id="regCountry" required>${countryOptions(activeCountry)}</select><small class="meta">Ce pays sera enregistré sur votre profil. Vous pourrez ensuite consulter les annonces de n’importe quel pays.</small></div><button class="full" onclick="openGoogleAuth()">S'inscrire avec Google</button><button class="full outline" onclick="openPhoneAuth()">S'inscrire avec mon numéro (SMS)</button><div class="verify-note">La confirmation est automatique : Google confirme l'email ou le code SMS confirme le téléphone. Aucune validation manuelle par l'administrateur.</div><p class="meta">Vous pouvez aussi utiliser l'inscription e-mail ci-dessous.</p><div class="field"><label>Email</label><input id="regEmail" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="regPass" type="password" placeholder="Au moins 6 caractères"></div><button class="full" onclick="register()">Créer mon compte par email</button><p style="text-align:center">Déjà inscrit ? <a href="#" onclick="openModal('login');return false">Se connecter</a></p>`;
+ :`<h2>Créer un compte AFRIKORA</h2><div class="field"><label for="regName">Nom complet</label><input id="regName" placeholder="Votre nom"></div><div class="field"><label for="regCountry">Pays de résidence <span style="color:#dc2626">*</span></label><select id="regCountry" required><option value="">— Choisissez votre pays —</option>${countryOptions('')}</select><small class="meta">Vous devez choisir votre pays. Aucun pays n’est sélectionné automatiquement.</small></div><button class="full" onclick="openGoogleAuth()">S'inscrire avec Google</button><button class="full outline" onclick="openPhoneAuth(true)">S'inscrire avec mon numéro (SMS)</button><div class="verify-note">La confirmation est automatique : Google confirme l'email ou le code SMS confirme le téléphone. Aucune validation manuelle par l'administrateur.</div><p class="meta">Vous pouvez aussi utiliser l'inscription e-mail ci-dessous.</p><div class="field"><label>Email</label><input id="regEmail" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="regPass" type="password" placeholder="Au moins 6 caractères"></div><button class="full" onclick="register()">Créer mon compte par email</button><p style="text-align:center">Déjà inscrit ? <a href="#" onclick="openModal('login');return false">Se connecter</a></p>`;
  openCustom(html)
 }
 
@@ -1504,16 +1563,15 @@ ${a.whatsapp_enabled&&a.whatsapp_phone&&!a.demo?`<button class="small full" styl
 }
 async function register(){
  if(!requireClient())return;
- const name=document.getElementById("regName")?.value.trim()||"",email=document.getElementById("regEmail").value.trim().toLowerCase(),pass=document.getElementById("regPass").value,country=document.getElementById("regCountry")?.value||"";
- if(!country||!AFRICAN_COUNTRIES.some(c=>c.code===country)){toast("Choisissez obligatoirement votre pays de résidence");return}
+ const name=document.getElementById("regName")?.value.trim()||"",email=document.getElementById("regEmail").value.trim().toLowerCase(),pass=document.getElementById("regPass").value,signupCountry=getSignupCountry();
+ if(!signupCountry){toast("Choisissez votre pays de résidence");document.getElementById("regCountry")?.focus();return}
  if(!email||pass.length<6){toast("Entrez une adresse email valide et un mot de passe de 6 caractères minimum");return}
  try{
-  const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name:name||email.split("@")[0],country_code:country}}});
+  const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name:document.getElementById("regName")?.value.trim()||email.split("@")[0],country_code:signupCountry}}});
   if(error)throw error;
   if(data.session){
-   activeCountry=country;try{localStorage.setItem(COUNTRY_STORE,country)}catch(e){}
-   current={id:data.user.id,name:name||email.split("@")[0],phone:"",email,avatar_url:"",verified:isVerifiedUser(data.user)};
-   await ensureProfile(data.user,current.name,"",country);await loadMessages();await loadCloudData();closeModal();updateAccount();toast("Compte créé avec succès")
+   current={id:data.user.id,name:document.getElementById("regName")?.value.trim()||email.split("@")[0],phone:"",email,avatar_url:"",verified:isVerifiedUser(data.user)};
+   await ensureProfile(data.user,current.name,"",signupCountry);await loadMessages();try{localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}await loadCloudData();closeModal();updateAccount();toast("Compte créé avec succès")
   }else{openCustom(`<h2>Confirmez votre adresse email</h2><p>Un lien de confirmation vient d’être envoyé à <b>${esc(email)}</b>. Ouvrez-le pour activer votre compte et publier sur AFRIKORA.</p><button class="full" onclick="closeModal()">J’ai compris</button>`)}
  }catch(e){console.error(e);toast(e.message||"Impossible de créer le compte")}
 }
@@ -1534,10 +1592,10 @@ async function logout(){
  current=null;fav=[];messages=[];updateAccount();render();go("home");toast("Déconnexion effectuée")
 }
 
-async function ensureProfile(user,name,phone,countryCode){
+async function ensureProfile(user,name,phone,countryCode=activeCountry){
  if(!supabaseClient)return;
- const country=countryCode||user?.user_metadata?.country_code||activeCountry;
- const {error}=await supabaseClient.from("profiles").upsert({id:user.id,name,phone,country_code:country},{onConflict:"id"});
+ const safeCountry=AFRICAN_COUNTRIES.some(c=>c.code===countryCode)?countryCode:activeCountry;
+ const {error}=await supabaseClient.from("profiles").upsert({id:user.id,name,phone,country_code:safeCountry},{onConflict:"id"});
  if(error)console.error("profile",error)
 }
 
@@ -1546,15 +1604,13 @@ async function setCurrentFromUser(user){
  if(!supabaseClient)return;
  let {data:profile,error:profileError}=await supabaseClient.from("profiles").select("id,name,phone,avatar_url").eq("id",user.id).maybeSingle();
  if(profileError && !String(profileError.message||"").toLowerCase().includes("avatar_url")) console.warn("Lecture du profil:",profileError.message);
- if(profileError && String(profileError.message||"").toLowerCase().includes("avatar_url")){ const retry=await supabaseClient.from("profiles").select("id,name,phone,country_code").eq("id",user.id).maybeSingle(); profile=retry.data; }
+ if(profileError && String(profileError.message||"").toLowerCase().includes("avatar_url")){ const retry=await supabaseClient.from("profiles").select("id,name,phone").eq("id",user.id).maybeSingle(); profile=retry.data; }
  if(!profile){
   const name=user.user_metadata?.name||user.email?.split("@")[0]||"Utilisateur",phone=user.user_metadata?.phone||"";
-  const pendingCountry=(()=>{try{return localStorage.getItem('afrikora_pending_signup_country')}catch(e){return null}})();
-  const savedResidence=user.user_metadata?.country_code||pendingCountry||activeCountry;
-  if(pendingCountry){activeCountry=pendingCountry;try{localStorage.setItem(COUNTRY_STORE,pendingCountry);localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}initCountries()}
-  await ensureProfile(user,name,phone,savedResidence);
-  profile={id:user.id,name,phone,avatar_url:"",country_code:user.user_metadata?.country_code||pendingCountry||activeCountry};
-  if(pendingCountry){try{localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}}
+  const pendingCountry=(()=>{try{return localStorage.getItem('afrikora_pending_signup_country')||user.user_metadata?.country_code||activeCountry}catch(e){return user.user_metadata?.country_code||activeCountry}})();
+  await ensureProfile(user,name,phone,pendingCountry);
+  try{localStorage.removeItem('afrikora_pending_signup_country')}catch(e){}
+  profile={id:user.id,name,phone,avatar_url:""}
  }
  const adminEmail="zoureassane96@gmail.com";isAdmin=String(user.email||"").toLowerCase()===adminEmail;current={id:user.id,name:profile.name||"Utilisateur",phone:profile.phone||"",email:user.email||"",avatar_url:profile.avatar_url||"",role:isAdmin?"admin":"user",verified:isVerifiedUser(user)}
 }
@@ -1596,6 +1652,7 @@ async function publishAd(){
  const title=document.getElementById("adTitle").value.trim(),price=Number(document.getElementById("adPrice").value),baseDescription=document.getElementById("adDesc").value.trim(),category=document.getElementById("adCat").value,otherCategory=(document.getElementById("adOtherCategory")?.value||"").trim(),description=(category==="Autres produits & services"&&otherCategory?`Type de produit/service : ${otherCategory}\\n\\n`:"")+baseDescription,city=document.getElementById("adCity").value,type=document.getElementById("adType").value,metier=type==="service"?document.getElementById("adMetier").value:"",publicationCountry=document.getElementById("adCountry").value;
  const whatsapp_enabled=document.getElementById("waEnabled").checked,whatsapp_phone=document.getElementById("waPhone").value.trim();
  const imageFiles=[...(document.getElementById("adImage")?.files||[])],is_featured=document.getElementById("adFeatured")?.checked||false;
+ if(!publicationCountry){toast("Choisissez le pays où se trouve votre produit ou service");document.getElementById("adCountry")?.focus();return}
  if(!title||!price||!city.trim()){toast("Ajoutez un titre, un prix et une ville/localité");return}
  if(category==="Autres produits & services"&&!otherCategory){toast("Précisez le produit ou le service dans la catégorie Autres produits & services");document.getElementById("adOtherCategory")?.focus();return}
  if(!AFRICAN_COUNTRIES.some(c=>c.code===publicationCountry)){toast("Choisissez un pays de publication valide");return}
@@ -1617,7 +1674,7 @@ async function publishAd(){
   const image_url=image_urls[0]||null;
   const {error}=await supabaseClient.from("annonces").insert({user_id:current.id,title,category,price,city,description,type,metier,status:"active",image_url,image_urls,is_featured,whatsapp_enabled,whatsapp_phone:whatsapp_enabled?whatsapp_phone:null,country_code:publicationCountry});
   if(error)throw error;
-  document.getElementById("adTitle").value="";document.getElementById("adPrice").value="";document.getElementById("adDesc").value="";if(document.getElementById("adOtherCategory"))document.getElementById("adOtherCategory").value="";document.getElementById("adCat").value="Matériaux";toggleOtherCategoryField();document.getElementById("adImage").value="";document.getElementById("adImagePreview").innerHTML="";document.getElementById("adFeatured").checked=false;
+  document.getElementById("adTitle").value="";document.getElementById("adCountry").value="";syncCountryFromPublish();document.getElementById("adPrice").value="";document.getElementById("adDesc").value="";if(document.getElementById("adOtherCategory"))document.getElementById("adOtherCategory").value="";document.getElementById("adCat").value="Matériaux";toggleOtherCategoryField();document.getElementById("adImage").value="";document.getElementById("adImagePreview").innerHTML="";document.getElementById("adFeatured").checked=false;
   document.getElementById("waEnabled").checked=false;document.getElementById("waPhone").value="";toggleWhatsappFields();
   document.getElementById("adType").value="produit";toggleMetier();
   await loadCloudData();toast("Annonce publiée");go("annonces")
@@ -3053,6 +3110,28 @@ html[lang="ar"] button, html[lang="ar"] label { unicode-bidi: plaintext; }
   #cards .card-title-row strong{font-size:12.5px}
   #cards .price{font-size:15px}
   #cards .card-view-button{min-height:38px}
+}
+
+
+/* Correctif final : réserver un espace réel aux icônes de recherche et de localisation. */
+@media (max-width: 800px){
+  #home .search input#q,
+  #home .search input#city{
+    box-sizing:border-box!important;
+    padding-left:56px!important;
+    padding-right:14px!important;
+    text-indent:0!important;
+    background-repeat:no-repeat!important;
+    background-position:17px center!important;
+    background-size:24px 24px!important;
+    text-overflow:ellipsis!important;
+  }
+  #home .search input#q{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230d554b' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E")!important;
+  }
+  #home .search input#city{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%230d806b'%3E%3Cpath d='M12 2a8 8 0 0 0-8 8c0 5.5 8 12 8 12s8-6.5 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z'/%3E%3C/svg%3E")!important;
+  }
 }
 
 </style>
