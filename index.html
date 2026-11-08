@@ -1644,6 +1644,28 @@ function toggleOtherCategoryField(){
 
 let publicationInProgress = false;
 
+// Prépare les photos en WebP léger avant l'envoi vers Supabase.
+// Si le navigateur ne sait pas convertir l'image, le fichier original est conservé.
+async function prepareAdImage(file){
+ try{
+  if(!window.createImageBitmap||!document.createElement('canvas').toBlob)return {file,ext:file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg',type:file.type};
+  const bitmap=await createImageBitmap(file);
+  const maxSide=1600,scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+  canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d',{alpha:true});
+  if(!ctx){bitmap.close?.();return {file,ext:file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg',type:file.type};}
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close?.();
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.82));
+  if(!blob)return {file,ext:file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg',type:file.type};
+  const output=blob.size<file.size?blob:file;
+  const type=output===blob?'image/webp':file.type;
+  const ext=type==='image/webp'?'webp':type==='image/png'?'png':'jpg';
+  return {file:output,ext,type};
+ }catch(e){console.warn('Compression photo ignorée :',e);return {file,ext:file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg',type:file.type};}
+}
+
 async function publishAd(){
  if(publicationInProgress)return;
  if(!current){openModal("login");return}
@@ -1670,7 +1692,13 @@ async function publishAd(){
  }
  try{
   const image_urls=[];
-  for(let i=0;i<imageFiles.length;i++){const file=imageFiles[i],ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg",path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${ext}`;const {error:uploadError}=await supabaseClient.storage.from("annonce-photos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});if(uploadError)throw uploadError;image_urls.push(supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl)}
+  for(let i=0;i<imageFiles.length;i++){
+   const prepared=await prepareAdImage(imageFiles[i]);
+   const path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${prepared.ext}`;
+   const {error:uploadError}=await supabaseClient.storage.from("annonce-photos").upload(path,prepared.file,{cacheControl:"3600",upsert:false,contentType:prepared.type});
+   if(uploadError)throw uploadError;
+   image_urls.push(supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl);
+  }
   const image_url=image_urls[0]||null;
   const {error}=await supabaseClient.from("annonces").insert({user_id:current.id,title,category,price,city,description,type,metier,status:"active",image_url,image_urls,is_featured,whatsapp_enabled,whatsapp_phone:whatsapp_enabled?whatsapp_phone:null,country_code:publicationCountry});
   if(error)throw error;
@@ -1815,6 +1843,36 @@ async function updateAdStatus(id,status){
  await loadCloudData();renderDash();toast(status==="sold"?"Annonce marquée comme vendue":"Annonce réactivée")
 }
 
+async function deleteAd(id){
+ if(!current||!requireClient())return;
+ const ad=ads.find(a=>String(a.id)===String(id));
+ if(!ad){toast("Annonce introuvable. Actualisez la page.");return;}
+ if(!isAdmin&&String(ad.owner)!==String(current.id)){toast("Vous ne pouvez supprimer que vos propres annonces.");return;}
+ if(!confirm("Supprimer définitivement cette annonce ? Cette action est irréversible."))return;
+ await performAdDeletion(id,isAdmin);
+}
+
+async function performAdDeletion(id,adminMode=false){
+ try{
+  let request=supabaseClient.from("annonces").delete().eq("id",id);
+  if(!adminMode)request=request.eq("user_id",current.id);
+  const {data,error}=await request.select("id");
+  if(error)throw error;
+  if(!data||data.length===0){
+   toast("Suppression non effectuée : Supabase n'a supprimé aucune ligne. Vérifiez les autorisations RLS de la table annonces.");
+   return;
+  }
+  ads=ads.filter(a=>String(a.id)!==String(id));
+  await loadCloudData();
+  if(adminMode)await loadAdminDashboard();
+  else renderDash();
+  toast("Annonce supprimée avec confirmation de la base de données.");
+ }catch(e){
+  console.error("Suppression annonce AFRIKORA :",e);
+  toast("Suppression refusée : "+(e.message||"erreur Supabase"));
+ }
+}
+
 async function editAd(id){
  if(!current||!requireClient())return;
  const ad=ads.find(a=>String(a.id)===String(id));
@@ -1885,19 +1943,13 @@ async function saveAdEditPhotos(){
   const image_urls=[...kept];
 
   for(let i=0;i<files.length;i++){
-   const file=files[i];
-   const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
-   const path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${ext}`;
-
+   const prepared=await prepareAdImage(files[i]);
+   const path=`${current.id}/${Date.now()}-${i}-${Math.random().toString(36).slice(2,9)}.${prepared.ext}`;
    const {error:uploadError}=await supabaseClient.storage
     .from("annonce-photos")
-    .upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
-
+    .upload(path,prepared.file,{cacheControl:"3600",upsert:false,contentType:prepared.type});
    if(uploadError)throw uploadError;
-
-   image_urls.push(
-    supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl
-   );
+   image_urls.push(supabaseClient.storage.from("annonce-photos").getPublicUrl(path).data.publicUrl);
   }
 
   const {error}=await supabaseClient.from("annonces").update({
@@ -2030,9 +2082,7 @@ async function adminSetAdStatus(id,status){
 async function adminDeleteAd(id){
  if(!current||!isAdmin){toast("Accès refusé");return}
  if(!confirm("Supprimer définitivement cette annonce ? Cette action est irréversible."))return;
- const {error}=await supabaseClient.from("annonces").delete().eq("id",id);
- if(error){toast("Suppression refusée : "+error.message);return}
- await loadCloudData();await loadAdminDashboard();toast("Annonce supprimée");
+ await performAdDeletion(id,true);
 }
 
 function starsHtml(n){return "★★★★★".split("").map((s,i)=>`<span style="opacity:${i<Number(n)?1:.25}">${s}</span>`).join("")}
