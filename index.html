@@ -1284,7 +1284,7 @@ function toast(t){const x=document.getElementById("toast");x.textContent=t;x.cla
 function requireClient(){if(!supabaseClient){toast("Connexion au service indisponible. Réessayez.");return false}return true}
 
 function openCustom(html){document.getElementById("modalBody").innerHTML=html;document.getElementById("modal").classList.add("open")}
-function closeModal(){document.getElementById("modal").classList.remove("open")}
+function closeModal(){document.getElementById("modal").classList.remove("open");window.__AFRIKORAGallery=null;}
 function openModal(type){
  const html=type==="login"
  ?`<h2>Connexion à AFRIKORA</h2><button class="full" onclick="openGoogleAuth()">Continuer avec Google</button><button class="full outline" onclick="openPhoneAuth()">Continuer avec mon numéro de téléphone</button><div class="verify-note">Les comptes Google confirmés et les numéros validés par SMS sont vérifiés automatiquement.</div><p style="text-align:center">Ou se connecter avec son email</p><div class="field"><label>Email</label><input id="loginId" type="email" placeholder="exemple@gmail.com"></div><div class="field"><label>Mot de passe</label><input id="loginPass" type="password"></div><button class="full" onclick="login()">Se connecter</button><p style="text-align:center">Pas encore de compte ? <a href="#" onclick="openModal('register');return false">Créer un compte</a></p>`
@@ -1299,6 +1299,8 @@ function setBottomNavActive(id){
  });
 }
 function go(id){
+ // Ferme automatiquement la galerie photo lorsqu’un visiteur change de rubrique/menu.
+ if(window.__AFRIKORAGallery){closeModal();window.__AFRIKORAGallery=null;}
  const navMenu=document.getElementById("siteNav");const menuButton=document.getElementById("mobileMenuToggle");if(navMenu)navMenu.classList.remove("mobile-menu-open");if(menuButton){menuButton.textContent="☰";menuButton.setAttribute("aria-expanded","false");menuButton.setAttribute("aria-label","Ouvrir le menu");}
  setBottomNavActive(id);
  document.querySelectorAll(".dash").forEach(x=>x.classList.remove("show"));
