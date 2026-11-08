@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://jovyqqqfcgluoclqrwvq.supabase.co" crossorigin>
+<link rel="preload" as="image" href="/afrikora-hero-mobile.jpg" media="(max-width: 800px)" fetchpriority="high">
 <!-- AFRIKORA V10.5 — diagnostic CLS temporaire, activé uniquement avec ?clsdebug=1 -->
 <script>
 (function(){
@@ -164,7 +167,6 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
   nav .brand-logo{width:auto;max-width:180px;max-height:48px}
   nav #countryTop{grid-area:country;width:100%;max-width:none;min-width:0;padding:10px 7px;font-size:14px}
   nav #languageSelect{grid-area:language;width:100%;max-width:none;min-width:0;padding:10px 7px;font-size:14px}
-  nav 
   nav .account{grid-area:account;display:flex;justify-content:flex-end;gap:6px;min-width:0}
   nav .account button{flex:1;min-width:0;white-space:nowrap;padding:9px 6px;font-size:13px}
   nav .navlinks{display:none}
@@ -173,7 +175,6 @@ footer{background:#082f2c;color:#dcefeb;padding:35px 5%;text-align:center}footer
   nav{padding:10px 12px;gap:8px}
   nav #countryTop,nav #languageSelect{font-size:13px;padding:9px 5px}
   nav .account button{font-size:12px;padding:8px 4px}
-  nav 
 }
 @media(min-width:801px){
   nav #languageSelect{max-width:145px}
@@ -253,7 +254,6 @@ html[dir="rtl"] .country-bar label{display:block}
     padding-left:6px;
     padding-right:6px;
   }
-  nav 
   nav .account{
     width:100%;
     min-width:0;
@@ -967,7 +967,7 @@ html[dir="rtl"] .country-bar label{display:block}
 
 <nav id="siteNav">
 <button type="button" id="mobileMenuToggle" aria-label="Menu secondaire" aria-expanded="false" onclick="toggleAfrikoraMenu()">☰</button>
-<div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA" width="250" height="62" decoding="async" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<strong style=&quot;font-size:25px;color:#0D554B;letter-spacing:1px&quot;>AFRIKORA</strong>')"></div>
+<div class="logo"><img class="brand-logo" src="afrikora-logo.png" alt="AFRIKORA" width="250" height="62" loading="eager" fetchpriority="high" decoding="async" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<strong style=&quot;font-size:25px;color:#0D554B;letter-spacing:1px&quot;>AFRIKORA</strong>')"></div>
 <div class="navlinks">
 <button onclick="go('home')">Accueil</button>
 <button onclick="go('annonces')">Annonces</button>
@@ -1927,8 +1927,8 @@ async function trackAFRIKORAVisit(){
  if(!supabaseClient||visitTracked)return;
  visitTracked=true;
  try{
-  let visitorId=localStorage.getItem("prixfaso_visitor_id");
-  if(!visitorId){visitorId=(crypto.randomUUID?crypto.randomUUID():"v-"+Date.now()+"-"+Math.random().toString(36).slice(2));localStorage.setItem("prixfaso_visitor_id",visitorId)}
+  let visitorId=localStorage.getItem("afrikora_visitor_id");
+  if(!visitorId){visitorId=(crypto.randomUUID?crypto.randomUUID():"v-"+Date.now()+"-"+Math.random().toString(36).slice(2));localStorage.setItem("afrikora_visitor_id",visitorId)}
   const {error}=await supabaseClient.rpc("track_site_visit",{p_visitor_id:visitorId});
   if(error)throw error;
  }catch(e){console.warn("Statistiques AFRIKORA non disponibles :",e.message||e)}
